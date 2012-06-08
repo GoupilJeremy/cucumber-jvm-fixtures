@@ -1,4 +1,4 @@
-package fixtures.common.dataindex.utils;
+package fixtures.common.database.utils;
 
 import java.sql.Types;
 

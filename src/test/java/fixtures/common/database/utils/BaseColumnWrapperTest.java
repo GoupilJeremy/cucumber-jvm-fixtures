@@ -1,10 +1,9 @@
-package fixtures.common.dataindex.utils;
+package fixtures.common.database.utils;
 
 import static org.hamcrest.CoreMatchers.is;
 
 import java.util.List;
 
-import fixtures.common.database.utils.BaseColumnWrapper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.matchers.JUnitMatchers;
