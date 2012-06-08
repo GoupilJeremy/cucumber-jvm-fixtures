@@ -12,7 +12,7 @@
 	<packaging>jar</packaging>
 	<name>cucumber-jvm-fixtures</name>
 	<description>Librairie de fixtures utilitaires pour les projets utilisant cucumber-jvm</description>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.1-SNAPSHOT</version>
 
 	<repositories>
 		<repository>
