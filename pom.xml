@@ -15,6 +15,12 @@
 	<description>Librairie de fixtures utilitaires pour les projets utilisant cucumber-jvm</description>
 	<version>0.0.3-SNAPSHOT</version>
 
+	<scm>
+		<connection>scm:git:git@github.com:figarocms/cucumber-jvm-fixtures.git</connection>
+		<url>scm:git:git@github.com:figarocms/cucumber-jvm-fixtures.git</url>
+		<developerConnection>scm:git:git@github.com:figarocms/cucumber-jvm-fixtures.git</developerConnection>
+	</scm>
+
 	<repositories>
 		<repository>
 			<id>sonatype-snapshots</id>
@@ -142,9 +148,4 @@
 		</dependency>
 	</dependencies>
 
-	<scm>
-		<connection>scm:git:git@github.com:figarocms/cucumber-jvm-fixtures.git</connection>
-		<url>scm:git:git@github.com:figarocms/cucumber-jvm-fixtures.git</url>
-		<developerConnection>scm:git:git@github.com:figarocms/cucumber-jvm-fixtures.git</developerConnection>
-	</scm>
 </project>
