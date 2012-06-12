@@ -26,6 +26,7 @@ public class BaseColumnWrapperTest {
         BaseColumnWrapper wrapper = new BaseColumnWrapper(FromXToDatatableEnum.class);
         List<String> baseColumnNames = wrapper.getDatatableColumnNames();
         //
+
         assertThat(baseColumnNames.size(), is(FromXToDatatableEnum.values().length));
         assertThat(baseColumnNames, JUnitMatchers.hasItems(FromXToDatatableEnum.A.getDatatableColumnName(),
                 FromXToDatatableEnum.B.getDatatableColumnName(), FromXToDatatableEnum.C.getDatatableColumnName(),
