@@ -1,10 +1,10 @@
 package fixtures.common.database.utils;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.matchers.JUnitMatchers;
 
@@ -15,8 +15,8 @@ public class BaseColumnWrapperTest {
         BaseColumnWrapper wrapper = new BaseColumnWrapper(FromXToDatatableEnum.class);
         List<String> baseColumnNames = wrapper.getBaseColumnNames();
         //
-        Assert.assertThat(baseColumnNames.size(), is(FromXToDatatableEnum.values().length));
-        org.junit.Assert.assertThat(baseColumnNames, JUnitMatchers
+        assertThat(baseColumnNames.size(), is(FromXToDatatableEnum.values().length));
+        assertThat(baseColumnNames, JUnitMatchers
                 .hasItems(FromXToDatatableEnum.A.getBaseColumnName(), FromXToDatatableEnum.B.getBaseColumnName(),
                         FromXToDatatableEnum.C.getBaseColumnName(), FromXToDatatableEnum.D.getBaseColumnName()));
     }
@@ -26,11 +26,9 @@ public class BaseColumnWrapperTest {
         BaseColumnWrapper wrapper = new BaseColumnWrapper(FromXToDatatableEnum.class);
         List<String> baseColumnNames = wrapper.getDatatableColumnNames();
         //
-        Assert.assertThat(baseColumnNames.size(), is(FromXToDatatableEnum.values().length));
-        Assert.assertThat(baseColumnNames, JUnitMatchers
-                .hasItems(FromXToDatatableEnum.A.getDatatableColumnName(),
-                        FromXToDatatableEnum.B.getDatatableColumnName(),
-                        FromXToDatatableEnum.C.getDatatableColumnName(),
-                        FromXToDatatableEnum.D.getDatatableColumnName()));
+        assertThat(baseColumnNames.size(), is(FromXToDatatableEnum.values().length));
+        assertThat(baseColumnNames, JUnitMatchers.hasItems(FromXToDatatableEnum.A.getDatatableColumnName(),
+                FromXToDatatableEnum.B.getDatatableColumnName(), FromXToDatatableEnum.C.getDatatableColumnName(),
+                "lollo"));
     }
 }
