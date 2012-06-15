@@ -33,7 +33,7 @@
 		<project.build.sourceEncoding>ISO-8859-15</project.build.sourceEncoding>
 		<testSourceDirectory.path>src/test/java</testSourceDirectory.path>
 		<!-- cucumber -->
-		<cucumber.jvm.version>1.0.9</cucumber.jvm.version>
+		<cucumber.jvm.version>1.0.8</cucumber.jvm.version>
 	</properties>
 
 	<!-- Plugin de Build -->
@@ -145,6 +145,12 @@
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>1.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.elasticsearch</groupId>
+			<artifactId>elasticsearch</artifactId>
+			<version>0.19.4</version>
 		</dependency>
 	</dependencies>
 
