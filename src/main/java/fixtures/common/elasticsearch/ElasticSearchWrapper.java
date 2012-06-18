@@ -6,6 +6,7 @@ import java.util.Random;
 import cucumber.table.DataTable;
 import fixtures.common.RowToObjectDataSource;
 import fixtures.common.rows.RowsToObject;
+import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
@@ -29,25 +30,24 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
     private static Random random = new Random();
 
     public ElasticSearchWrapper(DataTable dataTable, String index, String type) {
-        this.client = NodeBuilder.nodeBuilder().client(HOSTING_NO_DATA).build().client();
+        this.client = NodeBuilder.nodeBuilder().local(true).client(HOSTING_NO_DATA).data(false).node().client();
         this.dataTable = dataTable;
         this.index = index;
         this.type = type;
     }
 
-    public BulkResponse persistAndIndex() {
+    public BulkResponse persistAndIndex(final List<XContentBuilder> documents) {
         final BulkRequestBuilder bulkRequestBuilder = client.prepareBulk();
-        RowsToObject<XContentBuilder> rowsToObject = new RowsToObject<XContentBuilder>(dataTable, this, Document.class);
-        final List<XContentBuilder> documents = rowsToObject.executeInRows();
         for (XContentBuilder document : documents) {
             final IndexRequestBuilder indexRequestBuilder = indexRow(client, document);
             bulkRequestBuilder.add(indexRequestBuilder);
         }
-        return bulkRequestBuilder.execute().actionGet();
+        BulkResponse bulkResponse = bulkRequestBuilder.execute().actionGet();
+        client.admin().indices().refresh(new RefreshRequest(index)).actionGet();
+        return bulkResponse;
     }
 
-    private IndexRequestBuilder indexRow(final Client client,
-            XContentBuilder xContentBuilder) {
+    private IndexRequestBuilder indexRow(final Client client, XContentBuilder xContentBuilder) {
 
         return client.prepareIndex(index, type, random.nextInt(BIG_ID_INTERVAL) + "").setSource(xContentBuilder);
     }
