@@ -17,9 +17,9 @@ import org.slf4j.LoggerFactory;
  * transforme un tableau {@see DataTable} en object.
  */
 public class RowsToObject<Res> {
+    public static final int INDEX_1 = 1;
     public static final int INDEX_0 = 0;
 
-    public static final int TO_INDEX_1 = 1;
 
     private DataTable dataTable;
 
@@ -47,7 +47,7 @@ public class RowsToObject<Res> {
         List<List<String>> rows = dataTable.raw();
         Map<String, Integer> headers = createMapHeaders(rows.get(INDEX_0));
         List<Res> results = new ArrayList<Res>();
-        for (List<String> row : rows.subList(INDEX_0, TO_INDEX_1)) {
+        for (List<String> row : rows.subList(INDEX_1, results.size() - 1)) {
             RowToObject<RowToObjectDataSource,Res> rowToObject;
             List<Object> argsForConstructor = new ArrayList<Object>();
             argsForConstructor.add(headers);
