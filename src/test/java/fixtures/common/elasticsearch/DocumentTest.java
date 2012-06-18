@@ -1,7 +1,7 @@
 package fixtures.common.elasticsearch;
 
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
@@ -22,14 +22,14 @@ import org.mockito.MockitoAnnotations;
 
 public class DocumentTest extends RowToObjectTest {
     private static final String MANDATORY_HEADER = "needed";
+    private static final String MANDATORY_VALUE = "value needed";
 
-    @Mock
-    private Document documentMock;
+
 
     @Mock
     private ElasticSearchWrapper elasticSearchWrapper;
 
-    private Document document;
+    private Document document ;
 
     private XContentBuilder xContentBuilder;
 
@@ -41,15 +41,22 @@ public class DocumentTest extends RowToObjectTest {
 
     @Test
     public void test_mapRowToObject_call_getXContentBuilder() throws IOException {
+                // given
+        Map<String, Integer> headers = new HashMap<String, Integer>();
+        headers.put(MANDATORY_HEADER, FIRST_COLUMN_INDEX);
+        headers.put(SECOND_COLUMN_NAME, SECOND_COLUMN_INDEX);
+        List<String> row = new ArrayList<String>();
+        row.add(MANDATORY_HEADER);
+        row.add(SECOND_COLUMN_NAME);
 
-        //given
-        given(documentMock.getXContentBuilder()).willReturn(xContentBuilder);
+        document = buildDocument(headers, row);
+        Document spy = spy(document);
 
         //when
-        final XContentBuilder json = documentMock.mapRowToObject();
+        final XContentBuilder json = spy.mapRowToObject();
 
         //then
-        verify(documentMock).getXContentBuilder();
+        verify(spy).getXContentBuilder();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -59,15 +66,21 @@ public class DocumentTest extends RowToObjectTest {
         Map<String, Integer> headers = new HashMap<String, Integer>();
         headers.put(FIRST_COLUMN_NAME, FIRST_COLUMN_INDEX);
         headers.put(SECOND_COLUMN_NAME, SECOND_COLUMN_INDEX);
-        List<String> row = new ArrayList<String>();
+         List<String> row = new ArrayList<String>();
         row.add(StringUtils.EMPTY);
         row.add(FIRST_COLUMN_VALUE);
 
-        document = new Document(headers,row,elasticSearchWrapper) {
+        document = buildDocument(headers, row);
+
+        //when
+        document.mapRowToObject();
+    }
+
+    private Document buildDocument(final Map<String, Integer> headers, final List<String> row) {
+        return new Document(headers,row,elasticSearchWrapper) {
             @Override
             protected Collection<String> getMandatoryHeaders() {
-                Collection<String> headers = Lists.newArrayList();
-                headers.add(MANDATORY_HEADER);
+                Collection<String> headers = buildMandatoryHeaders();
                 return headers;
             }
 
@@ -76,8 +89,13 @@ public class DocumentTest extends RowToObjectTest {
                 return xContentBuilder;
             }
         };
+    }
 
-        //when
-        document.mapRowToObject();
+
+
+    private Collection<String> buildMandatoryHeaders() {
+        Collection<String> headers = Lists.newArrayList();
+        headers.add(MANDATORY_HEADER);
+        return headers;
     }
 }
