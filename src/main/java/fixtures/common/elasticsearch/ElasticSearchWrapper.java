@@ -42,7 +42,7 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
         this.dataTable = dataTable;
         this.index = index;
         this.type = type;
-        reInitIndex(mapping);
+        reInitIndex(mapping); 
     }
 
      private void reInitIndex(final Writer mapping) throws IOException {
