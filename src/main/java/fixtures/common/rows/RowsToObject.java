@@ -42,13 +42,12 @@ public class RowsToObject<Res> {
     public List<Res> executeInRows() {
         List<List<String>> rows = dataTable.raw();
         Map<String, Integer> headers = createMapHeaders(rows.get(0));
-        rows.remove(0);
         List<Res> results = new ArrayList<Res>();
-        for (List<String> row : rows) {
+        for (int i = 1; i < rows.size(); i++) {
             RowToObject<RowToObjectDataSource,Res> rowToObject;
             List<Object> argsForConstructor = new ArrayList<Object>();
             argsForConstructor.add(headers);
-            argsForConstructor.add(row);
+            argsForConstructor.add(rows.get(i));
             argsForConstructor.add(rowToObjectDataSource);
 
             rowToObject = buildRowToObject(clazz, argsForConstructor, Map.class, List.class,
