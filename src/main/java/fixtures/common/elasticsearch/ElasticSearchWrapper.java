@@ -1,11 +1,12 @@
 package fixtures.common.elasticsearch;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.List;
 import java.util.Random;
 
 import cucumber.table.DataTable;
 import fixtures.common.RowToObjectDataSource;
-import fixtures.common.rows.RowsToObject;
 import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -29,11 +30,28 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
 
     private static Random random = new Random();
 
-    public ElasticSearchWrapper(DataTable dataTable, String index, String type) {
+    public ElasticSearchWrapper(DataTable dataTable, String index, String type) throws IOException {
         this.client = NodeBuilder.nodeBuilder().local(true).client(HOSTING_NO_DATA).data(false).node().client();
         this.dataTable = dataTable;
         this.index = index;
         this.type = type;
+    }
+
+    public ElasticSearchWrapper(DataTable dataTable, String index, String type, Writer mapping) throws IOException {
+        this.client = NodeBuilder.nodeBuilder().local(true).client(HOSTING_NO_DATA).data(false).node().client();
+        this.dataTable = dataTable;
+        this.index = index;
+        this.type = type;
+        reInitIndex(mapping);
+    }
+
+     private void reInitIndex(final Writer mapping) throws IOException {
+        if (client.admin().indices().prepareExists(index).execute().actionGet().exists()) {
+            client.admin().indices().prepareDelete(index).execute().actionGet();
+        }
+        client.admin().indices().prepareCreate(index).execute().actionGet();
+        client.admin().indices().preparePutMapping(index).setSource(mapping.toString())
+                .setType(type).execute().actionGet();
     }
 
     public BulkResponse persistAndIndex(final List<XContentBuilder> documents) {
