@@ -8,25 +8,27 @@ import java.util.Set;
 import fixtures.common.RowToObjectDataSource;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * map une ligne de tableau cucumber vers un objet.
  */
-public abstract class RowToObject<T extends RowToObjectDataSource> {
-    private Map<String, Integer> headers;
+public abstract class RowToObject<D extends RowToObjectDataSource,Res> {
+    protected Map<String, Integer> headers;
 
-    private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(RowToObject.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RowToObject.class);
 
     protected List<String> row;
 
-    private T rowToObjectDataSource;
+    private D rowToObjectDataSource;
 
     protected Map<String, Object> context;
 
     protected Object[] args;
 
-    public RowToObject(Map<String, Integer> headers, final List<String> row, final T dataSource) {
-        if (headers.isEmpty()) {
+    public RowToObject(Map<String, Integer> headers, final List<String> row, final D dataSource) {
+        if ( headers == null  || headers.isEmpty()) {
             throw new IllegalArgumentException(
                     "la map de correspondance entre le nom de la colonne et l'index est vide ");
         }
@@ -44,11 +46,10 @@ public abstract class RowToObject<T extends RowToObjectDataSource> {
         this.rowToObjectDataSource = dataSource;
     }
 
-    protected abstract void mapRowToObject();
+    protected abstract Res mapRowToObject();
 
-    protected abstract Object execute();
 
-    private String getValue(final List<String> row, final String column, final Map<String, Integer> headers,
+    protected String getValue(final List<String> row, final String column, final Map<String, Integer> headers,
             String defaultValue) {
         String value = defaultValue;
         Integer index = MapUtils.getInteger(headers, column);
@@ -63,7 +64,7 @@ public abstract class RowToObject<T extends RowToObjectDataSource> {
         return value;
     }
 
-    protected String getValue(String... columns) {
+    public String getValue(String... columns) {
         for (String column : columns) {
             String value = StringUtils.trim(getValue(row, column, headers, StringUtils.EMPTY));
             if (StringUtils.isNotBlank(value)) {
@@ -93,7 +94,7 @@ public abstract class RowToObject<T extends RowToObjectDataSource> {
         this.args = args;
     }
 
-    public T getRowToObjectDataSource() {
+    public D getRowToObjectDataSource() {
         return rowToObjectDataSource;
     }
 }

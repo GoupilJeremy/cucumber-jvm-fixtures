@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 /**
  * transforme un tableau {@see DataTable} en object.
  */
-public class RowsToObject {
+public class RowsToObject<Res> {
     private DataTable dataTable;
 
     private Class<? extends RowToObject> clazz;
@@ -39,16 +39,15 @@ public class RowsToObject {
         this.rowToObjectDataSource = rowToObjectDataSource;
     }
 
-    public List<Object> executeInRows() {
+    public List<Res> executeInRows() {
         List<List<String>> rows = dataTable.raw();
         Map<String, Integer> headers = createMapHeaders(rows.get(0));
-        rows.remove(0);
-        List<Object> results = new ArrayList<Object>();
-        for (List<String> row : rows) {
-            RowToObject rowToObject;
+        List<Res> results = new ArrayList<Res>();
+        for (int i = 1; i < rows.size(); i++) {
+            RowToObject<RowToObjectDataSource,Res> rowToObject;
             List<Object> argsForConstructor = new ArrayList<Object>();
             argsForConstructor.add(headers);
-            argsForConstructor.add(row);
+            argsForConstructor.add(rows.get(i));
             argsForConstructor.add(rowToObjectDataSource);
 
             rowToObject = buildRowToObject(clazz, argsForConstructor, Map.class, List.class,
@@ -60,8 +59,7 @@ public class RowsToObject {
             rowToObject.setArgs(args);
             rowToObject.setContext(context);
 
-            rowToObject.mapRowToObject();
-            results.add(rowToObject.execute());
+            results.add(rowToObject.mapRowToObject());
         }
         return results;
     }
