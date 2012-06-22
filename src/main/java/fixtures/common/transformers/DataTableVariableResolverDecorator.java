@@ -22,7 +22,7 @@ public class DataTableVariableResolverDecorator extends DataTable {
     }
 
     public DataTableVariableResolverDecorator(DataTable dataTable, Map<String, String> context) {
-        super(Lists.<DataTableRow>newArrayList(), new TableConverter(getXStream(), null));
+        super(new ArrayList<DataTableRow>(), new TableConverter(getXStream(), null));
         getGherkinRows().addAll(decorate(dataTable.getGherkinRows(), context));
         populateRaw();
     }
@@ -42,7 +42,7 @@ public class DataTableVariableResolverDecorator extends DataTable {
     }
 
     protected List<DataTableRow> decorate(List<DataTableRow> rows, final Map<String, String> context) {
-        List<DataTableRow> dataTableRows = Lists.newArrayList();
+        List<DataTableRow> dataTableRows = new ArrayList<DataTableRow>();
         dataTableRows.addAll(Collections2.transform(rows, new Function<DataTableRow, DataTableRow>() {
             @Override
             public DataTableRow apply(@Nullable final DataTableRow dataTableRow) {

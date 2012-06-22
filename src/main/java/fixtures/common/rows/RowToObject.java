@@ -1,13 +1,17 @@
 package fixtures.common.rows;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.base.Objects;
 import fixtures.common.RowToObjectDataSource;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +53,7 @@ public abstract class RowToObject<D extends RowToObjectDataSource,Res> {
     protected abstract Res mapRowToObject();
 
 
-    protected String getValue(final List<String> row, final String column, final Map<String, Integer> headers,
+    protected static String getValue(final List<String> row, final String column, final Map<String, Integer> headers,
             String defaultValue) {
         String value = defaultValue;
         Integer index = MapUtils.getInteger(headers, column);
@@ -59,18 +63,45 @@ public abstract class RowToObject<D extends RowToObjectDataSource,Res> {
                 value = v;
             }
         } else {
-            LOGGER.debug("nom de colonne non présent dans le step:'" + column + "'");
+            LOGGER.debug("column name no present into step:'" + column + "'");
         }
         return value;
     }
 
-    public String getValue(String... columns) {
-        for (String column : columns) {
+
+    protected static  <E> E getValueAsObject(final List<String> row, final String column, final Map<String, Integer> headers,
+             String defaultValue,Map<String,Class> columnNamesAndTypes) {
+         String value = getValue(row,column,headers,defaultValue);
+        Class clazz = columnNamesAndTypes.get(column);
+        if(clazz == null){
+              throw new IllegalArgumentException("Column "+column+" type not defined in columnNamesAndTypes");
+        }
+        try {
+
+            Constructor constructor = clazz.getConstructor(String.class);
+
+        return (E) constructor.newInstance(value);
+        } catch (NoSuchMethodException e) {
+            LOGGER.error(e.getMessage());
+        } catch (InvocationTargetException e) {
+            LOGGER.error(e.getMessage());
+        } catch (InstantiationException e) {
+            LOGGER.error(e.getMessage());
+        } catch (IllegalAccessException e) {
+            LOGGER.error(e.getMessage());
+
+        }
+              throw new IllegalArgumentException("value" +value+" of column "+column+" cannot be cast ");
+
+     }
+
+    public String getValue(String column) {
+
             String value = StringUtils.trim(getValue(row, column, headers, StringUtils.EMPTY));
             if (StringUtils.isNotBlank(value)) {
                 return value;
             }
-        }
+
         return StringUtils.EMPTY;
     }
 
