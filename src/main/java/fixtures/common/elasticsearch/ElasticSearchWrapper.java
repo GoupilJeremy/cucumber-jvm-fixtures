@@ -37,20 +37,21 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
         this.type = type;
     }
 
-    public ElasticSearchWrapper(DataTable dataTable, String index, String type, Writer mapping) throws IOException {
+    public ElasticSearchWrapper(DataTable dataTable, String index, String type, Writer mapping,
+            final String templateName) throws IOException {
         this.client = NodeBuilder.nodeBuilder().local(true).client(HOSTING_NO_DATA).data(false).node().client();
         this.dataTable = dataTable;
         this.index = index;
         this.type = type;
-        reInitIndex(mapping); 
+        reInitIndex(mapping, templateName);
     }
 
-     private void reInitIndex(final Writer mapping) throws IOException {
+    private void reInitIndex(final Writer mapping, final String templateName) throws IOException {
         if (client.admin().indices().prepareExists(index).execute().actionGet().exists()) {
             client.admin().indices().prepareDelete(index).execute().actionGet();
         }
         client.admin().indices().prepareCreate(index).execute().actionGet();
-        client.admin().indices().preparePutTemplate(index).setTemplate("analytic").setSource(mapping.toString()).execute().actionGet();
+        client.admin().indices().preparePutTemplate(index).setTemplate(templateName).setSource(mapping.toString()).execute().actionGet();
     }
 
     public BulkResponse persistAndIndex(final List<XContentBuilder> documents) {
