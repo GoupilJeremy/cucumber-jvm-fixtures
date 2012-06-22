@@ -50,8 +50,7 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
             client.admin().indices().prepareDelete(index).execute().actionGet();
         }
         client.admin().indices().prepareCreate(index).execute().actionGet();
-        client.admin().indices().preparePutMapping(index).setSource(mapping.toString())
-                .setType(type).execute().actionGet();
+        client.admin().indices().preparePutTemplate(index).setTemplate("analytic").setSource(mapping.toString()).execute().actionGet();
     }
 
     public BulkResponse persistAndIndex(final List<XContentBuilder> documents) {
