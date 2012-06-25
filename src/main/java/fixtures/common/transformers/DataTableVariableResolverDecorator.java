@@ -8,7 +8,6 @@ import java.util.Map;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import cucumber.runtime.converters.LocalizedXStreams;
 import cucumber.table.DataTable;
@@ -29,8 +28,7 @@ public class DataTableVariableResolverDecorator extends DataTable {
 
     private static LocalizedXStreams.LocalizedXStream getXStream() {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        LocalizedXStreams.LocalizedXStream xStream = new LocalizedXStreams(classLoader).get(Locale.getDefault());
-        return xStream;
+        return new LocalizedXStreams(classLoader).get(Locale.getDefault());
     }
 
     private void populateRaw() {
@@ -46,8 +44,7 @@ public class DataTableVariableResolverDecorator extends DataTable {
         dataTableRows.addAll(Collections2.transform(rows, new Function<DataTableRow, DataTableRow>() {
             @Override
             public DataTableRow apply(@Nullable final DataTableRow dataTableRow) {
-                DataTableRow dt = new VariableResolverRowDecorator(dataTableRow, context);
-                return dt;
+                return new VariableResolverRowDecorator(dataTableRow, context);
             }
         }));
         return dataTableRows;
