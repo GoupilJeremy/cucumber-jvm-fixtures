@@ -5,7 +5,6 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Random;
 
-import cucumber.table.DataTable;
 import fixtures.common.RowToObjectDataSource;
 import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
@@ -22,7 +21,6 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
 
     private Client client;
 
-    private DataTable dataTable;
 
     private String index;
 
@@ -30,28 +28,17 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
 
     private static Random random = new Random();
 
-    public ElasticSearchWrapper(DataTable dataTable, String index, String type) throws IOException {
-        this.client = NodeBuilder.nodeBuilder().local(true).client(HOSTING_NO_DATA).data(false).node().client();
-        this.dataTable = dataTable;
-        this.index = index;
-        this.type = type;
-    }
-
-    public ElasticSearchWrapper(DataTable dataTable, String index, String type, Writer mapping,
+    public ElasticSearchWrapper(String index, String type, Writer mapping,
             final String templateName) throws IOException {
         this.client = NodeBuilder.nodeBuilder().local(true).client(HOSTING_NO_DATA).data(false).node().client();
-        this.dataTable = dataTable;
         this.index = index;
         this.type = type;
-        reInitIndex(mapping, templateName);
-    }
-
-    private void reInitIndex(final Writer mapping, final String templateName) throws IOException {
         if (client.admin().indices().prepareExists(index).execute().actionGet().exists()) {
             client.admin().indices().prepareDelete(index).execute().actionGet();
         }
         client.admin().indices().prepareCreate(index).execute().actionGet();
-        client.admin().indices().preparePutTemplate(index).setTemplate(templateName).setSource(mapping.toString()).execute().actionGet();
+        client.admin().indices().preparePutTemplate(index).setTemplate(templateName).setSource(mapping.toString())
+                .execute().actionGet();
     }
 
     public BulkResponse persistAndIndex(final List<XContentBuilder> documents) {
