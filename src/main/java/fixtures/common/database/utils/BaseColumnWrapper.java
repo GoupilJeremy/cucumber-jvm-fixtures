@@ -1,6 +1,5 @@
 package fixtures.common.database.utils;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -12,6 +11,20 @@ import com.google.common.collect.Lists;
 public class BaseColumnWrapper {
     private EnumSet enumSet;
 
+    private final static  Function<IBaseColumnToTable, String> GET_BASE_COLUMN_NAME =   new Function<IBaseColumnToTable, String>() {
+            @Override
+            public String apply(final IBaseColumnToTable input) {
+                return input.getBaseColumnName();
+            }
+        };
+
+    private final static Function<IBaseColumnToTable, String> GET_DATATABLE_COLUMN_NAME = new Function<IBaseColumnToTable, String>() {
+            @Override
+            public String apply(final IBaseColumnToTable input) {
+                return input.getDatatableColumnName();
+            }
+        };
+
     public BaseColumnWrapper(Class myEnum) {
         enumSet = EnumSet.allOf(myEnum);
     }
@@ -21,21 +34,13 @@ public class BaseColumnWrapper {
     }
 
     public List<String> getBaseColumnNames() {
-        return getColumns(new Function<IBaseColumnToTable, String>() {
-            @Override
-            public String apply(final IBaseColumnToTable input) {
-                return input.getBaseColumnName();
-            }
-        });
+        return getColumns(GET_BASE_COLUMN_NAME);
     }
 
+
+
     public List<String> getDatatableColumnNames() {
-        return getColumns(new Function<IBaseColumnToTable, String>() {
-            @Override
-            public String apply(final IBaseColumnToTable input) {
-                return input.getDatatableColumnName();
-            }
-        });
+        return getColumns(GET_DATATABLE_COLUMN_NAME);
     }
 
     private List<String> getColumns(Function<IBaseColumnToTable, String> function) {
