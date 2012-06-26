@@ -11,6 +11,7 @@ import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.node.NodeBuilder;
 
@@ -19,8 +20,9 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
 
     private static final boolean HOSTING_NO_DATA = true;
 
-    private Client client;
+    private static final String ALL_INDICES = "_all";
 
+    private Client client;
 
     private String index;
 
@@ -28,17 +30,25 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
 
     private static Random random = new Random();
 
-    public ElasticSearchWrapper(String index, String type, Writer mapping,
-            final String templateName) throws IOException {
+    public ElasticSearchWrapper(String index, String type) throws IOException {
         this.client = NodeBuilder.nodeBuilder().local(true).client(HOSTING_NO_DATA).data(false).node().client();
         this.index = index;
         this.type = type;
-        if (client.admin().indices().prepareExists(index).execute().actionGet().exists()) {
-            client.admin().indices().prepareDelete(index).execute().actionGet();
+    }
+
+    public static void deleteAllIndices() {
+        final Client innerClient = NodeBuilder.nodeBuilder().local(true).client(HOSTING_NO_DATA).data(false).node()
+                .client();
+        innerClient.admin().indices().prepareDelete(ALL_INDICES).execute().actionGet();
+    }
+
+    public void initIndex(final Writer mapping, final String templateName) {
+        final IndicesAdminClient adminClient = client.admin().indices();
+        if (!adminClient.prepareExists(index).execute().actionGet().exists()) {
+            adminClient.prepareCreate(index).execute().actionGet();
+            adminClient.preparePutTemplate(index).setTemplate(templateName).setSource(mapping.toString())
+                    .execute().actionGet();
         }
-        client.admin().indices().prepareCreate(index).execute().actionGet();
-        client.admin().indices().preparePutTemplate(index).setTemplate(templateName).setSource(mapping.toString())
-                .execute().actionGet();
     }
 
     public BulkResponse persistAndIndex(final List<XContentBuilder> documents) {
@@ -53,7 +63,6 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
     }
 
     private IndexRequestBuilder indexRow(final Client client, XContentBuilder xContentBuilder) {
-
         return client.prepareIndex(index, type, random.nextInt(BIG_ID_INTERVAL) + "").setSource(xContentBuilder);
     }
 }
