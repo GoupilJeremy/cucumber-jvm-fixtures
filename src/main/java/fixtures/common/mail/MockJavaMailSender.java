@@ -1,6 +1,5 @@
 package fixtures.common.mail;
 
-import javax.annotation.Nullable;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import java.io.InputStream;
@@ -96,7 +95,7 @@ public class MockJavaMailSender implements JavaMailSender {
 
         return Collections2.filter(mailBeans, new Predicate<MailBean>() {
             @Override
-            public boolean apply(@Nullable final MailBean input) {
+            public boolean apply(final MailBean input) {
                 return input.getSubject().contains(mailSubject);
             }
         });

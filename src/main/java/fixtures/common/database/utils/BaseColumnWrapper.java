@@ -23,7 +23,7 @@ public class BaseColumnWrapper {
     public List<String> getBaseColumnNames() {
         return getColumns(new Function<IBaseColumnToTable, String>() {
             @Override
-            public String apply(@Nullable final IBaseColumnToTable input) {
+            public String apply(final IBaseColumnToTable input) {
                 return input.getBaseColumnName();
             }
         });
@@ -32,7 +32,7 @@ public class BaseColumnWrapper {
     public List<String> getDatatableColumnNames() {
         return getColumns(new Function<IBaseColumnToTable, String>() {
             @Override
-            public String apply(@Nullable final IBaseColumnToTable input) {
+            public String apply(final IBaseColumnToTable input) {
                 return input.getDatatableColumnName();
             }
         });

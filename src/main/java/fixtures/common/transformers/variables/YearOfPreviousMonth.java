@@ -12,7 +12,7 @@ public class YearOfPreviousMonth implements Function<String, String> {
     private MutableDateTime previousMonth = MutableDateTime.now().monthOfYear().add(-1);
 
     @Override
-    public String apply(@Nullable final String input) {
+    public String apply(final String input) {
         return input.replaceAll(YEAR_OF_PREVIOUS_MONTH_VARIABLE_NAME, previousMonth.year().getAsText(Locale.FRENCH));
     }
 }

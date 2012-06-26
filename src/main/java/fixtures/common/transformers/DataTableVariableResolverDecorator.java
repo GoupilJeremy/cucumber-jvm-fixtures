@@ -1,6 +1,5 @@
 package fixtures.common.transformers;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -43,7 +42,7 @@ public class DataTableVariableResolverDecorator extends DataTable {
         List<DataTableRow> dataTableRows = new ArrayList<DataTableRow>();
         dataTableRows.addAll(Collections2.transform(rows, new Function<DataTableRow, DataTableRow>() {
             @Override
-            public DataTableRow apply(@Nullable final DataTableRow dataTableRow) {
+            public DataTableRow apply(final DataTableRow dataTableRow) {
                 return new VariableResolverRowDecorator(dataTableRow, context);
             }
         }));
