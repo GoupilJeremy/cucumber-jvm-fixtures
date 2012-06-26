@@ -25,7 +25,6 @@ public class RowsToObject<Res> {
 
     private Map<String, Object> context = new HashMap<String, Object>();
 
-    private Object[] args;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RowsToObject.class);
 
@@ -56,7 +55,6 @@ public class RowsToObject<Res> {
             if (rowToObject == null) {
                 throw new IllegalStateException("pas de constructeur trouvé pour la classe " + clazz.getName());
             }
-            rowToObject.setArgs(args);
             rowToObject.setContext(context);
 
             results.add(rowToObject.mapRowToObject());
@@ -119,7 +117,4 @@ public class RowsToObject<Res> {
         this.context = context;
     }
 
-    public void setArgs(final Object[] args) {
-        this.args = args;
-    }
 }

@@ -7,11 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.base.Objects;
 import fixtures.common.RowToObjectDataSource;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +27,6 @@ public abstract class RowToObject<D extends RowToObjectDataSource,Res> {
 
     protected Map<String, Object> context;
 
-    protected Object[] args;
 
     public RowToObject(Map<String, Integer> headers, final List<String> row, final D dataSource) {
         if ( headers == null  || headers.isEmpty()) {
@@ -115,14 +112,6 @@ public abstract class RowToObject<D extends RowToObjectDataSource,Res> {
 
     public void setContext(final Map<String, Object> context) {
         this.context = context;
-    }
-
-    public Object[] getArgs() {
-        return args;
-    }
-
-    public void setArgs(final Object[] args) {
-        this.args = args;
     }
 
     public D getRowToObjectDataSource() {
