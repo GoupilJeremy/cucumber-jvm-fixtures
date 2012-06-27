@@ -50,7 +50,7 @@ public abstract class RowToObject<D extends RowToObjectDataSource,Res> {
     protected abstract Res mapRowToObject();
 
 
-    protected static String getValue(final List<String> row, final String column, final Map<String, Integer> headers,
+    protected  String getValue(final List<String> row, final String column, final Map<String, Integer> headers,
             String defaultValue) {
         String value = defaultValue;
         Integer index = MapUtils.getInteger(headers, column);
@@ -59,14 +59,14 @@ public abstract class RowToObject<D extends RowToObjectDataSource,Res> {
             if (!StringUtils.isBlank(v)) {
                 value = v;
             }
-        } else {
-            LOGGER.debug("column name no present into step:'" + column + "'");
+        }else if(!context.containsKey(column)){
+            LOGGER.error("column name no present into step:'" + column + "'");
         }
         return value;
     }
 
 
-    protected static  <E> E getValueAsObject(final List<String> row, final String column, final Map<String, Integer> headers,
+    protected   <E> E getValueAsObject(final List<String> row, final String column, final Map<String, Integer> headers,
              String defaultValue,Map<String,Class> columnNamesAndTypes) {
          String value = getValue(row,column,headers,defaultValue);
         Class clazz = columnNamesAndTypes.get(column);
