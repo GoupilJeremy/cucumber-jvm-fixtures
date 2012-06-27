@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 /**
  * map une ligne de tableau cucumber vers un objet.
  */
-public abstract class RowToObject<D extends RowToObjectDataSource,Res> {
+public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
     protected Map<String, Integer> headers;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RowToObject.class);
@@ -27,9 +27,10 @@ public abstract class RowToObject<D extends RowToObjectDataSource,Res> {
 
     protected Map<String, Object> context;
 
+    protected Object[] args;
 
     public RowToObject(Map<String, Integer> headers, final List<String> row, final D dataSource) {
-        if ( headers == null  || headers.isEmpty()) {
+        if (headers == null || headers.isEmpty()) {
             throw new IllegalArgumentException(
                     "la map de correspondance entre le nom de la colonne et l'index est vide ");
         }
@@ -70,14 +71,14 @@ public abstract class RowToObject<D extends RowToObjectDataSource,Res> {
              String defaultValue,Map<String,Class> columnNamesAndTypes) {
          String value = getValue(row,column,headers,defaultValue);
         Class clazz = columnNamesAndTypes.get(column);
-        if(clazz == null){
-              throw new IllegalArgumentException("Column "+column+" type not defined in columnNamesAndTypes");
+        if (clazz == null) {
+            throw new IllegalArgumentException("Column " + column + " type not defined in columnNamesAndTypes");
         }
         try {
 
             Constructor constructor = clazz.getConstructor(String.class);
 
-        return (E) constructor.newInstance(value);
+            return (E) constructor.newInstance(value);
         } catch (NoSuchMethodException e) {
             LOGGER.error(e.getMessage());
         } catch (InvocationTargetException e) {
@@ -88,17 +89,24 @@ public abstract class RowToObject<D extends RowToObjectDataSource,Res> {
             LOGGER.error(e.getMessage());
 
         }
-              throw new IllegalArgumentException("value" +value+" of column "+column+" cannot be cast ");
+        throw new IllegalArgumentException("value" + value + " of column " + column + " cannot be cast ");
+    }
 
-     }
+   
 
     public String getValue(String column) {
+        String value = StringUtils.trim(getValue(row, column, headers, StringUtils.EMPTY));
+        if (StringUtils.isNotBlank(value)) {
+            return value;
+        }
 
-            String value = StringUtils.trim(getValue(row, column, headers, StringUtils.EMPTY));
-            if (StringUtils.isNotBlank(value)) {
-                return value;
-            }
+        return StringUtils.EMPTY;
+    }
 
+    public String getValue(String... columns) {
+        for (String column : columns) {
+            return getValue(column);
+        }
         return StringUtils.EMPTY;
     }
 
@@ -116,5 +124,13 @@ public abstract class RowToObject<D extends RowToObjectDataSource,Res> {
 
     public D getRowToObjectDataSource() {
         return rowToObjectDataSource;
+    }
+
+     public Object[] getArgs() {
+        return args;
+    }
+
+    public void setArgs(final Object[] args) {
+        this.args = args;
     }
 }
