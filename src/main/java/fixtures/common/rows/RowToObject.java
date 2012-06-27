@@ -60,7 +60,7 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
             if (!StringUtils.isBlank(v)) {
                 value = v;
             }
-        }else if(!context.containsKey(column)){
+        }else if(context==null||!context.containsKey(column)){
             LOGGER.error("column name no present into step:'" + column + "'");
         }
         return value;
