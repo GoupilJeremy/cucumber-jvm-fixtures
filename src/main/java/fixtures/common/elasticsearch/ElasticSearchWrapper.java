@@ -30,8 +30,8 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
 
     private static Random random = new Random();
 
-    public ElasticSearchWrapper(String index, String type) throws IOException {
-        this.client = NodeBuilder.nodeBuilder().local(true).client(HOSTING_NO_DATA).data(false).node().client();
+    public ElasticSearchWrapper(Client client, String index, String type) throws IOException {
+        this.client = client;
         this.index = index;
         this.type = type;
     }
@@ -46,8 +46,8 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
         final IndicesAdminClient adminClient = client.admin().indices();
         if (!adminClient.prepareExists(index).execute().actionGet().exists()) {
             adminClient.prepareCreate(index).execute().actionGet();
-            adminClient.preparePutTemplate(index).setTemplate(templateName).setSource(mapping.toString())
-                    .execute().actionGet();
+            adminClient.preparePutTemplate(index).setTemplate(templateName).setSource(mapping.toString()).execute()
+                    .actionGet();
         }
     }
 
