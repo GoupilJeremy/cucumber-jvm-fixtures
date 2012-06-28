@@ -17,7 +17,10 @@ import gherkin.formatter.model.Row;
 
 public class DataTableVariableResolverDecorator extends DataTable {
 
-         private List<DataTableRow> newGherkinRowsMutable;
+    private DataTable dataTableToDecorate;
+    private Map<String, String> context;
+
+
 
     public DataTableVariableResolverDecorator(DataTable dataTable) {
         this(dataTable, Maps.<String, String>newHashMap());
@@ -26,9 +29,9 @@ public class DataTableVariableResolverDecorator extends DataTable {
     public DataTableVariableResolverDecorator(DataTable dataTable, Map<String, String> context) {
         super(new ArrayList<DataTableRow>(), new TableConverter(getXStream(), null));
 
-        newGherkinRowsMutable = Lists.newArrayList(decorate(dataTable.getGherkinRows(), context));
+        this.dataTableToDecorate = dataTable;
+        this.context = context;
 
-        populateRaw();
     }
 
     private static LocalizedXStreams.LocalizedXStream getXStream() {
@@ -36,17 +39,17 @@ public class DataTableVariableResolverDecorator extends DataTable {
         return new LocalizedXStreams(classLoader).get(Locale.getDefault());
     }
 
-    private void populateRaw() {
-        for (Row row : newGherkinRowsMutable) {
-            List<String> list = new ArrayList<String>();
-            list.addAll(row.getCells());
-            raw().add(list);
-        }
+    /**
+     * En attendant de trouver mieux  : pour la compatibilité 1.0.10
+     * @return  DataTable
+     */
+    public DataTable getDataTableDecorated(){
+        return new DataTable(decorate(),new TableConverter(getXStream(), null));
     }
 
-    protected List<DataTableRow> decorate(List<DataTableRow> rows, final Map<String, String> context) {
+    protected  List<DataTableRow> decorate() {
         List<DataTableRow> dataTableRows = new ArrayList<DataTableRow>();
-        dataTableRows.addAll(Collections2.transform(rows, new Function<DataTableRow, DataTableRow>() {
+        dataTableRows.addAll(Collections2.transform(dataTableToDecorate.getGherkinRows(), new Function<DataTableRow, DataTableRow>() {
             @Override
             public DataTableRow apply(final DataTableRow dataTableRow) {
                 return new VariableResolverRowDecorator(dataTableRow, context);
