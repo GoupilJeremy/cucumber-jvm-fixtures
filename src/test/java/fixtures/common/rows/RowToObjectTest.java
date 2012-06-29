@@ -1,6 +1,7 @@
 package fixtures.common.rows;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
@@ -28,19 +29,18 @@ public class RowToObjectTest {
 
     protected static final String SECOND_COLUMN_NAME = "second column name";
 
-    private Map<String, Integer> headers;
-
-    private List<String> row;
+    private Map<String, Integer>  headers = new HashMap<String, Integer>();
+    private List<String> row = new ArrayList<String>();
 
     @Mock
     private RowToObjectDataSource rowToObjectDataSource;
 
+
     @Test
     public void testGetValue_nominal_case() {
         //given
-        Map<String, Integer> headers = new HashMap<String, Integer>();
         headers.put(FIRST_COLUMN_NAME, FIRST_COLUMN_INDEX);
-        List<String> row = new ArrayList<String>();
+
         row.add(FIRST_COLUMN_VALUE);
         RowToObject rowToObject = new RowToObject(headers, row, rowToObjectDataSource) {
             @Override
@@ -106,7 +106,6 @@ public class RowToObjectTest {
     @Test(expected = IllegalArgumentException.class)
     public void testGetValue_with_null_headers() {
         //given
-        List<String> row = new ArrayList<String>();
 
         row.add(FIRST_COLUMN_VALUE);
 
@@ -121,23 +120,36 @@ public class RowToObjectTest {
     @Test
     public void test_getValue_with_Default_value() {
         //given
-        Map<String, Integer> headers = new HashMap<String, Integer>();
-        headers.put(FIRST_COLUMN_NAME, FIRST_COLUMN_INDEX);
-        headers.put(SECOND_COLUMN_NAME, SECOND_COLUMN_INDEX);
-        List<String> row = new ArrayList<String>();
-        row.add(StringUtils.EMPTY);
-        row.add(FIRST_COLUMN_VALUE);
-        RowToObject rowToObject = new RowToObject(headers, row, rowToObjectDataSource) {
-            @Override
-            protected Object mapRowToObject() {
-                return null;
-            }
-        };
+        RowToObject rowToObject = getRowToObject();
 
         //when
         final String value = rowToObject.getValueForColumn(FIRST_COLUMN_NAME, DEFAULT_COLUMN_VALUE);
 
         //then
         assertThat("value =" + value, value, is(DEFAULT_COLUMN_VALUE));
+    }
+
+    @Test
+    public void test_getArgs_copy_when_null(){
+        //given
+        RowToObject rowToObject = getRowToObject();
+        rowToObject.setArgs(null);
+
+        // when  then
+        assertThat(rowToObject.getArgs(), is(nullValue()));
+    }
+
+    private RowToObject getRowToObject() {
+          headers.put(FIRST_COLUMN_NAME, FIRST_COLUMN_INDEX);
+        headers.put(SECOND_COLUMN_NAME, SECOND_COLUMN_INDEX);
+        List<String> row = new ArrayList<String>();
+        row.add(StringUtils.EMPTY);
+        row.add(FIRST_COLUMN_VALUE);
+        return  new RowToObject(headers, row, rowToObjectDataSource) {
+            @Override
+            protected Object mapRowToObject() {
+                return null;
+            }
+        };
     }
 }

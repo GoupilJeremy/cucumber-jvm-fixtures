@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.base.Objects;
+import com.google.common.collect.ObjectArrays;
 import fixtures.common.RowToObjectDataSource;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
@@ -51,8 +53,7 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
 
     protected abstract Res mapRowToObject();
 
-
-    protected  String getValue(final List<String> row, final String column, final Map<String, Integer> headers,
+    protected String getValue(final List<String> row, final String column, final Map<String, Integer> headers,
             String defaultValue) {
         String value = defaultValue;
         Integer index = MapUtils.getInteger(headers, column);
@@ -61,16 +62,15 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
             if (!StringUtils.isBlank(v)) {
                 value = v;
             }
-        }else if(context==null||!context.containsKey(column)){
+        } else if (context == null || !context.containsKey(column)) {
             LOGGER.error("column name no present into step:'" + column + "'");
         }
         return value;
     }
 
-
-    protected   <E> E getValueAsObject(final List<String> row, final String column, final Map<String, Integer> headers,
-             String defaultValue,Map<String,Class> columnNamesAndTypes) {
-         String value = getValue(row,column,headers,defaultValue);
+    protected <E> E getValueAsObject(final List<String> row, final String column, final Map<String, Integer> headers,
+            String defaultValue, Map<String, Class> columnNamesAndTypes) {
+        String value = getValue(row, column, headers, defaultValue);
         Class clazz = columnNamesAndTypes.get(column);
         if (clazz == null) {
             throw new IllegalArgumentException("Column " + column + " type not defined in columnNamesAndTypes");
@@ -88,12 +88,9 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
             LOGGER.error(e.getMessage());
         } catch (IllegalAccessException e) {
             LOGGER.error(e.getMessage());
-
         }
         throw new IllegalArgumentException("value" + value + " of column " + column + " cannot be cast ");
     }
-
-   
 
     public String getValue(String column) {
         String value = StringUtils.trim(getValue(row, column, headers, StringUtils.EMPTY));
@@ -127,11 +124,15 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
         return rowToObjectDataSource;
     }
 
-     public Object[] getArgs() {
-        return  Arrays.copyOf(args,args.length);
+    public Object[] getArgs() {
+        if (args == null) {
+            return args;
+        } else {
+            return ObjectArrays.newArray(args, args.length);
+        }
     }
 
     public void setArgs(final Object[] args) {
-        this.args = Arrays.copyOf(args,args.length);
+        this.args = (args == null)? null : ObjectArrays.newArray(args, args.length);
     }
 }
