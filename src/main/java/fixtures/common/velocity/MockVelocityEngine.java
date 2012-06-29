@@ -5,9 +5,6 @@ import java.net.URL;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
-import org.apache.velocity.exception.MethodInvocationException;
-import org.apache.velocity.exception.ParseErrorException;
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +39,7 @@ public class MockVelocityEngine extends VelocityEngine {
 
     @Override
     public boolean mergeTemplate(final String templateName, final String encoding, final Context context,
-            final Writer writer) throws ResourceNotFoundException, ParseErrorException, MethodInvocationException {
+            final Writer writer) {
         if (isExist(templateName)) {
             try {
                 return super.mergeTemplate(templateName, encoding, context, writer);
