@@ -33,7 +33,7 @@ public class EmailTransformer extends AbstractDataTableTransformer<Collection<Ma
 
     @Override
     protected List<DataTableRow> buildRowForDataTable(final Collection<MailBean> mailBeans,
-            final List<DataTableRow> rows) throws IllegalStateException {
+            final List<DataTableRow> rows)  {
 
         List<MailBean> sorted = Lists.newArrayList(mailBeans);
         Collections.sort(sorted, new MailBeanComparator());
