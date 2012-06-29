@@ -21,6 +21,12 @@ import org.springframework.util.StringUtils;
 public class FileToDatatable {
     private static final Transliterator ACCENTS_CONVERTER = Transliterator.getInstance("NFD;[:M:]Remove;NFC;");
 
+
+
+    private FileToDatatable(){}
+
+
+
     /**
      * Lit un fichier spécifiquement formaté (cf exemple) et le transforme en datatable.<br/>
      * Tous les cas ne sont pas gérés dans cette méthode. A enrichir <br/>
@@ -69,7 +75,6 @@ public class FileToDatatable {
 
     private static LocalizedXStreams.LocalizedXStream getXStream() {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        LocalizedXStreams.LocalizedXStream xStream = new LocalizedXStreams(classLoader).get(Locale.getDefault());
-        return xStream;
+        return new LocalizedXStreams(classLoader).get(Locale.getDefault());
     }
 }
