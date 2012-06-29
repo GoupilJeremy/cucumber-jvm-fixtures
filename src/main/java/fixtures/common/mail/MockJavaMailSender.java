@@ -90,9 +90,9 @@ public class MockJavaMailSender implements JavaMailSender {
     }
 
     public Collection<MailBean> sendMails(final String mailSubject) {
-        final List<MailBean> mailBeans = getMailBeans();
+        final List<MailBean> mailBeanList = getMailBeans();
 
-        return Collections2.filter(mailBeans, new Predicate<MailBean>() {
+        return Collections2.filter(mailBeanList, new Predicate<MailBean>() {
             @Override
             public boolean apply(final MailBean input) {
                 return input.getSubject().contains(mailSubject);

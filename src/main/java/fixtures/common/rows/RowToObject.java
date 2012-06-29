@@ -124,13 +124,13 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
 
     public Object[] getArgs() {
         if (args == null) {
-            return null;
+            return new Object[0];
         } else {
             return ObjectArrays.newArray(args, args.length);
         }
     }
 
     public void setArgs(final Object[] args) {
-        this.args = (args == null)? null : ObjectArrays.newArray(args, args.length);
+        this.args = (args == null)?  new Object[0] : ObjectArrays.newArray(args, args.length);
     }
 }
