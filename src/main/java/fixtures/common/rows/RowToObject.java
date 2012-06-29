@@ -2,6 +2,7 @@ package fixtures.common.rows;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -127,10 +128,10 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
     }
 
      public Object[] getArgs() {
-        return args;
+        return  Arrays.copyOf(args,args.length);
     }
 
     public void setArgs(final Object[] args) {
-        this.args = args;
+        this.args = Arrays.copyOf(args,args.length);
     }
 }
