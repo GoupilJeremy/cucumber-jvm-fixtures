@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ObjectArrays;
 import cucumber.runtime.CucumberException;
 import cucumber.table.DataTable;
 import fixtures.common.RowToObjectDataSource;
@@ -121,6 +122,6 @@ public class RowsToObject<Res> {
     }
 
     public void setArgs(final Object[] args) {
-        this.args = args;
+         this.args = (args == null)? null : ObjectArrays.newArray(args, args.length);
     }
 }
