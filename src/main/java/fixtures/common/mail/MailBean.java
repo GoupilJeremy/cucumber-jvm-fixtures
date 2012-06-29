@@ -71,7 +71,7 @@ public class MailBean {
 
     private String extractAttachment(final MimeMessage mimeMessage) throws IOException, MessagingException {
         Object content = mimeMessage.getContent();
-        String attachment = StringUtils.EMPTY;
+        String extractedAttachment = StringUtils.EMPTY;
         if (content instanceof MimeMultipart) {
             MimeMultipart mimeMultipart = (MimeMultipart) content;
             //MimeMultipart bodyPart = (MimeMultipart) mimeMultipart.getBodyPart(0).getContent();
@@ -81,7 +81,7 @@ public class MailBean {
                     FileInputStream fileInputStream = (FileInputStream) mimeMultipart.getBodyPart(1).getContent();
                     List listLines = IOUtils.readLines(fileInputStream, CharEncoding.ISO_8859_1);
                     // on remplace les espaces non sécables par un espace normal
-                    attachment = StringUtils.replace(StringUtils.join(listLines, "\n"), " ", " ");
+                    extractedAttachment = StringUtils.replace(StringUtils.join(listLines, "\n"), " ", " ");
                     // ferme le flux
                     IOUtils.closeQuietly(fileInputStream);
                 } else if (mimeMultipart.getBodyPart(1).getContent() instanceof ByteArrayInputStream) {
@@ -89,18 +89,18 @@ public class MailBean {
                             .getContent();
                     List listLines = IOUtils.readLines(fileInputStream, CharEncoding.ISO_8859_1);
                     // on remplace les espaces non sécables par un espace normal
-                    attachment = StringUtils.replace(StringUtils.join(listLines, "\n"), " ", " ");
+                    extractedAttachment = StringUtils.replace(StringUtils.join(listLines, "\n"), " ", " ");
                     // ferme le flux
                     IOUtils.closeQuietly(fileInputStream);
                 }
             }
         }
-        return attachment;
+        return extractedAttachment;
     }
 
     private String extractBody(final MimeMessage mimeMessage) throws IOException, MessagingException {
         Object content = mimeMessage.getContent();
-        String body = StringUtils.EMPTY;
+        String extractedBody = StringUtils.EMPTY;
         if (content instanceof MimeMultipart) {
             MimeMultipart mimeMultipart = (MimeMultipart) content;
             MimeMultipart bodyPart = (MimeMultipart) mimeMultipart.getBodyPart(0).getContent();
@@ -117,12 +117,12 @@ public class MailBean {
                 //
                 List listLines = IOUtils.readLines(inputStream, CharEncoding.ISO_8859_1);
                 // on remplace les espaces non sécables par un espace normal
-                body = StringUtils.replace(StringUtils.join(listLines, CARRIAGE_RETURN), " ", " ");
+                extractedBody = StringUtils.replace(StringUtils.join(listLines, CARRIAGE_RETURN), " ", " ");
             }
         } else if (content instanceof String) {
-            body = (String) content;
+            extractedBody = (String) content;
         }
-        return body;
+        return extractedBody;
     }
 
     private String extractFrom(final MimeMessage mimeMessage) throws MessagingException {
