@@ -14,8 +14,13 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.node.NodeBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ElasticSearchWrapper implements RowToObjectDataSource {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchWrapper.class);
+
     private static final int BIG_ID_INTERVAL = 1000000;
 
     private static final boolean HOSTING_NO_DATA = true;
@@ -33,6 +38,7 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
     public ElasticSearchWrapper(Client client, String index, String type) throws IOException {
         this.client = client;
         this.index = index;
+        LOGGER.info(index);
         this.type = type;
     }
 
@@ -57,6 +63,7 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
             final IndexRequestBuilder indexRequestBuilder = indexRow(client, document);
             bulkRequestBuilder.add(indexRequestBuilder);
         }
+
         BulkResponse bulkResponse = bulkRequestBuilder.execute().actionGet();
         client.admin().indices().refresh(new RefreshRequest(index)).actionGet();
         return bulkResponse;
