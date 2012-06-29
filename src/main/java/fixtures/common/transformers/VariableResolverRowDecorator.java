@@ -15,6 +15,7 @@ import fixtures.common.transformers.variables.YearOfPreviousMonth;
 import gherkin.formatter.model.DataTableRow;
 
 public class VariableResolverRowDecorator extends DataTableRow{
+    private static final long serialVersionUID = 1L;
     private DataTableRow decoratedRow;
 
     private Map<String, String> context;
