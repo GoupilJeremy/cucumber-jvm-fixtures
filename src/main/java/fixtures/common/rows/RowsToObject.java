@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cucumber.runtime.CucumberException;
 import cucumber.table.DataTable;
 import fixtures.common.RowToObjectDataSource;
 import org.apache.commons.collections.CollectionUtils;
@@ -90,17 +91,17 @@ public class RowsToObject<Res> {
             }
         } catch (NoSuchMethodException e) {
             LOGGER.debug(message.toString());
-            throw new RuntimeException(message.toString(), e);
+            throw new CucumberException(message.toString(), e);
         } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
+            throw new CucumberException(e);
         } catch (InstantiationException e) {
-            throw new RuntimeException(e);
+            throw new CucumberException(e);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new CucumberException(e);
         } catch (IllegalArgumentException e) {
             LOGGER.debug("classes:" + classes);
             LOGGER.debug("args:" + args);
-            throw new RuntimeException(e);
+            throw new CucumberException(e);
         }
         return rowToObject;
     }

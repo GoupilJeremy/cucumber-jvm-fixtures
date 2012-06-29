@@ -2,13 +2,11 @@ package fixtures.common.rows;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.ObjectArrays;
 import fixtures.common.RowToObjectDataSource;
 import org.apache.commons.collections.MapUtils;
@@ -126,7 +124,7 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
 
     public Object[] getArgs() {
         if (args == null) {
-            return args;
+            return null;
         } else {
             return ObjectArrays.newArray(args, args.length);
         }
