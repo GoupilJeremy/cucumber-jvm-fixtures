@@ -17,7 +17,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailAuthenticationException;
-import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -38,19 +37,19 @@ public class MockJavaMailSender implements JavaMailSender {
         throw new NotImplementedException("createMimeMessage()");
     }
 
-    public MimeMessage createMimeMessage(final InputStream contentStream) throws MailException {
+    public MimeMessage createMimeMessage(final InputStream contentStream)  {
         throw new NotImplementedException("createMimeMessage(InputStream contentStream)");
     }
 
-    public void send(final MimeMessage mimeMessage) throws MailException {
+    public void send(final MimeMessage mimeMessage)  {
         throw new NotImplementedException("send(MimeMessage mimeMessage)");
     }
 
-    public void send(final MimeMessage[] mimeMessages) throws MailException {
+    public void send(final MimeMessage[] mimeMessages)  {
         throw new NotImplementedException("send(MimeMessage[] mimeMessages)");
     }
 
-    public void send(final MimeMessagePreparator mimeMessagePreparator) throws MailException {
+    public void send(final MimeMessagePreparator mimeMessagePreparator) {
         MailBean mailBean;
         try {
             MimeMessage mimeMessage = new MimeMessage(Session.getInstance(new Properties()));
@@ -70,11 +69,11 @@ public class MockJavaMailSender implements JavaMailSender {
         }
     }
 
-    public void send(final MimeMessagePreparator[] mimeMessagePreparators) throws MailException {
+    public void send(final MimeMessagePreparator[] mimeMessagePreparators)  {
         throw new NotImplementedException("send(MimeMessagePreparator mimeMessagePreparator)");
     }
 
-    public void send(final SimpleMailMessage simpleMessage) throws MailException {
+    public void send(final SimpleMailMessage simpleMessage)  {
         MailBean mailBean = new MailBean(simpleMessage);
         if (StringUtils.equalsIgnoreCase(mailBean.getTo(), "exception@aden.com")) {
             throw new MailAuthenticationException("Bad email from Mock :)");
@@ -82,7 +81,7 @@ public class MockJavaMailSender implements JavaMailSender {
         mailBeans.add(mailBean);
     }
 
-    public void send(final SimpleMailMessage[] simpleMessages) throws MailException {
+    public void send(final SimpleMailMessage[] simpleMessages)  {
         throw new NotImplementedException("send(SimpleMailMessage[] simpleMessages)");
     }
 
