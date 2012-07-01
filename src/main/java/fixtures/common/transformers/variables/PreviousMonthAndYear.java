@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.MutableDateTime;
 
@@ -16,7 +17,8 @@ public class PreviousMonthAndYear implements Function<String, String> {
 
     @Override
     public String apply(final String input) {
-        return input.replaceAll(PREVIOUS_MONTH_VARIABLE_NAME, Joiner.on(SPACE)
+        String strToProceed = Strings.nullToEmpty(input);
+        return strToProceed.replaceAll(PREVIOUS_MONTH_VARIABLE_NAME, Joiner.on(SPACE)
                 .join(StringUtils.capitalize(previousMonth.monthOfYear().getAsText(Locale.FRENCH)),
                         previousMonth.year().getAsText(Locale.FRENCH)));
     }

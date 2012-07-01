@@ -1,10 +1,12 @@
 package fixtures.common.transformers;
 
-import javax.annotation.Nullable;
-import java.util.Map;
-
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
+import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
+
+import javax.annotation.Nullable;
+import java.util.Map;
 
 public class VariableFunction implements Function<String, String> {
     private Map<String, String> context;
@@ -15,6 +17,10 @@ public class VariableFunction implements Function<String, String> {
 
     @Override
     public String apply(@Nullable final String input) {
-        return Objects.firstNonNull(context.get(input), input);
+	    String strToProceed = Strings.nullToEmpty(input);
+	    if ( context == null) {
+			return strToProceed;
+	    }
+	    return Objects.firstNonNull(context.get(input), strToProceed);
     }
 }

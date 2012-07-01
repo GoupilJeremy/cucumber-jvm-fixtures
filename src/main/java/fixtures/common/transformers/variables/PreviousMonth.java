@@ -3,6 +3,7 @@ package fixtures.common.transformers.variables;
 import java.util.Locale;
 
 import com.google.common.base.Function;
+import com.google.common.base.Strings;
 import org.joda.time.MutableDateTime;
 
 public class PreviousMonth implements Function<String, String> {
@@ -12,7 +13,8 @@ public class PreviousMonth implements Function<String, String> {
 
     @Override
     public String apply(final String input) {
-        return input.replaceAll(PREVIOUS_MONTH_VARIABLE_NAME, getPreviousMonth());
+        String strToProceed = Strings.nullToEmpty(input);
+        return strToProceed.replaceAll(PREVIOUS_MONTH_VARIABLE_NAME, getPreviousMonth());
     }
 
     public String getPreviousMonth() {

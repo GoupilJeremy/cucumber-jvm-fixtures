@@ -1,6 +1,7 @@
 package fixtures.common.transformers.variables;
 
 import com.google.common.base.Function;
+import com.google.common.base.Strings;
 import org.apache.commons.lang.StringUtils;
 
 public class CapitalizePreviousMonth implements Function<String, String> {
@@ -10,7 +11,8 @@ public class CapitalizePreviousMonth implements Function<String, String> {
 
     @Override
     public String apply(final String input) {
-        return input.replaceAll(PREVIOUS_MONTH_VARIABLE_NAME_UPPER,
+        String strToProceed = Strings.nullToEmpty(input);
+        return strToProceed.replaceAll(PREVIOUS_MONTH_VARIABLE_NAME_UPPER,
                 StringUtils.capitalize(previousMonth.getPreviousMonth()));
     }
 }

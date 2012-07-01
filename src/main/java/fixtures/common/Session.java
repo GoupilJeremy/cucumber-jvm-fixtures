@@ -18,7 +18,6 @@ public class Session implements StepParameter {
 
 
     private MockHttpSession newSession() {
-
         return new MockHttpSession();
     }
 
