@@ -80,6 +80,7 @@ public class RowsToObject<Res> {
             message.append(aClass.getCanonicalName());
             message.append(",");
         }
+        String msg = message.toString();
 
         try {
             Constructor constructor = clazz.getConstructor(classes);
@@ -88,11 +89,11 @@ public class RowsToObject<Res> {
                 final Object[] classes1 = list.toArray(new Object[list.size()]);
                 rowToObject = (RowToObject) constructor.newInstance(classes1);
             } else {
-                LOGGER.debug(message.toString());
+                LOGGER.debug(msg);
             }
         } catch (NoSuchMethodException e) {
-            LOGGER.debug(message.toString());
-            throw new CucumberException(message.toString(), e);
+            LOGGER.debug(msg);
+            throw new CucumberException(msg, e);
         } catch (InvocationTargetException e) {
             throw new CucumberException(e);
         } catch (InstantiationException e) {
@@ -100,7 +101,7 @@ public class RowsToObject<Res> {
         } catch (IllegalAccessException e) {
             throw new CucumberException(e);
         } catch (IllegalArgumentException e) {
-            LOGGER.debug("classes:" + classes);
+            LOGGER.debug("classes:" + msg);
             LOGGER.debug("args:" + args);
             throw new CucumberException(e);
         }
