@@ -10,6 +10,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.google.common.io.LineProcessor;
+import cucumber.runtime.CucumberException;
 import cucumber.table.DataTable;
 import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
@@ -47,7 +48,7 @@ public class FileTransformer extends AbstractDataTableTransformer<File> {
                 }
             });
         } catch (IOException e) {
-            throw new RuntimeException("Test cucumber", e);
+            throw new CucumberException("Test cucumber", e);
         }
 
         return dataTableRows;
