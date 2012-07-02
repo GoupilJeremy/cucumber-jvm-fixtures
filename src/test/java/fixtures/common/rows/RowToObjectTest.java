@@ -136,7 +136,7 @@ public class RowToObjectTest {
         rowToObject.setArgs(null);
 
         // when  then
-        assertThat(rowToObject.getArgs(), is(nullValue()));
+        assertThat(rowToObject.getArgs(), is(new Object[0]));
     }
 
     private RowToObject getRowToObject() {
