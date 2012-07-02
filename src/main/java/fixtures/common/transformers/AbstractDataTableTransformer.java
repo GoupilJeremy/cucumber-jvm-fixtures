@@ -33,5 +33,5 @@ public abstract class AbstractDataTableTransformer<T> implements IDataTableTrans
     }
 
     protected abstract List<DataTableRow> buildRowForDataTable(final T transform,
-            List<DataTableRow> rows) throws IllegalStateException;
+            List<DataTableRow> rows);
 }
