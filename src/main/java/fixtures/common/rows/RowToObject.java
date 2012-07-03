@@ -11,6 +11,7 @@ import com.google.common.collect.ObjectArrays;
 import fixtures.common.RowToObjectDataSource;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,7 +88,7 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
         } catch (IllegalAccessException e) {
             LOGGER.error(e.getMessage());
         }
-        throw new IllegalArgumentException("value" + value + " of column " + column + " cannot be cast ");
+        throw new IllegalArgumentException("value " + value + " of column " + column + " cannot be cast ");
     }
 
     public String getValue(String column) {
@@ -97,6 +98,11 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
         }
 
         return StringUtils.EMPTY;
+    }
+
+      public LocalDate getValueAsLocalDate(String column) {
+        String value = getValue(column);
+        return LocalDate.parse(value);
     }
 
     public String getValue(String... columns) {

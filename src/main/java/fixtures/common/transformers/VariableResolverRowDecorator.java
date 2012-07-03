@@ -8,9 +8,11 @@ import java.util.Map;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import fixtures.common.transformers.variables.CapitalizePreviousMonth;
+import fixtures.common.transformers.variables.LocalDateCurrentMonthAndYearInContext;
 import fixtures.common.transformers.variables.PreviousMonth;
 import fixtures.common.transformers.variables.PreviousMonthAndYear;
 import fixtures.common.transformers.variables.PreviousMonthUpper;
+import fixtures.common.transformers.variables.VariableFunction;
 import fixtures.common.transformers.variables.YearOfPreviousMonth;
 import gherkin.formatter.model.DataTableRow;
 
@@ -41,6 +43,7 @@ public class VariableResolverRowDecorator extends DataTableRow{
                 .transform(new PreviousMonthUpper()) //
                 .transform(new PreviousMonthAndYear()) //
                 .transform(new YearOfPreviousMonth())
+                .transform(new LocalDateCurrentMonthAndYearInContext(context))
                 .transform(new VariableFunction(context)));
     }
 

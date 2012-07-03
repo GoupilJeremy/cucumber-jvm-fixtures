@@ -1,6 +1,7 @@
 package fixtures.common.transformers;
 
 import com.google.common.collect.Maps;
+import fixtures.common.transformers.variables.VariableFunction;
 import org.junit.Test;
 
 import java.util.Map;
