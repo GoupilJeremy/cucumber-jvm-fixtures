@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.ObjectArrays;
 import fixtures.common.RowToObjectDataSource;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
@@ -100,7 +99,7 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
         return StringUtils.EMPTY;
     }
 
-      public LocalDate getValueAsLocalDate(String column) {
+    public LocalDate getValueAsLocalDate(String column) {
         String value = getValue(column);
         return LocalDate.parse(value);
     }
@@ -132,11 +131,18 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
         if (args == null) {
             return new Object[0];
         } else {
-            return ObjectArrays.newArray(args, args.length);
+            return copyArray(this.args);
         }
     }
 
     public void setArgs(final Object[] args) {
-        this.args = (args == null)?  new Object[0] : ObjectArrays.newArray(args, args.length);
+        this.args = (args == null) ? new Object[0] : copyArray(args);
+    }
+
+    private Object[] copyArray(Object[] arrayToCopy) {
+        int length = arrayToCopy.length;
+        Object[] arrayNew = new Object[length];
+        System.arraycopy(arrayToCopy, 0, arrayNew, 0, length);
+        return arrayNew;
     }
 }

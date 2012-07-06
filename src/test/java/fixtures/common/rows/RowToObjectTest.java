@@ -1,7 +1,6 @@
 package fixtures.common.rows;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
@@ -151,5 +150,75 @@ public class RowToObjectTest {
                 return null;
             }
         };
+    }
+    
+    // =============================================================================================
+    // setArgs
+    // =============================================================================================
+
+    @Test
+    public void testSetArgs_null_array() throws Exception {
+        RowToObject rowToObject = getRowToObject();
+        Object[] objects = null;
+        //
+        rowToObject.setArgs(objects);
+        //
+        assertThat(rowToObject.getArgs(), is(new Object[0]));
+    }
+
+    @Test
+    public void testSetArgs_empty_array() throws Exception {
+        RowToObject rowToObject = getRowToObject();
+        Object[] objects = new Object[0];
+        //
+        rowToObject.setArgs(objects);
+        //
+        assertThat(rowToObject.getArgs(), is(new Object[0]));
+    }
+
+    @Test
+    public void testSetArgs_array_with_one_data() throws Exception {
+        RowToObject rowToObject = getRowToObject();
+        Object[] objects = new Object[]{"one data"};
+        //
+        rowToObject.setArgs(objects);
+        //
+        assertThat(rowToObject.getArgs(), is(new Object[]{"one data"}));
+    }
+
+    @Test
+    public void testSetArgs_array_with_many_data() throws Exception {
+        RowToObject rowToObject = getRowToObject();
+        Object[] objects = new Object[]{"one data", "two data"};
+        //
+        rowToObject.setArgs(objects);
+        //
+        assertThat(rowToObject.getArgs(), is(new Object[]{"one data", "two data"}));
+    }
+
+    @Test
+    public void testSetArgs_array_with_many_data_less_data_after() throws Exception {
+        RowToObject rowToObject = getRowToObject();
+        Object[] objects = new Object[]{"one data", "two data"};
+        //
+        rowToObject.setArgs(objects);
+        assertThat(rowToObject.getArgs(), is(new Object[]{"one data", "two data"}));
+        //
+        Object[] objects02 = new Object[]{"one data2"};
+        rowToObject.setArgs(objects02);
+        assertThat(rowToObject.getArgs(), is(new Object[]{"one data2"}));
+    }
+
+    @Test
+    public void testSetArgs_array_with_many_data_more_data_after() throws Exception {
+        RowToObject rowToObject = getRowToObject();
+        Object[] objects = new Object[]{"one data", "two data"};
+        //
+        rowToObject.setArgs(objects);
+        assertThat(rowToObject.getArgs(), is(new Object[]{"one data", "two data"}));
+        //
+        Object[] objects02 = new Object[]{"one data2", "two data2", "three data2"};
+        rowToObject.setArgs(objects02);
+        assertThat(rowToObject.getArgs(), is(new Object[]{"one data2", "two data2", "three data2"}));
     }
 }
