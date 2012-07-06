@@ -28,12 +28,16 @@ public class RowToObjectTest {
 
     protected static final String SECOND_COLUMN_NAME = "second column name";
 
-    private Map<String, Integer>  headers = new HashMap<String, Integer>();
+    private static final String NOT_IN_LIST = "no_in_list";
+
+    private static final String NOT_IN_LIST_2 = "no_in_list_2";
+
+    private Map<String, Integer> headers = new HashMap<String, Integer>();
+
     private List<String> row = new ArrayList<String>();
 
     @Mock
     private RowToObjectDataSource rowToObjectDataSource;
-
 
     @Test
     public void testGetValue_nominal_case() {
@@ -128,8 +132,72 @@ public class RowToObjectTest {
         assertThat("value =" + value, value, is(DEFAULT_COLUMN_VALUE));
     }
 
+    // =================================================================================================================
+
     @Test
-    public void test_getArgs_copy_when_null(){
+    public void testGetValue_ellipse_nominal_case_first() {
+        //given
+        headers.put(FIRST_COLUMN_NAME, FIRST_COLUMN_INDEX);
+
+        row.add(FIRST_COLUMN_VALUE);
+        RowToObject rowToObject = new RowToObject(headers, row, rowToObjectDataSource) {
+            @Override
+            protected Object mapRowToObject() {
+                return null;
+            }
+        };
+
+        //when
+        final String value = rowToObject.getValue(FIRST_COLUMN_NAME, NOT_IN_LIST);
+
+        //then
+        assertThat("value =" + value, value, is(FIRST_COLUMN_VALUE));
+    }
+
+    @Test
+    public void testGetValue_ellipse_nominal_case_second() {
+        //given
+        headers.put(FIRST_COLUMN_NAME, FIRST_COLUMN_INDEX);
+
+        row.add(FIRST_COLUMN_VALUE);
+        RowToObject rowToObject = new RowToObject(headers, row, rowToObjectDataSource) {
+            @Override
+            protected Object mapRowToObject() {
+                return null;
+            }
+        };
+
+        //when
+        final String value = rowToObject.getValue(NOT_IN_LIST, FIRST_COLUMN_NAME);
+
+        //then
+        assertThat("value =" + value, value, is(FIRST_COLUMN_VALUE));
+    }
+
+
+    @Test
+    public void testGetValue_ellipse_nominal_case_no_one_found() {
+        //given
+        headers.put(FIRST_COLUMN_NAME, FIRST_COLUMN_INDEX);
+
+        row.add(FIRST_COLUMN_VALUE);
+        RowToObject rowToObject = new RowToObject(headers, row, rowToObjectDataSource) {
+            @Override
+            protected Object mapRowToObject() {
+                return null;
+            }
+        };
+
+        //when
+        final String value = rowToObject.getValue(NOT_IN_LIST, NOT_IN_LIST_2);
+
+        //then
+        assertThat("value =" + value, value, is(""));
+    }
+
+    // =================================================================================================================
+    @Test
+    public void test_getArgs_copy_when_null() {
         //given
         RowToObject rowToObject = getRowToObject();
         rowToObject.setArgs(null);
@@ -139,19 +207,19 @@ public class RowToObjectTest {
     }
 
     private RowToObject getRowToObject() {
-          headers.put(FIRST_COLUMN_NAME, FIRST_COLUMN_INDEX);
+        headers.put(FIRST_COLUMN_NAME, FIRST_COLUMN_INDEX);
         headers.put(SECOND_COLUMN_NAME, SECOND_COLUMN_INDEX);
         List<String> row = new ArrayList<String>();
         row.add(StringUtils.EMPTY);
         row.add(FIRST_COLUMN_VALUE);
-        return  new RowToObject(headers, row, rowToObjectDataSource) {
+        return new RowToObject(headers, row, rowToObjectDataSource) {
             @Override
             protected Object mapRowToObject() {
                 return null;
             }
         };
     }
-    
+
     // =============================================================================================
     // setArgs
     // =============================================================================================

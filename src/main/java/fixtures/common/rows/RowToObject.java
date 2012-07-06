@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.base.Strings;
 import fixtures.common.RowToObjectDataSource;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
@@ -106,7 +107,10 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
 
     public String getValue(String... columns) {
         for (String column : columns) {
-            return getValue(column);
+            String valueFound = getValue(column);
+            if (!Strings.isNullOrEmpty(valueFound)) {
+                return valueFound;
+            }
         }
         return StringUtils.EMPTY;
     }
