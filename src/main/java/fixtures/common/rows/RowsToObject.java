@@ -27,7 +27,7 @@ public class RowsToObject<Res> {
 
     private Map<String, Object> context = new HashMap<String, Object>();
 
-    private Object[] args;
+    protected Object[] args;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RowsToObject.class);
 
@@ -122,7 +122,14 @@ public class RowsToObject<Res> {
         this.context = context;
     }
 
-    public void setArgs(final Object[] args) {
-         this.args = (args == null)? null : ObjectArrays.newArray(args, args.length);
+    public void setArgs(final Object[] argsNew) {
+        if (argsNew == null) {
+            this.args = null;
+        }
+        else {
+            int length = argsNew.length;
+            this.args = ObjectArrays.newArray(argsNew, length);
+            System.arraycopy(argsNew, 0, this.args, 0, length);
+        }
     }
 }
