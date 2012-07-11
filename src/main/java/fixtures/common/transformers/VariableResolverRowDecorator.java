@@ -1,23 +1,16 @@
 package fixtures.common.transformers;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
-import fixtures.common.transformers.variables.CapitalizePreviousMonth;
-import fixtures.common.transformers.variables.LocalDateCurrentMonthAndYearInContext;
-import fixtures.common.transformers.variables.PreviousMonth;
-import fixtures.common.transformers.variables.PreviousMonthAndYear;
-import fixtures.common.transformers.variables.PreviousMonthUpper;
-import fixtures.common.transformers.variables.VariableFunction;
-import fixtures.common.transformers.variables.YearOfPreviousMonth;
 import gherkin.formatter.model.DataTableRow;
 
-public class VariableResolverRowDecorator extends DataTableRow{
+public class VariableResolverRowDecorator extends DataTableRow {
     private static final long serialVersionUID = 1L;
+
     private DataTableRow decoratedRow;
 
     private Map<String, String> context;
@@ -35,16 +28,16 @@ public class VariableResolverRowDecorator extends DataTableRow{
     }
 
     protected List<String> resolveVariables(List<String> stringsWithVariables) {
-        List<String> internalStringsWithVariables = checkNotNull(stringsWithVariables, Lists.newArrayList());
-        return Lists.newArrayList(FluentIterable  //
-                .from(internalStringsWithVariables) //
-                .transform(new CapitalizePreviousMonth()) //
-                .transform(new PreviousMonth()) //
-                .transform(new PreviousMonthUpper()) //
-                .transform(new PreviousMonthAndYear()) //
-                .transform(new YearOfPreviousMonth())
-                .transform(new LocalDateCurrentMonthAndYearInContext(context))
-                .transform(new VariableFunction(context)));
-    }
+        if (stringsWithVariables == null || stringsWithVariables.isEmpty()) {
+            return Lists.newArrayList();
+        }
 
+        FluentIterable<String> fluentIterable = FluentIterable.from(stringsWithVariables);
+        List<Function<String, String>> functions = VariableResolverStringDecorator.getFunctions(context);
+        for (Function<String, String> function : functions) {
+            fluentIterable = fluentIterable.transform(function);
+        }
+
+        return Lists.newArrayList(fluentIterable);
+    }
 }

@@ -10,24 +10,26 @@ public class LocalDateCurrentMonthAndYearInContext implements Function<String, S
 
     public static final String CURRENT_YEAR = "currentYear";
 
+    private static final String LOCAL_DATE_VARIABLE = "yyyy-mm-";
 
     private String currentMonth;
+
     private String currentYear;
 
-
     public LocalDateCurrentMonthAndYearInContext(Map<String, String> context) {
-        currentMonth = context.get(CURRENT_MONTH);
-        currentYear = context.get(CURRENT_YEAR);
+        if (context != null) {
+            currentMonth = context.get(CURRENT_MONTH);
+            currentYear = context.get(CURRENT_YEAR);
+        }
     }
 
     @Override
     public String apply(@Nullable final String input) {
-
-        if(currentMonth==null||currentYear==null||input==null||!input.startsWith("yyyy-mm-")){
+        if (currentMonth == null || currentYear == null || input == null || !input.startsWith(LOCAL_DATE_VARIABLE)) {
             return input;
         }
         String[] strings = input.split("-");
         String day = strings[strings.length - 1];
-        return currentYear+"-"+currentMonth+"-"+day;
+        return currentYear + "-" + currentMonth + "-" + day;
     }
 }
