@@ -27,7 +27,7 @@ public class NumericMonthTest {
 
     @Test
     public void testMonth_input_has_var() throws Exception {
-        String input = "{\"customerId\":124,\"from\":\"2009-${moisNumeric}\",\"to\":\"2012-${moisNumeric}\"";
+        String input = "2012-${moisNumeric}";
         NumericMonth numericMonth = new NumericMonth();
         String result = numericMonth.apply(input);
         String expectedMonth = DateTime.now().toString("MM");
