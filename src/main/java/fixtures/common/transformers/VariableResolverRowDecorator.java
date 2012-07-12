@@ -27,7 +27,7 @@ public class VariableResolverRowDecorator extends DataTableRow {
         return decoratedRow.getDiffType();
     }
 
-    protected List<String> resolveVariables(List<String> stringsWithVariables) {
+    private List<String> resolveVariables(List<String> stringsWithVariables) {
         if (stringsWithVariables == null || stringsWithVariables.isEmpty()) {
             return Lists.newArrayList();
         }

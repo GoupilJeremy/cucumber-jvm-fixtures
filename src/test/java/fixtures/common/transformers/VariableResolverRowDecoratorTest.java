@@ -51,19 +51,6 @@ public class VariableResolverRowDecoratorTest {
         DataTableRow row = new DataTableRow(Lists.<Comment>newArrayList(), null, 0);
     }
 
-    @Test
-    public void test_resolve_variables_with_null_cells() throws Exception {
-        //given
-        List<String> strings = Arrays.asList("1", "2", "${moisPrecedent}");
-        DataTableRow row = new DataTableRow(Lists.<Comment>newArrayList(), strings, 0);
-        DateTimeUtils.setCurrentMillisFixed(FIXED_TIME);
-        //when
-        List<String> stringsWithVariables = null;
-        List<String> list = new VariableResolverRowDecorator(row, Maps.<String, String>newHashMap())
-                .resolveVariables(stringsWithVariables);
-        //then
-        assertThat(list.isEmpty(), is(true));
-    }
 
     // =================================================================================================================
 
