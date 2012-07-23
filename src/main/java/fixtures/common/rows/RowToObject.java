@@ -12,6 +12,8 @@ import fixtures.common.RowToObjectDataSource;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +21,8 @@ import org.slf4j.LoggerFactory;
  * map une ligne de tableau cucumber vers un objet.
  */
 public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
+    public static final String DATE_FORMAT_YYYY_MM = "yyyy-MM";
+
     protected Map<String, Integer> headers;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RowToObject.class);
@@ -102,7 +106,8 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
 
     public LocalDate getValueAsLocalDate(String column) {
         String value = getValue(column);
-        return LocalDate.parse(value);
+        DateTimeFormatter formatter = DateTimeFormat.forPattern(DATE_FORMAT_YYYY_MM);
+        return formatter.parseLocalDate(value);
     }
 
     public String getValue(String... columns) {
