@@ -12,11 +12,8 @@
 	<packaging>jar</packaging>
 	<name>cucumber-jvm-fixtures</name>
 	<description>Librairie de fixtures utilitaires pour les projets utilisant cucumber-jvm</description>
-<<<<<<< HEAD
 	<version>0.0.13-SNAPSHOT</version>
-=======
-	<version>0.0.12</version>
->>>>>>> d7ca80905401329e6a137abde52552a9939be70a
+
 
 	<scm>
 		<connection>scm:git:git@github.com:figarocms/cucumber-jvm-fixtures.git</connection>
