@@ -19,7 +19,7 @@
 		<connection>scm:git:git@github.com:figarocms/cucumber-jvm-fixtures.git</connection>
 		<url>scm:git:git@github.com:figarocms/cucumber-jvm-fixtures.git</url>
 		<developerConnection>scm:git:git@github.com:figarocms/cucumber-jvm-fixtures.git</developerConnection>
-	  <tag>cucumber-jvm-fixtures-0.0.12</tag>
+
   </scm>
 
 	<repositories>
