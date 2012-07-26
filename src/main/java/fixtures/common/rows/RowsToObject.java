@@ -32,7 +32,7 @@ public class RowsToObject<Res> {
     private static final Logger LOGGER = LoggerFactory.getLogger(RowsToObject.class);
 
     /**
-     * à utiliser si on souhaite partager des variables entre steps via la Map context.
+     * Ã  utiliser si on souhaite partager des variables entre steps via la Map context.
      */
     public RowsToObject(DataTable dataTable, RowToObjectDataSource rowToObjectDataSource,
             Class<? extends RowToObject> clazz) {
@@ -56,7 +56,7 @@ public class RowsToObject<Res> {
                     rowToObjectDataSource.getClass());
 
             if (rowToObject == null) {
-                throw new IllegalStateException("pas de constructeur trouvé pour la classe " + clazz.getName());
+                throw new IllegalStateException("pas de constructeur trouvï¿½ pour la classe " + clazz.getName());
             }
             rowToObject.setArgs(args);
             rowToObject.setContext(context);
@@ -67,10 +67,10 @@ public class RowsToObject<Res> {
     }
 
     /**
-     * @param clazz   class implémentant RowToObject
+     * @param clazz   class implÃ©mentant RowToObject
      * @param args    arguments du constructeur
      * @param classes classes des arguments du constructeur, afin de retrouver ce constructeur dans la classe
-     * @return objet RowToObject instancié
+     * @return objet RowToObject instanciÃ©
      */
     private RowToObject buildRowToObject(Class clazz, List<Object> args, Class... classes) {
         RowToObject rowToObject = null;

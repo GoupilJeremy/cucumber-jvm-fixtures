@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import fixtures.common.transformers.Label;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.CharEncoding;
@@ -75,21 +76,21 @@ public class MailBean {
         if (content instanceof MimeMultipart) {
             MimeMultipart mimeMultipart = (MimeMultipart) content;
             //MimeMultipart bodyPart = (MimeMultipart) mimeMultipart.getBodyPart(0).getContent();
-            // on a une pièce jointe
+            // on a une piÃ¨ce jointe
             if (mimeMultipart.getCount() > 1) {
                 if (mimeMultipart.getBodyPart(1).getContent() instanceof FileInputStream) {
                     FileInputStream fileInputStream = (FileInputStream) mimeMultipart.getBodyPart(1).getContent();
                     List listLines = IOUtils.readLines(fileInputStream, CharEncoding.ISO_8859_1);
-                    // on remplace les espaces non sécables par un espace normal
-                    extractedAttachment = StringUtils.replace(StringUtils.join(listLines, "\n"), " ", " ");
+                    // on remplace les espaces non sÃ©cables par un espace normal
+                    extractedAttachment = Label.cleanLabel(StringUtils.join(listLines, "\n"));
                     // ferme le flux
                     IOUtils.closeQuietly(fileInputStream);
                 } else if (mimeMultipart.getBodyPart(1).getContent() instanceof ByteArrayInputStream) {
                     ByteArrayInputStream fileInputStream = (ByteArrayInputStream) mimeMultipart.getBodyPart(1)
                             .getContent();
                     List listLines = IOUtils.readLines(fileInputStream, CharEncoding.ISO_8859_1);
-                    // on remplace les espaces non sécables par un espace normal
-                    extractedAttachment = StringUtils.replace(StringUtils.join(listLines, "\n"), " ", " ");
+                    // on remplace les espaces non sÃ©cables par un espace normal
+                    extractedAttachment = Label.cleanLabel(StringUtils.join(listLines, "\n"));
                     // ferme le flux
                     IOUtils.closeQuietly(fileInputStream);
                 }
@@ -116,8 +117,8 @@ public class MailBean {
                 InputStream inputStream = mimeBodyPart.getInputStream();
                 //
                 List listLines = IOUtils.readLines(inputStream, CharEncoding.ISO_8859_1);
-                // on remplace les espaces non sécables par un espace normal
-                extractedBody = StringUtils.replace(StringUtils.join(listLines, CARRIAGE_RETURN), " ", " ");
+                // on remplace les espaces non sÃ©cables par un espace normal
+                extractedBody = Label.cleanLabel(StringUtils.join(listLines, CARRIAGE_RETURN));
             }
         } else if (content instanceof String) {
             extractedBody = (String) content;

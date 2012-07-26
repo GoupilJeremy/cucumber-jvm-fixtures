@@ -41,7 +41,7 @@ public class VariableResolverRowDecoratorTest {
     }
 
     /**
-     * Le NPE est levé: on ne change pas le comportement de la datatable.
+     * Le NPE est levÃ©: on ne change pas le comportement de la datatable.
      *
      * @throws Exception
      */
@@ -64,7 +64,7 @@ public class VariableResolverRowDecoratorTest {
         //when
         final List<String> cells = new VariableResolverRowDecorator(row, Maps.<String, String>newHashMap()).getCells();
         //then
-        List<String> expected = Arrays.asList("1", "2", "décembre");
+        List<String> expected = Arrays.asList("1", "2", "dÃ©cembre");
         assertThat(cells, is(expected));
     }
 
@@ -116,7 +116,7 @@ public class VariableResolverRowDecoratorTest {
         //when
         final List<String> cells = new VariableResolverRowDecorator(row, Maps.<String, String>newHashMap()).getCells();
         //then
-        List<String> expected = Arrays.asList("1", "décembre", "1969");
+        List<String> expected = Arrays.asList("1", "dÃ©cembre", "1969");
         assertThat(cells, is(expected));
     }
 
@@ -131,7 +131,7 @@ public class VariableResolverRowDecoratorTest {
         //when
         final List<String> cells = new VariableResolverRowDecorator(row, Maps.<String, String>newHashMap()).getCells();
         //then
-        List<String> expected = Arrays.asList("1", "décembre", "Décembre 1969");
+        List<String> expected = Arrays.asList("1", "dÃ©cembre", "DÃ©cembre 1969");
         assertThat(cells, is(expected));
     }
 
@@ -146,7 +146,7 @@ public class VariableResolverRowDecoratorTest {
         context.put("LP-1", "1323-23");
         final List<String> cells = new VariableResolverRowDecorator(row, context).getCells();
         //then
-        List<String> expected = Arrays.asList("1", "1323-23", "Décembre 1969");
+        List<String> expected = Arrays.asList("1", "1323-23", "DÃ©cembre 1969");
         assertThat(cells, is(expected));
     }
 
@@ -163,7 +163,7 @@ public class VariableResolverRowDecoratorTest {
         context.put("LP-1", "1323-23");
         final List<String> cells = new VariableResolverRowDecorator(row, context).getCells();
         //then
-        List<String> expected = Arrays.asList("1", "1323-23", "DÉCEMBRE");
+        List<String> expected = Arrays.asList("1", "1323-23", "DÃ‰CEMBRE");
         assertThat(cells, is(expected));
     }
 
@@ -218,6 +218,6 @@ public class VariableResolverRowDecoratorTest {
                 .getCells();
 
         //then
-        assertThat(cellsDecorated, is(Arrays.asList("le mois décembre", "le mois 1969", "ok pas de variables $1")));
+        assertThat(cellsDecorated, is(Arrays.asList("le mois dÃ©cembre", "le mois 1969", "ok pas de variables $1")));
     }
 }

@@ -10,8 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * recherche un template velocity suivant le chemin donné ou dans le répertoire /mails.
- * Si aucun template n'est trouvé, on en renvoie pas d'erreur car on suppose que l'on ne veu pas
+ * recherche un template velocity suivant le chemin donnÃ© ou dans le rÃ©pertoire /mails.
+ * Si aucun template n'est trouvÃ©, on en renvoie pas d'erreur car on suppose que l'on ne veu pas
  * tester le template donc on le shunte et on continue le traitement.
  */
 public class MockVelocityEngine extends VelocityEngine {
@@ -21,7 +21,7 @@ public class MockVelocityEngine extends VelocityEngine {
 
 	public MockVelocityEngine() {
 		super();
-		// nécessaire pour charger les templates
+		// nÃ©cessaire pour charger les templates
 		addProperty("resource.loader", CLASS_VALUE);
 		addProperty("class.resource.loader.class", RESOURCE_LOADER);
 	}
@@ -46,7 +46,7 @@ public class MockVelocityEngine extends VelocityEngine {
 			try {
 				return super.mergeTemplate(templateName, encoding, context, writer);
 			} catch (Exception e) {
-				LOGGER.warn("Problème avec le template {}",templateName,e);
+				LOGGER.warn("ProblÃ¨me avec le template {}",templateName,e);
 			}
 		}
 		return false;

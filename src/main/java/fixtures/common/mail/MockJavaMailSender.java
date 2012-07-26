@@ -61,7 +61,7 @@ public class MockJavaMailSender implements JavaMailSender {
                 mailBeans.add(mailBean);
             }
         } catch (Exception e) {
-            LOGGER.error("Impossible de récupérer les infos du message preparator", e);
+            LOGGER.error("Impossible de rÃ©cupÃ©rer les infos du message preparator", e);
             throw new MailAuthenticationException("Message preparator failed ", e);
         }
         if (StringUtils.equalsIgnoreCase(mailBean.getTo(), "exception@aden.com")) {

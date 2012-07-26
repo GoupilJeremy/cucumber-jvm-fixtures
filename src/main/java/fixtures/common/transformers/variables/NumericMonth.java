@@ -21,10 +21,10 @@ public class NumericMonth implements Function<String, String> {
         boolean found = matcher.find();
         if (found) {
             MutableDateTime now = MutableDateTime.now();
-            // on récupère la valeur ( [-+]{1}[0-9]+) si elle existe
+            // on rÃ©cupÃ¨re la valeur ( [-+]{1}[0-9]+) si elle existe
             String group = matcher.group(1);
             if (!Strings.isNullOrEmpty(group)) {
-                // non géré pour le moment (peut-être en JDK 7)
+                // non gÃ©rÃ© pour le moment (peut-Ãªtre en JDK 7)
                 Integer offset = Ints.tryParse(group.trim().replace("+", ""));
                 if (offset != null) {
                     now.addMonths(offset);

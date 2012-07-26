@@ -10,8 +10,8 @@ public class LabelTest {
 
 	@Test
 	public void test_clean() {
-		String myString = "ma" + NON_BREAKING_SPACE + "chaine de" + NON_BREAKING_SPACE + "caractère";
-		String myCleanedString = "ma chaine de caractère";
+		String myString = "ma" + NON_BREAKING_SPACE + "chaine de" + NON_BREAKING_SPACE + "caractÃ¨re";
+		String myCleanedString = "ma chaine de caractÃ¨re";
 		//
 		assertThat(Label.cleanLabel(myString), is(myCleanedString));
 	}

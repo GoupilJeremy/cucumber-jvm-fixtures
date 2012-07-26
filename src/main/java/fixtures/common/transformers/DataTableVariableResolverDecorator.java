@@ -40,7 +40,7 @@ public class DataTableVariableResolverDecorator extends DataTable {
     }
 
     /**
-     * En attendant de trouver mieux  : pour la compatibilité 1.0.10
+     * En attendant de trouver mieux  : pour la compatibilitÃ© 1.0.10
      * @return  DataTable
      */
     public DataTable getDataTableDecorated(){

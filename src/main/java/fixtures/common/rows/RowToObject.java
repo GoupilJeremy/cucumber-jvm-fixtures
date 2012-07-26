@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
  * map une ligne de tableau cucumber vers un objet.
  */
 public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
-    public static final String DATE_FORMAT_YYYY_MM = "yyyy-MM";
+    public static final String DATE_FORMAT_YYYY_MM_DD = "yyyy-MM-dd";
 
     protected Map<String, Integer> headers;
 
@@ -45,7 +45,7 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
         for (Integer integer : valuesSet) {
             if (row.size() - 1 < integer) {
                 throw new IllegalArgumentException(
-                        "la map de headers fait référence à un index trop grand (" + integer +
+                        "la map de headers fait rÃ©fÃ©rence Ã  un index trop grand (" + integer +
                                 ") alors que le nombre de colonne de la ligne est de " + row.size());
             }
         }
@@ -106,7 +106,7 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
 
     public LocalDate getValueAsLocalDate(String column) {
         String value = getValue(column);
-        DateTimeFormatter formatter = DateTimeFormat.forPattern(DATE_FORMAT_YYYY_MM);
+        DateTimeFormatter formatter = DateTimeFormat.forPattern(DATE_FORMAT_YYYY_MM_DD);
         return formatter.parseLocalDate(value);
     }
 

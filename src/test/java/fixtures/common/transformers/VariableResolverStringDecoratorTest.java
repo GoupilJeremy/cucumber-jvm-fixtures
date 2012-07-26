@@ -64,7 +64,7 @@ public class VariableResolverStringDecoratorTest {
         final HashMap<String, String> context = Maps.newHashMap();
         String result = VariableResolverStringDecorator.resolveVariables(input, context);
         //then
-        String expected = "test = 01 - décembre - Décembre - Décembre - Décembre 1969 - DÉCEMBRE -";
+        String expected = "test = 01 - dÃ©cembre - DÃ©cembre - DÃ©cembre - DÃ©cembre 1969 - DÃ‰CEMBRE -";
         assertThat(result, is(expected));
     }
 

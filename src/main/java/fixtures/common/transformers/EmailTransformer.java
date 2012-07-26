@@ -17,13 +17,13 @@ public class EmailTransformer extends AbstractDataTableTransformer<Collection<Ma
 
     public static final String MESSAGE_HEADER = "message";
 
-    public static final String REPONDRE_A_HEADER = "répondre à";
+    public static final String REPONDRE_A_HEADER = "rÃ©pondre Ã ";
 
     public static final String DE_HEADER = "de";
 
-    public static final String A_HEADER = "à";
+    public static final String A_HEADER = "Ã ";
 
-    public static final String COPIE_CACHEE_HEADER = "copie cachée";
+    public static final String COPIE_CACHEE_HEADER = "copie cachÃ©e";
 
     public static final String PIECE_JOINTE_HEADER = "piece jointe";
 
@@ -58,7 +58,7 @@ public class EmailTransformer extends AbstractDataTableTransformer<Collection<Ma
                     cells.add(mailBean.getAttachment());
                 } else {
                     throw new IllegalStateException(
-                            "le header '" + headerValue + "' n'est pas géré par EmailTransformer");
+                            "le header '" + headerValue + "' n'est pas gÃ©rÃ© par EmailTransformer");
                 }
             }
             rows.add(new DataTableRow(new ArrayList<Comment>(), cells, line));
