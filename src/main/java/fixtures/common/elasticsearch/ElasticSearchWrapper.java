@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import fixtures.common.RowToObjectDataSource;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.flush.FlushRequest;
 import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
@@ -46,7 +47,8 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
     public static void deleteAllIndices() {
         final Client innerClient = NodeBuilder.nodeBuilder().local(true).client(HOSTING_NO_DATA).data(false).node()
                 .client();
-        innerClient.admin().indices().prepareDelete(ALL_INDICES).execute().actionGet();
+        innerClient.admin().indices().delete(new DeleteIndexRequest(ALL_INDICES));
+        innerClient.admin().indices().refresh(new RefreshRequest(ALL_INDICES));
         innerClient.admin().indices().flush(new FlushRequest(ALL_INDICES));
 
     }
