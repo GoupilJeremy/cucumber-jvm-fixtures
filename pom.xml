@@ -35,7 +35,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<testSourceDirectory.path>src/test/java</testSourceDirectory.path>
 		<!-- cucumber -->
-		<cucumber.jvm.version>1.0.10</cucumber.jvm.version>
+		<cucumber.jvm.version>1.0.11</cucumber.jvm.version>
 	</properties>
 
 	<!-- Plugin de Build -->
