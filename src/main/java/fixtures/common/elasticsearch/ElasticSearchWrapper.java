@@ -44,12 +44,12 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
         this.type = type;
     }
 
-    public static void deleteAllIndices() {
+    public static void deleteAllIndices() throws InterruptedException {
         final Client innerClient = NodeBuilder.nodeBuilder().local(true).client(HOSTING_NO_DATA).data(false).node()
                 .client();
         innerClient.admin().indices().delete(new DeleteIndexRequest(ALL_INDICES));
-        innerClient.admin().indices().refresh(new RefreshRequest(ALL_INDICES));
         innerClient.admin().indices().flush(new FlushRequest(ALL_INDICES));
+        Thread.sleep(5000);
 
     }
 
