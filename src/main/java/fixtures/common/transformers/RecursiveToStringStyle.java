@@ -56,13 +56,4 @@ public class RecursiveToStringStyle extends ToStringStyle {
         buffer.append(ReflectionToStringBuilder.toString(coll.toArray(), this, true, true));
         depth--;
     }
-
-    /**
-     * <p>Ensure <code>Singleton</code> after serialization.</p>
-     *
-     * @return the singleton
-     */
-    private Object readResolve() {
-        return ToStringStyle.MULTI_LINE_STYLE;
-    }
 }
