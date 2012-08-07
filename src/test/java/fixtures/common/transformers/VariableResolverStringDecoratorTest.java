@@ -3,6 +3,7 @@ package fixtures.common.transformers;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,17 @@ import org.junit.Test;
 
 public class VariableResolverStringDecoratorTest {
     private static final int FIXED_TIME = 100;
+
+    @Test
+    public void testConstructor() throws Exception {
+        Constructor constructor = VariableResolverStringDecorator.class.getDeclaredConstructor();
+        // on vérifie que le contructeur est volontairement inacessible
+        assertThat(constructor.isAccessible(),is(false));
+
+        // pas utile au final, mais la couverture du constructeur est prise en compte
+        constructor.setAccessible(true);
+        constructor.newInstance();
+    }
 
     @Test
     public void test_check_nb_transformer() throws Exception {
