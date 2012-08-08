@@ -37,15 +37,23 @@ public class MockJavaMailSender implements JavaMailSender {
         throw new NotImplementedException("createMimeMessage()");
     }
 
-    public MimeMessage createMimeMessage(final InputStream contentStream)  {
+    public MimeMessage createMimeMessage(final InputStream contentStream) {
         throw new NotImplementedException("createMimeMessage(InputStream contentStream)");
     }
 
-    public void send(final MimeMessage mimeMessage)  {
+    public void send(final MimeMessagePreparator[] mimeMessagePreparators) {
+        throw new NotImplementedException("send(MimeMessagePreparator mimeMessagePreparator)");
+    }
+
+    public void send(final SimpleMailMessage[] simpleMessages) {
+        throw new NotImplementedException("send(SimpleMailMessage[] simpleMessages)");
+    }
+
+    public void send(final MimeMessage mimeMessage) {
         throw new NotImplementedException("send(MimeMessage mimeMessage)");
     }
 
-    public void send(final MimeMessage[] mimeMessages)  {
+    public void send(final MimeMessage[] mimeMessages) {
         throw new NotImplementedException("send(MimeMessage[] mimeMessages)");
     }
 
@@ -69,20 +77,12 @@ public class MockJavaMailSender implements JavaMailSender {
         }
     }
 
-    public void send(final MimeMessagePreparator[] mimeMessagePreparators)  {
-        throw new NotImplementedException("send(MimeMessagePreparator mimeMessagePreparator)");
-    }
-
-    public void send(final SimpleMailMessage simpleMessage)  {
+    public void send(final SimpleMailMessage simpleMessage) {
         MailBean mailBean = new MailBean(simpleMessage);
         if (StringUtils.equalsIgnoreCase(mailBean.getTo(), "exception@aden.com")) {
             throw new MailAuthenticationException("Bad email from Mock :)");
         }
         mailBeans.add(mailBean);
-    }
-
-    public void send(final SimpleMailMessage[] simpleMessages)  {
-        throw new NotImplementedException("send(SimpleMailMessage[] simpleMessages)");
     }
 
     public List<MailBean> getMailBeans() {
@@ -91,17 +91,24 @@ public class MockJavaMailSender implements JavaMailSender {
 
     public Collection<MailBean> sendMails(final String mailSubject) {
         final List<MailBean> mailBeanList = getMailBeans();
-
-        return Collections2.filter(mailBeanList, new Predicate<MailBean>() {
-            @Override
-            public boolean apply(final MailBean input) {
-                return input.getSubject().contains(mailSubject);
-            }
-        });
+        return Collections2.filter(mailBeanList, new MailSubjectPredicate(mailSubject));
     }
 
     public DataTable toDataTable(Collection<MailBean> mailsSent, DataTable expected) {
         EmailTransformer emailTransformer = new EmailTransformer(expected);
         return emailTransformer.toDataTable(mailsSent);
+    }
+
+    private static class MailSubjectPredicate implements Predicate<MailBean> {
+        private String mailSubject;
+
+        public MailSubjectPredicate(final String mailSubject) {
+            this.mailSubject = mailSubject;
+        }
+
+        @Override
+        public boolean apply(final MailBean input) {
+            return input.getSubject().contains(mailSubject);
+        }
     }
 }
