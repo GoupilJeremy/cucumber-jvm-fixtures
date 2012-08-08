@@ -45,30 +45,34 @@ public class EmailTransformer extends AbstractDataTableTransformer<Collection<Ma
         for (MailBean mailBean : sorted) {
             List<String> cells = new ArrayList<String>();
             for (String headerValue : headersAsCells) {
-                if (headerValue.equalsIgnoreCase(SUJET_HEADER)) {
-                    cells.add(mailBean.getSubject());
-                } else if (headerValue.equalsIgnoreCase(MESSAGE_HEADER)) {
-                    cells.add(Label.cleanLabel(mailBean.getBody()));
-                } else if (headerValue.equalsIgnoreCase(REPONDRE_A_HEADER)) {
-                    cells.add(mailBean.getReplyTo());
-                } else if (headerValue.equalsIgnoreCase(DE_HEADER)) {
-                    cells.add(mailBean.getFrom());
-                } else if (headerValue.equalsIgnoreCase(A_HEADER)) {
-                    cells.add(mailBean.getTo());
-                } else if (headerValue.equalsIgnoreCase(COPIE_CACHEE_HEADER)) {
-                    cells.add(mailBean.getBcc());
-                } else if (headerValue.equalsIgnoreCase(PIECE_JOINTE_HEADER)) {
-                    cells.add(mailBean.getAttachment());
-                } else {
-                    throw new IllegalStateException(
-                            "le header '" + headerValue + "' n'est pas géré par EmailTransformer");
-                }
+                cells.addAll(populate(mailBean, headerValue));
             }
             rows.add(new DataTableRow(new ArrayList<Comment>(), cells, line));
-
             line++;
         }
         return rows;
+    }
+
+    private List<String> populate(final MailBean mailBean, final String headerValue) {
+        List<String> cells = Lists.newArrayList();
+        if (headerValue.equalsIgnoreCase(SUJET_HEADER)) {
+            cells.add(mailBean.getSubject());
+        } else if (headerValue.equalsIgnoreCase(MESSAGE_HEADER)) {
+            cells.add(Label.cleanLabel(mailBean.getBody()));
+        } else if (headerValue.equalsIgnoreCase(REPONDRE_A_HEADER)) {
+            cells.add(mailBean.getReplyTo());
+        } else if (headerValue.equalsIgnoreCase(DE_HEADER)) {
+            cells.add(mailBean.getFrom());
+        } else if (headerValue.equalsIgnoreCase(A_HEADER)) {
+            cells.add(mailBean.getTo());
+        } else if (headerValue.equalsIgnoreCase(COPIE_CACHEE_HEADER)) {
+            cells.add(mailBean.getBcc());
+        } else if (headerValue.equalsIgnoreCase(PIECE_JOINTE_HEADER)) {
+            cells.add(mailBean.getAttachment());
+        } else {
+            throw new IllegalStateException("le header '" + headerValue + "' n'est pas géré par EmailTransformer");
+        }
+        return cells;
     }
 
     private class MailBeanComparator implements Comparator<MailBean> {
