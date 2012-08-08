@@ -12,11 +12,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import com.google.common.collect.Lists;
 import com.google.common.io.LineProcessor;
 import cucumber.runtime.CucumberException;
+import cucumber.runtime.converters.LocalizedXStreams;
 import cucumber.table.DataTable;
+import cucumber.table.TableConverter;
 import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 import org.junit.Before;
@@ -32,7 +35,9 @@ public class FileTransformerTest {
         List<DataTableRow> rows = Lists
                 .newArrayList(new DataTableRow(new ArrayList<Comment>(), dataTableToCompareHeader, 1),
                         new DataTableRow(new ArrayList<Comment>(), data, 2));
-        dataTable = new DataTable(rows, null);
+        TableConverter tableConverter = new TableConverter(new LocalizedXStreams(Thread.currentThread().getContextClassLoader()).get(
+                Locale.getDefault()), null);
+        dataTable = new DataTable(rows, tableConverter);
     }
 
     @Test(expected = IllegalArgumentException.class)

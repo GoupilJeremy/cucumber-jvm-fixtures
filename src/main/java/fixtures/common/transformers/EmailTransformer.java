@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import cucumber.table.DataTable;
 import fixtures.common.mail.MailBean;
@@ -33,7 +35,8 @@ public class EmailTransformer extends AbstractDataTableTransformer<Collection<Ma
 
     @Override
     protected List<DataTableRow> buildRowForDataTable(final Collection<MailBean> mailBeans,
-            final List<DataTableRow> rows)  {
+            final List<DataTableRow> rows) {
+        Preconditions.checkArgument(mailBeans != null, "la liste de mail ne peut ëtre null");
 
         List<MailBean> sorted = Lists.newArrayList(mailBeans);
         Collections.sort(sorted, new MailBeanComparator());
@@ -71,7 +74,9 @@ public class EmailTransformer extends AbstractDataTableTransformer<Collection<Ma
     private class MailBeanComparator implements Comparator<MailBean> {
         @Override
         public int compare(final MailBean mailBean01, final MailBean mailBean02) {
-            return mailBean01.getTo().compareTo(mailBean02.getTo());
+            String mailTo01 = Strings.nullToEmpty(mailBean01.getTo());
+            String mailTo02 = Strings.nullToEmpty(mailBean02.getTo());
+            return mailTo01.compareTo(mailTo02);
         }
     }
 }
