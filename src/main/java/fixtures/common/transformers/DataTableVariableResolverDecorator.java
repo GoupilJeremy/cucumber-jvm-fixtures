@@ -29,7 +29,7 @@ public class DataTableVariableResolverDecorator extends DataTable {
 
     public DataTableVariableResolverDecorator(DataTable dataTable, Map<String, String> context) {
         super(new ArrayList<DataTableRow>(), new TableConverter(getXStream(), null));
-	   	Preconditions.checkArgument(dataTable != null, "le fichier ne peut ëtre null");
+	   	Preconditions.checkArgument(dataTable != null, "la datatable ne peut ëtre null");
 
         this.dataTableToDecorate = dataTable;
         this.context = context;
