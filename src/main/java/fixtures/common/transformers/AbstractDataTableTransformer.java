@@ -16,6 +16,7 @@ public abstract class AbstractDataTableTransformer<T> implements IDataTableTrans
     }
 
     public AbstractDataTableTransformer(DataTable dataTableFromFeatureFileToCompare) {
+	    this();
         final List<List<String>> raw = dataTableFromFeatureFileToCompare.raw();
         Validate.notEmpty(raw,
                 "la datatable doit contenir au moins une ligne contenant les headers,\n afin de connaître lors de la méthode 'transform', quelle propriété de l'objet mettre dans la cellule");
