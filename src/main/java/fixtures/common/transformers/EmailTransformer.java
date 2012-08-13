@@ -59,7 +59,10 @@ public class EmailTransformer extends AbstractDataTableTransformer<Collection<Ma
         if (emailProperty==null) {
             throw new IllegalStateException("le header '" + headerValue + "' n'est pas géré par EmailTransformer");
         }
+        return fillCells(mailBean, emailProperty);
+    }
 
+    private List<String> fillCells(final MailBean mailBean, final EmailPropertyEnum emailProperty) {
         List<String> cells = Lists.newArrayList();
         switch (emailProperty) {
             case SUJET_HEADER:
@@ -82,6 +85,8 @@ public class EmailTransformer extends AbstractDataTableTransformer<Collection<Ma
                 break;
             case PIECE_JOINTE_HEADER:
                 cells.add(mailBean.getAttachment());
+                break;
+            default:
                 break;
         }
 
