@@ -8,7 +8,6 @@ import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 import org.apache.commons.lang.Validate;
 
-
 public abstract class AbstractDataTableTransformer<T> implements IDataTableTransformer<T> {
     protected List<String> headersAsCells;
 
@@ -16,7 +15,7 @@ public abstract class AbstractDataTableTransformer<T> implements IDataTableTrans
     }
 
     public AbstractDataTableTransformer(DataTable dataTableFromFeatureFileToCompare) {
-	    this();
+        this();
         final List<List<String>> raw = dataTableFromFeatureFileToCompare.raw();
         Validate.notEmpty(raw,
                 "la datatable doit contenir au moins une ligne contenant les headers,\n afin de connaître lors de la méthode 'transform', quelle propriété de l'objet mettre dans la cellule");
@@ -33,6 +32,5 @@ public abstract class AbstractDataTableTransformer<T> implements IDataTableTrans
         rows.add(new DataTableRow(new ArrayList<Comment>(), headersAsCells, 0));
     }
 
-    protected abstract List<DataTableRow> buildRowForDataTable(final T transform,
-            List<DataTableRow> rows);
+    protected abstract List<DataTableRow> buildRowForDataTable(final T transform, List<DataTableRow> rows);
 }

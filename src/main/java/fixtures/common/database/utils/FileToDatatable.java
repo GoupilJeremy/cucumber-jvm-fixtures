@@ -21,11 +21,8 @@ import org.springframework.util.StringUtils;
 public class FileToDatatable {
     private static final Transliterator ACCENTS_CONVERTER = Transliterator.getInstance("NFD;[:M:]Remove;NFC;");
 
-
-
-    private FileToDatatable(){}
-
-
+    private FileToDatatable() {
+    }
 
     /**
      * Lit un fichier spécifiquement formaté (cf exemple) et le transforme en datatable.<br/>
@@ -46,7 +43,7 @@ public class FileToDatatable {
         Assert.hasText(api, "pas d'application de défini");
         Assert.hasText(data, "pas de fichier de défini");
         // on normalise le nom (enlève les accents, les quotes et remplace les espaces par des _
-        String normalizedData = ACCENTS_CONVERTER.transform(data).replace(" ", "_").replace("'", "_");
+        String normalizedData = ACCENTS_CONVERTER.transform(data).replace(" ", "_").replace("'", "_").toLowerCase();
         // on crée le chemin supposé
         String path = api + "/insert/" + normalizedData + ".txt";
         ClassPathResource classPathResource = new ClassPathResource(path);

@@ -35,8 +35,8 @@ public class FileTransformerTest {
         List<DataTableRow> rows = Lists
                 .newArrayList(new DataTableRow(new ArrayList<Comment>(), dataTableToCompareHeader, 1),
                         new DataTableRow(new ArrayList<Comment>(), data, 2));
-        TableConverter tableConverter = new TableConverter(new LocalizedXStreams(Thread.currentThread().getContextClassLoader()).get(
-                Locale.getDefault()), null);
+        TableConverter tableConverter = new TableConverter(
+                new LocalizedXStreams(Thread.currentThread().getContextClassLoader()).get(Locale.getDefault()), null);
         dataTable = new DataTable(rows, tableConverter);
     }
 

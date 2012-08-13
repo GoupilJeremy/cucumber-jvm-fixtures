@@ -31,7 +31,7 @@ public class VariableResolverRowDecorator extends DataTableRow {
         if (stringsWithVariables == null || stringsWithVariables.isEmpty()) {
             return Lists.newArrayList();
         }
- 
+
         FluentIterable<String> fluentIterable = FluentIterable.from(stringsWithVariables);
         List<Function<String, String>> functions = VariableResolverStringDecorator.getFunctions(context);
         for (Function<String, String> function : functions) {

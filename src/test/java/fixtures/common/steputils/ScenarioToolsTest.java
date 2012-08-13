@@ -13,7 +13,7 @@ public class ScenarioToolsTest {
     public void testApplicationContext_has_stepParameter() throws Exception {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
                 "classpath:config/context-with-step-parameters.xml");
-        
+
         // Avant reset
         InnerStepParameter innerStepParameter01 = applicationContext
                 .getBean("innerStepParameter01", InnerStepParameter.class);

@@ -12,7 +12,6 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 public class DatatableUtilsTest {
-
     @Test
     public void testConstructor() throws Exception {
         Constructor constructor = DatatableUtils.class.getDeclaredConstructor();

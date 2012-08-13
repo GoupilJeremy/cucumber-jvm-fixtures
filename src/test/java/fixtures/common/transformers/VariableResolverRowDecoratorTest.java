@@ -22,7 +22,8 @@ public class VariableResolverRowDecoratorTest {
     @Test
     public void test_check_nb_transformer() throws Exception {
         //when
-        List<Function<String, String>> functions = VariableResolverStringDecorator.getFunctions(Maps.<String, String>newHashMap());
+        List<Function<String, String>> functions = VariableResolverStringDecorator
+                .getFunctions(Maps.<String, String>newHashMap());
         //then
         // SI on change la taille, AJOUTER LES TESTS ASSOCIES A LA FONCTION
         assertThat(functions.size(), is(8));
@@ -50,7 +51,6 @@ public class VariableResolverRowDecoratorTest {
         //given
         DataTableRow row = new DataTableRow(Lists.<Comment>newArrayList(), null, 0);
     }
-
 
     // =================================================================================================================
 
@@ -189,7 +189,8 @@ public class VariableResolverRowDecoratorTest {
     @Test
     public void test_resolve_variables_NumericMonth() throws Exception {
         //given
-        DataTableRow row = new DataTableRow(Lists.<Comment>newArrayList(), Arrays.asList("1", "LP-1", "12-${moisNumeric}"), 0);
+        DataTableRow row = new DataTableRow(Lists.<Comment>newArrayList(),
+                Arrays.asList("1", "LP-1", "12-${moisNumeric}"), 0);
         DateTimeUtils.setCurrentMillisFixed(FIXED_TIME);
         //when
         final HashMap<String, String> context = Maps.newHashMap();

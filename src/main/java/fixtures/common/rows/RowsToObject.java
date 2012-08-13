@@ -125,8 +125,7 @@ public class RowsToObject<Res> {
     public void setArgs(final Object[] argsNew) {
         if (argsNew == null) {
             this.args = null;
-        }
-        else {
+        } else {
             int length = argsNew.length;
             this.args = ObjectArrays.newArray(argsNew, length);
             System.arraycopy(argsNew, 0, this.args, 0, length);

@@ -21,7 +21,7 @@ public class VariableResolverStringDecoratorTest {
     public void testConstructor() throws Exception {
         Constructor constructor = VariableResolverStringDecorator.class.getDeclaredConstructor();
         // on vérifie que le contructeur est volontairement inacessible
-        assertThat(constructor.isAccessible(),is(false));
+        assertThat(constructor.isAccessible(), is(false));
 
         // pas utile au final, mais la couverture du constructeur est prise en compte
         constructor.setAccessible(true);

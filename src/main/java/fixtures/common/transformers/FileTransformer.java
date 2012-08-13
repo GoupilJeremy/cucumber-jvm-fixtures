@@ -46,7 +46,7 @@ public class FileTransformer extends AbstractDataTableTransformer<File> {
     // =============================================================================================
     // inner class
     // =============================================================================================
-    
+
     private static class InnerLineProcessor implements LineProcessor<List<DataTableRow>> {
         private List<DataTableRow> dataTableRows = new ArrayList<DataTableRow>();
 
@@ -66,5 +66,7 @@ public class FileTransformer extends AbstractDataTableTransformer<File> {
         public List<DataTableRow> getResult() {
             return dataTableRows;
         }
-    };
+    }
+
+    ;
 }

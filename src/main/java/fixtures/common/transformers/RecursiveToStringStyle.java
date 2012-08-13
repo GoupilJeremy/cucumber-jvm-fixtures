@@ -8,7 +8,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 public class RecursiveToStringStyle extends ToStringStyle {
     private static final int INFINITE_DEPTH = -1;
+
     private static final long serialVersionUID = 1L;
+
     public static final ToStringStyle MULTI_LINE_STYLE = new RecursiveToStringStyle(5);
 
     public static final ToStringStyle MULTI_LINE_STYLE_FULLY_RECURSIVE = new RecursiveToStringStyle();

@@ -55,7 +55,7 @@ public class NumericMonthTest {
         assertThat(result, is("2012-" + expectedMonth));
     }
 
-     @Test
+    @Test
     public void testMonth_input_has_var_plus_two_month_many_time() throws Exception {
         String input = "2012-${moisNumeric +2 -1}";
         NumericMonth numericMonth = new NumericMonth();

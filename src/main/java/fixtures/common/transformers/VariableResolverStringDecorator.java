@@ -16,8 +16,8 @@ import fixtures.common.transformers.variables.VariableFunction;
 import fixtures.common.transformers.variables.YearOfPreviousMonth;
 
 public class VariableResolverStringDecorator {
-
-    private VariableResolverStringDecorator() {}
+    private VariableResolverStringDecorator() {
+    }
 
     public static String resolveVariables(String stringWithVariables, Map<String, String> context) {
         FluentIterable<String> fluentIterable = FluentIterable.from(Arrays.asList(stringWithVariables));

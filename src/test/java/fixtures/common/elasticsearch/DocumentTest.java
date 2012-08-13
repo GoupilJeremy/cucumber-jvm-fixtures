@@ -122,7 +122,7 @@ public class DocumentTest extends RowToObjectTest {
             spy.mapRowToObject();
         } finally {
             //then
-            verify(spy,never()).getXContentBuilder();
+            verify(spy, never()).getXContentBuilder();
         }
     }
 
