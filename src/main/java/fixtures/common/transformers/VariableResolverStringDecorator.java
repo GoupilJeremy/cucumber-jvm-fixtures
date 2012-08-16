@@ -8,6 +8,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import fixtures.common.transformers.variables.CapitalizePreviousMonth;
 import fixtures.common.transformers.variables.LocalDateCurrentMonthAndYearInContext;
+import fixtures.common.transformers.variables.Now;
 import fixtures.common.transformers.variables.NumericMonth;
 import fixtures.common.transformers.variables.PreviousMonth;
 import fixtures.common.transformers.variables.PreviousMonthAndYear;
@@ -38,6 +39,7 @@ public class VariableResolverStringDecorator {
                 , new PreviousMonthUpper() //
                 , new LocalDateCurrentMonthAndYearInContext(context)//
                 , new NumericMonth()//
+                , new Now()
         );
     }
 }

@@ -35,7 +35,7 @@ public class VariableResolverStringDecoratorTest {
                 .getFunctions(Maps.<String, String>newHashMap());
         //then
         // SI on change la taille, AJOUTER LES TESTS ASSOCIES A LA FONCTION
-        assertThat(functions.size(), Is.is(8));
+        assertThat(functions.size(), Is.is(9));
     }
 
     @Test
@@ -70,13 +70,13 @@ public class VariableResolverStringDecoratorTest {
     @Test
     public void test_resolve_variables_many_vars() throws Exception {
         //given
-        String input = "test = ${moisNumeric} - ${moisPrecedent} - ${majMoisPrecedent} - ${majMoisPrecedent} - ${moisPrecedentEtAnnee} - ${moisPrecedentMajuscule} -";
+        String input = "test = ${moisNumeric} - ${moisPrecedent} - ${majMoisPrecedent} - ${majMoisPrecedent} - ${moisPrecedentEtAnnee} - ${moisPrecedentMajuscule} - ${now (yyyy/dd) +4}";
         DateTimeUtils.setCurrentMillisFixed(FIXED_TIME);
         //when
         final HashMap<String, String> context = Maps.newHashMap();
         String result = VariableResolverStringDecorator.resolveVariables(input, context);
         //then
-        String expected = "test = 01 - décembre - Décembre - Décembre - Décembre 1969 - DÉCEMBRE -";
+        String expected = "test = 01 - décembre - Décembre - Décembre - Décembre 1969 - DÉCEMBRE - 1970/05";
         assertThat(result, is(expected));
     }
 
