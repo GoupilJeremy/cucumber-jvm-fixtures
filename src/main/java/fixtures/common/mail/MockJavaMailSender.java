@@ -3,13 +3,13 @@ package fixtures.common.mail;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 import cucumber.table.DataTable;
 import fixtures.common.transformers.EmailTransformer;
 import org.apache.commons.lang.NotImplementedException;
@@ -22,9 +22,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 
 public class MockJavaMailSender implements JavaMailSender {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MockJavaMailSender.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MockJavaMailSender.class);
+	public static final String EXCEPTION_EMAIL = "exception@aden.com";
 
-    private List<MailBean> mailBeans = new ArrayList<MailBean>();
+	private List<MailBean> mailBeans = new ArrayList<MailBean>();
 
     public void clean() {
         mailBeans.clear();
@@ -64,29 +65,30 @@ public class MockJavaMailSender implements JavaMailSender {
             mimeMessagePreparator.prepare(mimeMessage);
             //
             mailBean = new MailBean(mimeMessage);
-            // on ajoute pas si on est dans le cas d'erreur : mail =  "exception@aden.com"
-            if (!StringUtils.equalsIgnoreCase(mailBean.getTo(), "exception@aden.com")) {
+            // on ajoute pas si on est dans le cas d'erreur : mail =  EXCEPTION_EMAIL
+            if (!StringUtils.equalsIgnoreCase(mailBean.getTo(), EXCEPTION_EMAIL)) {
                 mailBeans.add(mailBean);
             }
         } catch (Exception e) {
             LOGGER.error("Impossible de récupérer les infos du message preparator", e);
             throw new MailAuthenticationException("Message preparator failed ", e);
         }
-        if (StringUtils.equalsIgnoreCase(mailBean.getTo(), "exception@aden.com")) {
+        if (StringUtils.equalsIgnoreCase(mailBean.getTo(), EXCEPTION_EMAIL)) {
             throw new MailAuthenticationException("Bad email from Mock :)");
         }
     }
 
     public void send(final SimpleMailMessage simpleMessage) {
+	    Preconditions.checkArgument(simpleMessage!=null, "SimpleMailMessage ne peut être null");
         MailBean mailBean = new MailBean(simpleMessage);
-        if (StringUtils.equalsIgnoreCase(mailBean.getTo(), "exception@aden.com")) {
+        if (StringUtils.equalsIgnoreCase(mailBean.getTo(), EXCEPTION_EMAIL)) {
             throw new MailAuthenticationException("Bad email from Mock :)");
         }
         mailBeans.add(mailBean);
     }
 
     public List<MailBean> getMailBeans() {
-        return mailBeans;
+        return Lists.newArrayList(mailBeans);
     }
 
     public Collection<MailBean> sendMails(final String mailSubject) {
@@ -108,7 +110,7 @@ public class MockJavaMailSender implements JavaMailSender {
 
         @Override
         public boolean apply(final MailBean input) {
-            return input.getSubject().contains(mailSubject);
+            return mailSubject !=null && input.getSubject().contains(mailSubject);
         }
     }
 }

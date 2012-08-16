@@ -76,6 +76,15 @@ public class NowTest {
         assertThat(result, is("ma date " + expectedMonth + " affichée"));
     }
 
+	@Test
+    public void testMonth_input_has_no_var_many_date_pattern() throws Exception {
+        String input = "ma date ${now (yyyy/MM/dd-hh:mm) (yyyy)} affichée";
+        Now now = new Now();
+        String result = now.apply(input);
+        //
+        assertThat(result, is(input));
+    }
+
          @Test
     public void testMonth_input_has_no_var_badd_pattern() throws Exception {
         String input = "ma date ${now (lololo)} affichée";
