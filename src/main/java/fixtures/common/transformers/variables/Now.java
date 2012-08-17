@@ -10,7 +10,6 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.primitives.Ints;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,12 +64,12 @@ public class Now implements Function<String, String> {
         List<String> listPatternDates = Lists
                 .newArrayList(Iterables.filter(groupSplitted, new PatternMatcherPredicate(DATE_PATTERN)));
         if (listPatternDates == null || listPatternDates.size() == 0) {
-	        return DEFAULT_PATTERN;
+            return DEFAULT_PATTERN;
         } else if (listPatternDates.size() == 1) {
-	        return listPatternDates.get(0).replaceAll("\\(", "").replaceAll("\\)", "");
+            return listPatternDates.get(0).replaceAll("\\(", "").replaceAll("\\)", "");
         } else {
-	        throw new VariableException(
-	        "Trop de pattern pour la date (1 seul doit être précisé): " + listPatternDates.toString());
+            throw new VariableException(
+                    "Trop de pattern pour la date (1 seul doit être précisé): " + listPatternDates.toString());
         }
     }
 
@@ -78,14 +77,14 @@ public class Now implements Function<String, String> {
 
         List<String> listPatternDays = Lists
                 .newArrayList(Iterables.filter(groupSplitted, new PatternMatcherPredicate(ADD_DAYS_PATTERN)));
-        if ( listPatternDays == null || listPatternDays.size() == 0) {
-	        return 0;
+        if (listPatternDays == null || listPatternDays.size() == 0) {
+            return 0;
         } else if (listPatternDays.size() == 1) {
-	        // "+" non géré pour le moment (peut-être en JDK 7)
-	        return Ints.tryParse(listPatternDays.get(0).trim().replace("+", ""));
+            // "+" non géré pour le moment (peut-être en JDK 7)
+            return Integer.parseInt(listPatternDays.get(0).trim().replace("+", ""));
         } else {
-	        throw new VariableException(
-	        "Trop de pattern pour l'ajout de jour (1 seul doit être précisé): " + listPatternDays.toString());
+            throw new VariableException(
+                    "Trop de pattern pour l'ajout de jour (1 seul doit être précisé): " + listPatternDays.toString());
         }
     }
 
