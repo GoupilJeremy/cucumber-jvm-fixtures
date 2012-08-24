@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Random;
 
 import fixtures.common.RowToObjectDataSource;
+import org.elasticsearch.action.admin.cluster.node.shutdown.NodesShutdownRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.flush.FlushRequest;
 import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
+import org.elasticsearch.bootstrap.ElasticSearch;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.common.xcontent.XContentBuilder;
@@ -37,6 +39,10 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
 
     private static Random random = new Random();
 
+    public ElasticSearchWrapper(){
+
+    }
+
     public ElasticSearchWrapper(Client client, String index, String type) throws IOException {
         this.client = client;
         this.index = index;
@@ -44,12 +50,17 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
         this.type = type;
     }
 
-    public static void deleteAllIndices() throws InterruptedException {
-        final Client innerClient = NodeBuilder.nodeBuilder().local(true).client(HOSTING_NO_DATA).data(false).node()
-                .client();
-        innerClient.admin().indices().delete(new DeleteIndexRequest(ALL_INDICES));
-        innerClient.admin().indices().flush(new FlushRequest(ALL_INDICES));
+    public void deleteAllIndices() throws InterruptedException {
+
+        client.admin().indices().delete(new DeleteIndexRequest(ALL_INDICES));
+        client.admin().indices().flush(new FlushRequest(ALL_INDICES));
         Thread.sleep(5000);
+
+    }
+
+    public void shutdownAllNodes() throws InterruptedException {
+
+        client.admin().cluster().nodesShutdown(new NodesShutdownRequest("_all"));
 
     }
 
@@ -57,7 +68,7 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
         final IndicesAdminClient adminClient = client.admin().indices();
         if (!adminClient.prepareExists(index).execute().actionGet().exists()) {
             adminClient.prepareCreate(index).execute().actionGet();
-            adminClient.preparePutTemplate(index).setTemplate(templateName).setSource(mapping.toString()).execute()
+            adminClient.preparePutTemplate(templateName).setSource(mapping.toString()).execute()
                     .actionGet();
         }
     }
@@ -65,7 +76,7 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
     public BulkResponse persistAndIndex(final List<XContentBuilder> documents) {
         final BulkRequestBuilder bulkRequestBuilder = client.prepareBulk();
         for (XContentBuilder document : documents) {
-            final IndexRequestBuilder indexRequestBuilder = indexRow(client, document);
+            final IndexRequestBuilder indexRequestBuilder = indexRow(document);
             bulkRequestBuilder.add(indexRequestBuilder);
         }
 
@@ -74,7 +85,11 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
         return bulkResponse;
     }
 
-    private IndexRequestBuilder indexRow(final Client client, XContentBuilder xContentBuilder) {
+    private IndexRequestBuilder indexRow( XContentBuilder xContentBuilder) {
         return client.prepareIndex(index, type, random.nextInt(BIG_ID_INTERVAL) + "").setSource(xContentBuilder);
+    }
+
+    public void setClient(final Client client) {
+        this.client = client;
     }
 }
