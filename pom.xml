@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
 		<groupId>com.adenclassifieds</groupId>
 		<artifactId>aden-parent</artifactId>
@@ -13,13 +12,13 @@
 	<packaging>jar</packaging>
 	<name>cucumber-jvm-fixtures</name>
 	<description>Librairie de fixtures utilitaires pour les projets utilisant cucumber-jvm</description>
-	<version>0.0.18-SNAPSHOT</version>
+	<version>0.0.18</version>
 
 	<scm>
 		<connection>scm:git:git@github.com:figarocms/cucumber-jvm-fixtures.git</connection>
 		<url>scm:git:git@github.com:figarocms/cucumber-jvm-fixtures.git</url>
 		<developerConnection>scm:git:git@github.com:figarocms/cucumber-jvm-fixtures.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>cucumber-jvm-fixtures-0.0.18</tag>
 	</scm>
 
 	<repositories>
