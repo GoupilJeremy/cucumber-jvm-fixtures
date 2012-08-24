@@ -74,13 +74,7 @@ public class RowsToObject<Res> {
      */
     private RowToObject buildRowToObject(Class clazz, List<Object> args, Class... classes) {
         RowToObject rowToObject = null;
-        final StringBuilder message = new StringBuilder(
-                "la classe " + clazz.getCanonicalName() + " n'a pas de constructeur ayant pour arguments:");
-        for (Class aClass : classes) {
-            message.append(aClass.getCanonicalName());
-            message.append(",");
-        }
-        String msg = message.toString();
+        String msg = createMessage(clazz, classes);
 
         try {
             Constructor constructor = clazz.getConstructor(classes);
@@ -108,6 +102,16 @@ public class RowsToObject<Res> {
         return rowToObject;
     }
 
+    private String createMessage(final Class clazz, final Class[] classes) {
+        final StringBuilder message = new StringBuilder(
+                "la classe " + clazz.getCanonicalName() + " n'a pas de constructeur ayant pour arguments:");
+        for (Class aClass : classes) {
+            message.append(aClass.getCanonicalName());
+            message.append(",");
+        }
+        return message.toString();
+    }
+
     private Map<String, Integer> createMapHeaders(final List<String> headers) {
         HashMap<String, Integer> mapHeaders = new HashMap<String, Integer>();
         if (CollectionUtils.isNotEmpty(headers)) {
@@ -125,8 +129,7 @@ public class RowsToObject<Res> {
     public void setArgs(final Object[] argsNew) {
         if (argsNew == null) {
             this.args = null;
-        }
-        else {
+        } else {
             int length = argsNew.length;
             this.args = ObjectArrays.newArray(argsNew, length);
             System.arraycopy(argsNew, 0, this.args, 0, length);

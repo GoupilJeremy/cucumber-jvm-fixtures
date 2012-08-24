@@ -6,9 +6,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import cucumber.table.DataTable;
 import fixtures.common.mail.MailBean;
+import fixtures.common.transformers.model.EmailPropertyEnum;
 import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 
@@ -33,7 +36,8 @@ public class EmailTransformer extends AbstractDataTableTransformer<Collection<Ma
 
     @Override
     protected List<DataTableRow> buildRowForDataTable(final Collection<MailBean> mailBeans,
-            final List<DataTableRow> rows)  {
+            final List<DataTableRow> rows) {
+        Preconditions.checkArgument(mailBeans != null, "la liste de mail ne peut ëtre null");
 
         List<MailBean> sorted = Lists.newArrayList(mailBeans);
         Collections.sort(sorted, new MailBeanComparator());
@@ -42,36 +46,61 @@ public class EmailTransformer extends AbstractDataTableTransformer<Collection<Ma
         for (MailBean mailBean : sorted) {
             List<String> cells = new ArrayList<String>();
             for (String headerValue : headersAsCells) {
-                if (headerValue.equalsIgnoreCase(SUJET_HEADER)) {
-                    cells.add(mailBean.getSubject());
-                } else if (headerValue.equalsIgnoreCase(MESSAGE_HEADER)) {
-                    cells.add(Label.cleanLabel(mailBean.getBody()));
-                } else if (headerValue.equalsIgnoreCase(REPONDRE_A_HEADER)) {
-                    cells.add(mailBean.getReplyTo());
-                } else if (headerValue.equalsIgnoreCase(DE_HEADER)) {
-                    cells.add(mailBean.getFrom());
-                } else if (headerValue.equalsIgnoreCase(A_HEADER)) {
-                    cells.add(mailBean.getTo());
-                } else if (headerValue.equalsIgnoreCase(COPIE_CACHEE_HEADER)) {
-                    cells.add(mailBean.getBcc());
-                } else if (headerValue.equalsIgnoreCase(PIECE_JOINTE_HEADER)) {
-                    cells.add(mailBean.getAttachment());
-                } else {
-                    throw new IllegalStateException(
-                            "le header '" + headerValue + "' n'est pas géré par EmailTransformer");
-                }
+                cells.addAll(populate(mailBean, headerValue));
             }
             rows.add(new DataTableRow(new ArrayList<Comment>(), cells, line));
-
             line++;
         }
         return rows;
     }
 
+    private List<String> populate(final MailBean mailBean, final String headerValue) {
+        EmailPropertyEnum emailProperty = EmailPropertyEnum.getEmailPropertyFromLabel(headerValue);
+        if (emailProperty==null) {
+            throw new IllegalStateException("le header '" + headerValue + "' n'est pas géré par EmailTransformer");
+        }
+        return fillCells(mailBean, emailProperty);
+    }
+
+    private List<String> fillCells(final MailBean mailBean, final EmailPropertyEnum emailProperty) {
+        List<String> cells = Lists.newArrayList();
+        switch (emailProperty) {
+            case SUJET_HEADER:
+                cells.add(mailBean.getSubject());
+                break;
+            case MESSAGE_HEADER:
+                cells.add(Label.cleanLabel(mailBean.getBody()));
+                break;
+            case REPONDRE_A_HEADER:
+                cells.add(mailBean.getReplyTo());
+                break;
+            case DE_HEADER:
+                cells.add(mailBean.getFrom());
+                break;
+            case A_HEADER:
+                cells.add(mailBean.getTo());
+                break;
+            case COPIE_CACHEE_HEADER:
+                cells.add(mailBean.getBcc());
+                break;
+            case PIECE_JOINTE_HEADER:
+                cells.add(mailBean.getAttachment());
+                break;
+            default:
+                break;
+        }
+
+        return cells;
+    }
+
     private class MailBeanComparator implements Comparator<MailBean> {
         @Override
         public int compare(final MailBean mailBean01, final MailBean mailBean02) {
-            return mailBean01.getTo().compareTo(mailBean02.getTo());
+            String mailTo01 = Strings.nullToEmpty(mailBean01.getTo());
+            String mailTo02 = Strings.nullToEmpty(mailBean02.getTo());
+            return mailTo01.compareTo(mailTo02);
         }
     }
+
+
 }

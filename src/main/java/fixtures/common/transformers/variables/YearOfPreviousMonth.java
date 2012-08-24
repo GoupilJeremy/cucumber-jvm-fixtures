@@ -1,6 +1,5 @@
 package fixtures.common.transformers.variables;
 
-import javax.annotation.Nullable;
 import java.util.Locale;
 
 import com.google.common.base.Function;
@@ -14,7 +13,8 @@ public class YearOfPreviousMonth implements Function<String, String> {
 
     @Override
     public String apply(final String input) {
-	    String strToProceed = Strings.nullToEmpty(input);
-        return strToProceed.replaceAll(YEAR_OF_PREVIOUS_MONTH_VARIABLE_NAME, previousMonth.year().getAsText(Locale.FRENCH));
+        String strToProceed = Strings.nullToEmpty(input);
+        return strToProceed
+                .replaceAll(YEAR_OF_PREVIOUS_MONTH_VARIABLE_NAME, previousMonth.year().getAsText(Locale.FRENCH));
     }
 }

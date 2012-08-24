@@ -174,7 +174,6 @@ public class RowToObjectTest {
         assertThat("value =" + value, value, is(FIRST_COLUMN_VALUE));
     }
 
-
     @Test
     public void testGetValue_ellipse_nominal_case_no_one_found() {
         //given

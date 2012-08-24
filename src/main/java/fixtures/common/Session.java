@@ -8,14 +8,13 @@ public class Session implements StepParameter {
     private MockHttpSession session;
 
     public Session() {
-        session= newSession();
+        session = newSession();
     }
 
     @Override
     public void reset() {
         this.session = newSession();
     }
-
 
     private MockHttpSession newSession() {
         return new MockHttpSession();
@@ -24,6 +23,4 @@ public class Session implements StepParameter {
     public MockHttpSession getSession() {
         return session;
     }
-
-
 }

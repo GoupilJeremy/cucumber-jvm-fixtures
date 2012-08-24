@@ -3,6 +3,7 @@ package fixtures.common.transformers;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,13 +18,24 @@ public class VariableResolverStringDecoratorTest {
     private static final int FIXED_TIME = 100;
 
     @Test
+    public void testConstructor() throws Exception {
+        Constructor constructor = VariableResolverStringDecorator.class.getDeclaredConstructor();
+        // on vérifie que le contructeur est volontairement inacessible
+        assertThat(constructor.isAccessible(), is(false));
+
+        // pas utile au final, mais la couverture du constructeur est prise en compte
+        constructor.setAccessible(true);
+        constructor.newInstance();
+    }
+
+    @Test
     public void test_check_nb_transformer() throws Exception {
         //when
         List<Function<String, String>> functions = VariableResolverStringDecorator
                 .getFunctions(Maps.<String, String>newHashMap());
         //then
         // SI on change la taille, AJOUTER LES TESTS ASSOCIES A LA FONCTION
-        assertThat(functions.size(), Is.is(8));
+        assertThat(functions.size(), Is.is(9));
     }
 
     @Test
@@ -58,13 +70,13 @@ public class VariableResolverStringDecoratorTest {
     @Test
     public void test_resolve_variables_many_vars() throws Exception {
         //given
-        String input = "test = ${moisNumeric} - ${moisPrecedent} - ${majMoisPrecedent} - ${majMoisPrecedent} - ${moisPrecedentEtAnnee} - ${moisPrecedentMajuscule} -";
+        String input = "test = ${moisNumeric} - ${moisPrecedent} - ${majMoisPrecedent} - ${majMoisPrecedent} - ${moisPrecedentEtAnnee} - ${moisPrecedentMajuscule} - ${now (yyyy/dd) +4}";
         DateTimeUtils.setCurrentMillisFixed(FIXED_TIME);
         //when
         final HashMap<String, String> context = Maps.newHashMap();
         String result = VariableResolverStringDecorator.resolveVariables(input, context);
         //then
-        String expected = "test = 01 - décembre - Décembre - Décembre - Décembre 1969 - DÉCEMBRE -";
+        String expected = "test = 01 - décembre - Décembre - Décembre - Décembre 1969 - DÉCEMBRE - 1970/05";
         assertThat(result, is(expected));
     }
 

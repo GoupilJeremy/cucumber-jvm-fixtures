@@ -8,7 +8,9 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 public class RecursiveToStringStyle extends ToStringStyle {
     private static final int INFINITE_DEPTH = -1;
+
     private static final long serialVersionUID = 1L;
+
     public static final ToStringStyle MULTI_LINE_STYLE = new RecursiveToStringStyle(5);
 
     public static final ToStringStyle MULTI_LINE_STYLE_FULLY_RECURSIVE = new RecursiveToStringStyle();
@@ -55,14 +57,5 @@ public class RecursiveToStringStyle extends ToStringStyle {
         depth++;
         buffer.append(ReflectionToStringBuilder.toString(coll.toArray(), this, true, true));
         depth--;
-    }
-
-    /**
-     * <p>Ensure <code>Singleton</code> after serialization.</p>
-     *
-     * @return the singleton
-     */
-    private Object readResolve() {
-        return ToStringStyle.MULTI_LINE_STYLE;
     }
 }

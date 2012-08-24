@@ -21,11 +21,8 @@ import org.springframework.util.StringUtils;
 public class FileToDatatable {
     private static final Transliterator ACCENTS_CONVERTER = Transliterator.getInstance("NFD;[:M:]Remove;NFC;");
 
-
-
-    private FileToDatatable(){}
-
-
+    private FileToDatatable() {
+    }
 
     /**
      * Lit un fichier spécifiquement formaté (cf exemple) et le transforme en datatable.<br/>
@@ -45,8 +42,8 @@ public class FileToDatatable {
     public static DataTable convert(final String api, final String data) throws IOException {
         Assert.hasText(api, "pas d'application de défini");
         Assert.hasText(data, "pas de fichier de défini");
-        // on normlise le nom (enlève les accents, les quotes et remplace les espaces par des _
-        String normalizedData = ACCENTS_CONVERTER.transform(data).replace(" ", "_").replace("'", "_");
+        // on normalise le nom (enlève les accents, les quotes et remplace les espaces par des _
+        String normalizedData = ACCENTS_CONVERTER.transform(data).replace(" ", "_").replace("'", "_").toLowerCase();
         // on crée le chemin supposé
         String path = api + "/insert/" + normalizedData + ".txt";
         ClassPathResource classPathResource = new ClassPathResource(path);
@@ -68,7 +65,7 @@ public class FileToDatatable {
                 rowsForDatatable.add(list);
             }
         }
-        // on passe par un objet cucumber pour générer la datable à partir d'une liste de liste
+        // on passe par un objet cucumber pour générer la datatable à partir d'une liste de liste
         TableConverter tableConverter = new TableConverter(getXStream(), null);
         return tableConverter.toTable(rowsForDatatable);
     }

@@ -21,7 +21,8 @@ public abstract class Document extends RowToObject<ElasticSearchWrapper, XConten
 
         for (String mandatoryHeader : getMandatoryHeaders()) {
             if (Strings.isNullOrEmpty(getValue(mandatoryHeader))) {
-                checkArgument(context!=null && context.get(mandatoryHeader) != null, mandatoryHeader + " is mandatory");
+                checkArgument(context != null && context.get(mandatoryHeader) != null,
+                        mandatoryHeader + " is mandatory");
             }
         }
 

@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ElasticSearchWrapper implements RowToObjectDataSource {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchWrapper.class);
 
     private static final int BIG_ID_INTERVAL = 1000000;
@@ -55,7 +54,6 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
         client.admin().indices().delete(new DeleteIndexRequest(ALL_INDICES));
         client.admin().indices().flush(new FlushRequest(ALL_INDICES));
         Thread.sleep(5000);
-
     }
 
     public void shutdownAllNodes() throws InterruptedException {

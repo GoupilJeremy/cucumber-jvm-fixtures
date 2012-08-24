@@ -2,8 +2,6 @@ package fixtures.common.database.utils;
 
 import java.sql.Types;
 
-import fixtures.common.database.utils.IBaseColumnToTable;
-
 public enum FromXToDatatableEnum implements IBaseColumnToTable {
 
     A("a", "A", Types.NUMERIC),
@@ -11,15 +9,13 @@ public enum FromXToDatatableEnum implements IBaseColumnToTable {
     C("c", "C", Types.VARCHAR),
     D("d", "D", Types.VARCHAR);
 
-
     private String datatableColumnName;
 
     private String databaseColumnName;
 
     private int databaseType;
 
-    FromXToDatatableEnum(final String datatableColumnName, final String databaseColumnName,
-            final int databaseType) {
+    FromXToDatatableEnum(final String datatableColumnName, final String databaseColumnName, final int databaseType) {
         this.databaseColumnName = databaseColumnName;
         this.datatableColumnName = datatableColumnName;
         this.databaseType = databaseType;
