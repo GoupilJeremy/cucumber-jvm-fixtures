@@ -55,7 +55,7 @@ public class FileTransformer extends AbstractDataTableTransformer<File> {
         @Override
         public boolean processLine(final String line) throws IOException {
             final Splitter splitter = Splitter.on(SEPARATOR);
-            final Iterable<String> cells = splitter.split(line);
+            final Iterable<String> cells = splitter.split(Label.cleanLabel(line));
             DataTableRow dataTableRow = new DataTableRow(new ArrayList<Comment>(), Lists.newArrayList(cells), counter);
             dataTableRows.add(dataTableRow);
             counter++;
