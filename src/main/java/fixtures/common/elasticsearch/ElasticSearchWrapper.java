@@ -13,11 +13,9 @@ import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
-import org.elasticsearch.bootstrap.ElasticSearch;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.node.NodeBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,8 +23,6 @@ public class ElasticSearchWrapper implements RowToObjectDataSource {
     private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchWrapper.class);
 
     private static final int BIG_ID_INTERVAL = 1000000;
-
-    private static final boolean HOSTING_NO_DATA = true;
 
     private static final String ALL_INDICES = "_all";
 

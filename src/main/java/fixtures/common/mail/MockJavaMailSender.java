@@ -3,11 +3,13 @@ package fixtures.common.mail;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Properties;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import cucumber.table.DataTable;
@@ -59,6 +61,7 @@ public class MockJavaMailSender implements JavaMailSender {
     }
 
     public void send(final MimeMessagePreparator mimeMessagePreparator) {
+        Preconditions.checkArgument(mimeMessagePreparator!=null, "MimeMessagePreparator ne peut être null");
         MailBean mailBean;
         try {
             MimeMessage mimeMessage = new MimeMessage(Session.getInstance(new Properties()));

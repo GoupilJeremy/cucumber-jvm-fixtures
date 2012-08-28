@@ -1,6 +1,7 @@
 package fixtures.common.rows;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 import fixtures.common.RowToObjectDataSource;
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.mockito.Mock;
 
@@ -37,7 +39,7 @@ public class RowToObjectTest {
     private List<String> row = new ArrayList<String>();
 
     @Mock
-    private RowToObjectDataSource rowToObjectDataSource;
+    private RowToObjectDataSource rowToObjectDataSource = null;
 
     @Test
     public void testGetValue_nominal_case() {
@@ -45,12 +47,7 @@ public class RowToObjectTest {
         headers.put(FIRST_COLUMN_NAME, FIRST_COLUMN_INDEX);
 
         row.add(FIRST_COLUMN_VALUE);
-        RowToObject rowToObject = new RowToObject(headers, row, rowToObjectDataSource) {
-            @Override
-            protected Object mapRowToObject() {
-                return null;
-            }
-        };
+        RowToObject rowToObject = new InnerRowToObject(headers, row, rowToObjectDataSource);
 
         //when
         final String value = rowToObject.getValue(FIRST_COLUMN_NAME);
@@ -67,12 +64,7 @@ public class RowToObjectTest {
         List<String> row = new ArrayList<String>();
         row.add(FIRST_COLUMN_VALUE);
 
-        new RowToObject(headers, row, rowToObjectDataSource) {
-            @Override
-            protected Object mapRowToObject() {
-                return null;
-            }
-        };
+        new InnerRowToObject(headers, row, rowToObjectDataSource);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -82,12 +74,7 @@ public class RowToObjectTest {
         headers.put(FIRST_COLUMN_NAME, FIRST_COLUMN_INDEX);
         List<String> row = new ArrayList<String>();
 
-        new RowToObject(headers, row, rowToObjectDataSource) {
-            @Override
-            protected Object mapRowToObject() {
-                return null;
-            }
-        };
+        new InnerRowToObject(headers, row, rowToObjectDataSource);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -98,12 +85,7 @@ public class RowToObjectTest {
 
         row.add(FIRST_COLUMN_VALUE);
 
-        new RowToObject(headers, row, rowToObjectDataSource) {
-            @Override
-            protected Object mapRowToObject() {
-                return null;
-            }
-        };
+        new InnerRowToObject(headers, row, rowToObjectDataSource);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -112,12 +94,7 @@ public class RowToObjectTest {
 
         row.add(FIRST_COLUMN_VALUE);
 
-        new RowToObject(null, row, rowToObjectDataSource) {
-            @Override
-            protected Object mapRowToObject() {
-                return null;
-            }
-        };
+        new InnerRowToObject(headers, row, rowToObjectDataSource);
     }
 
     @Test
@@ -140,12 +117,7 @@ public class RowToObjectTest {
         headers.put(FIRST_COLUMN_NAME, FIRST_COLUMN_INDEX);
 
         row.add(FIRST_COLUMN_VALUE);
-        RowToObject rowToObject = new RowToObject(headers, row, rowToObjectDataSource) {
-            @Override
-            protected Object mapRowToObject() {
-                return null;
-            }
-        };
+        RowToObject rowToObject = new InnerRowToObject(headers, row, rowToObjectDataSource);
 
         //when
         final String value = rowToObject.getValue(FIRST_COLUMN_NAME, NOT_IN_LIST);
@@ -160,12 +132,7 @@ public class RowToObjectTest {
         headers.put(FIRST_COLUMN_NAME, FIRST_COLUMN_INDEX);
 
         row.add(FIRST_COLUMN_VALUE);
-        RowToObject rowToObject = new RowToObject(headers, row, rowToObjectDataSource) {
-            @Override
-            protected Object mapRowToObject() {
-                return null;
-            }
-        };
+        RowToObject rowToObject = new InnerRowToObject(headers, row, rowToObjectDataSource);
 
         //when
         final String value = rowToObject.getValue(NOT_IN_LIST, FIRST_COLUMN_NAME);
@@ -180,12 +147,7 @@ public class RowToObjectTest {
         headers.put(FIRST_COLUMN_NAME, FIRST_COLUMN_INDEX);
 
         row.add(FIRST_COLUMN_VALUE);
-        RowToObject rowToObject = new RowToObject(headers, row, rowToObjectDataSource) {
-            @Override
-            protected Object mapRowToObject() {
-                return null;
-            }
-        };
+        RowToObject rowToObject = new InnerRowToObject(headers, row, rowToObjectDataSource);
 
         //when
         final String value = rowToObject.getValue(NOT_IN_LIST, NOT_IN_LIST_2);
@@ -199,7 +161,8 @@ public class RowToObjectTest {
     public void test_getArgs_copy_when_null() {
         //given
         RowToObject rowToObject = getRowToObject();
-        rowToObject.setArgs(null);
+        Object[] args = null;
+        rowToObject.setArgs(args);
 
         // when  then
         assertThat(rowToObject.getArgs(), is(new Object[0]));
@@ -211,17 +174,19 @@ public class RowToObjectTest {
         List<String> row = new ArrayList<String>();
         row.add(StringUtils.EMPTY);
         row.add(FIRST_COLUMN_VALUE);
-        return new RowToObject(headers, row, rowToObjectDataSource) {
-            @Override
-            protected Object mapRowToObject() {
-                return null;
-            }
-        };
+        return new InnerRowToObject(headers, row, rowToObjectDataSource);
     }
 
     // =============================================================================================
     // setArgs
     // =============================================================================================
+
+    @Test
+    public void testGetArgs_no_setArgs_before() throws Exception {
+        RowToObject rowToObject = getRowToObject();
+        //
+        assertThat(rowToObject.getArgs(), is(new Object[0]));
+    }
 
     @Test
     public void testSetArgs_null_array() throws Exception {
@@ -287,5 +252,90 @@ public class RowToObjectTest {
         Object[] objects02 = new Object[]{"one data2", "two data2", "three data2"};
         rowToObject.setArgs(objects02);
         assertThat(rowToObject.getArgs(), is(new Object[]{"one data2", "two data2", "three data2"}));
+    }
+
+    // =============================================================================================
+    // test getValueAsLocalDate
+    // =============================================================================================
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetValueAsLocalDate_column_is_null() throws Exception {
+        RowToObject rowToObject = getRowToObject();
+        String column = null;
+        rowToObject.getValueAsLocalDate(column);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetValueAsLocalDate_column_not_found() throws Exception {
+        RowToObject rowToObject = getRowToObject();
+        String column = "date";
+        rowToObject.getValueAsLocalDate(column);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetValueAsLocalDate_column_found_bad_data() throws Exception {
+        //given
+        headers.put("date", 0);
+        row.add("jeudi");
+        RowToObject rowToObject = new InnerRowToObject(headers, row, rowToObjectDataSource);
+        String column = "date";
+        rowToObject.getValueAsLocalDate(column);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetValueAsLocalDate_column_bad_pattern() throws Exception {
+        //given
+        headers.put("date", 0);
+        row.add(LocalDate.now().toString("yyyy/MM/dd"));
+        RowToObject rowToObject = new InnerRowToObject(headers, row, rowToObjectDataSource);
+        String column = "date";
+        //
+        rowToObject.getValueAsLocalDate(column);
+    }
+
+    @Test
+    public void testGetValueAsLocalDate_column_good_pattern() throws Exception {
+        LocalDate now = LocalDate.now();
+        //given
+        headers.put("date", 0);
+        row.add(now.toString(RowToObject.DATE_FORMAT_YYYY_MM_DD));
+        RowToObject rowToObject = new InnerRowToObject(headers, row, rowToObjectDataSource);
+        String column = "date";
+        LocalDate valueAsLocalDate = rowToObject.getValueAsLocalDate(column);
+        //
+        assertThat(valueAsLocalDate, is(now));
+    }
+
+    // =============================================================================================
+    // test for me :)
+    // =============================================================================================
+
+    @Test
+    public void testGetter() throws Exception {
+        headers.put("data", 0);
+        row.add("none");
+        RowToObject rowToObject = new InnerRowToObject(headers, row, rowToObjectDataSource);
+        //
+        Map<String, Object> context = new HashMap<String, Object>();
+        rowToObject.setContext(context);
+        //
+        assertThat((Map<String, Object>)rowToObject.getContext(), is(sameInstance(context)));
+        assertThat(rowToObject.getRowToObjectDataSource(), is(sameInstance(rowToObjectDataSource)));
+    }
+
+    // =============================================================================================
+    // Utils
+    // =============================================================================================
+
+    private static class InnerRowToObject extends RowToObject<RowToObjectDataSource, String> {
+        public InnerRowToObject(final Map<String, Integer> headers, final List<String> row,
+                final RowToObjectDataSource dataSource) {
+            super(headers, row, dataSource);
+        }
+
+        @Override
+        protected String mapRowToObject() {
+            return null;
+        }
     }
 }

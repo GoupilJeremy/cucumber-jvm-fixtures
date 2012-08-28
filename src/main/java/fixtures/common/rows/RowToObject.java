@@ -2,6 +2,7 @@ package fixtures.common.rows;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -42,12 +43,11 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
         }
         Set<Integer> valuesSet = new HashSet<Integer>();
         valuesSet.addAll(headers.values());
-        for (Integer integer : valuesSet) {
-            if (row.size() - 1 < integer) {
-                throw new IllegalArgumentException(
-                        "la map de headers fait référence à un index trop grand (" + integer +
-                                ") alors que le nombre de colonne de la ligne est de " + row.size());
-            }
+
+        Integer index = Collections.max(valuesSet);
+        if ((row.size() - 1) < index) {
+            throw new IllegalArgumentException("la map de headers fait référence à un index trop grand (" + index +
+                    ") alors que le nombre de colonne de la ligne est de " + row.size());
         }
         this.headers = headers;
         this.row = row;
@@ -66,7 +66,7 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
                 value = v;
             }
         } else if (context == null || !context.containsKey(column)) {
-            LOGGER.error("column name no present into step:'" + column + "'");
+            LOGGER.debug("column name no present into step:'" + column + "'");
         }
         return value;
     }
