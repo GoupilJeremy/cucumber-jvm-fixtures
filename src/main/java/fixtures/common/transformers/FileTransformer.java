@@ -32,9 +32,7 @@ public class FileTransformer extends AbstractDataTableTransformer<File> {
 
     public FileTransformer(DataTable dataTable, String column) {
         super(dataTable);
-        Preconditions
-                .checkArgument(!Strings.isNullOrEmpty(column), "la colonne doit être définie et ne peut ëtre null");
-        this.column = column;
+        this.column = Strings.nullToEmpty(column);
     }
 
     @Override
