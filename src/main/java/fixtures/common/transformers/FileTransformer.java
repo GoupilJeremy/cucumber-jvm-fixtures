@@ -4,10 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.google.common.io.LineProcessor;
@@ -21,8 +24,17 @@ public class FileTransformer extends AbstractDataTableTransformer<File> {
 
     private static final String SEPARATOR = "\t";
 
+    private String column;
+
     public FileTransformer(DataTable dataTable) {
         super(dataTable);
+    }
+
+    public FileTransformer(DataTable dataTable, String column) {
+        super(dataTable);
+        Preconditions
+                .checkArgument(!Strings.isNullOrEmpty(column), "la colonne doit être définie et ne peut ëtre null");
+        this.column = column;
     }
 
     @Override
@@ -34,6 +46,11 @@ public class FileTransformer extends AbstractDataTableTransformer<File> {
             dataTableRows = Files.readLines(file, CHARSET, newLineProcessor());
         } catch (IOException e) {
             throw new CucumberException("Test cucumber", e);
+        }
+
+        if (dataTableRows != null && !dataTableRows.isEmpty() && !Strings.isNullOrEmpty(column)) {
+            ColumnComparator columnComparator = new ColumnComparator(column, dataTableRows.get(0));
+            Collections.sort(dataTableRows, columnComparator);
         }
 
         return dataTableRows;
@@ -68,5 +85,28 @@ public class FileTransformer extends AbstractDataTableTransformer<File> {
         }
     }
 
-    ;
+    private static class ColumnComparator implements Comparator<DataTableRow> {
+        private String column;
+
+        private int index;
+
+        public ColumnComparator(final String column, final DataTableRow firstRow) {
+            this.column = column;
+            this.index = firstRow.getCells().indexOf(column);
+        }
+
+        @Override
+        public int compare(final DataTableRow dataTableRow01, final DataTableRow dataTableRow02) {
+            if (index < 0) {
+                return 0;
+            }
+            String cell01 = dataTableRow01.getCells().get(index);
+            String cell02 = dataTableRow02.getCells().get(index);
+            // la colonne avec le header reste en premier
+            if (cell01.equals(column)) {
+                return -1;
+            }
+            return cell01.compareTo(cell02);
+        }
+    }
 }

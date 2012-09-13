@@ -103,4 +103,51 @@ public class FileTransformerTest {
         final DataTable dataTableFromFile = spyFileTransformer.toDataTable(file);
         dataTableFromFile.raw();
     }
+
+    // sort
+
+    @Test(expected = IllegalArgumentException.class)
+    public void test_fileTransformer_column_is_null() throws Exception {
+        //
+        String column = null;
+        new FileTransformer(dataTable, column);
+    }
+
+    @Test
+    public void test_fileTransformer_column_is_unknow() throws Exception {
+
+        File file = new File(getClass().getClassLoader().getResource("files/file_to_transform_to_sort.txt").getFile());
+        //
+        String column = "unknown";
+        FileTransformer fileTransformer = new FileTransformer(dataTable, column);
+        final DataTable dataTableFromFile = fileTransformer.toDataTable(file);
+        List<List<String>> raw = dataTableFromFile.raw();
+        //ID, FILE, REF], [478, read.txt, 2574], [12, fs.sys, 1878D], [321 .git    48717
+
+        List<List<String>> expected = Lists.<List<String>>newArrayList( //
+                Lists.<String>newArrayList("ID", "FILE", "REF"), //
+                Lists.<String>newArrayList("478", "read.txt", "2574"),//
+                Lists.<String>newArrayList("12", "fs.sys", "1878D"),//
+                Lists.<String>newArrayList("321", ".git", "48717"));
+        assertThat(raw, is(expected));
+    }
+
+    @Test
+    public void test_fileTransformer_column_is_ok() throws Exception {
+
+        File file = new File(getClass().getClassLoader().getResource("files/file_to_transform_to_sort.txt").getFile());
+        //
+        String column = "ID";
+        FileTransformer fileTransformer = new FileTransformer(dataTable, column);
+        final DataTable dataTableFromFile = fileTransformer.toDataTable(file);
+        List<List<String>> raw = dataTableFromFile.raw();
+        //ID, FILE, REF], [478, read.txt, 2574], [12, fs.sys, 1878D], [321 .git    48717
+
+        List<List<String>> expected = Lists.<List<String>>newArrayList( //
+                Lists.<String>newArrayList("ID", "FILE", "REF"), //
+                Lists.<String>newArrayList("12", "fs.sys", "1878D"),//
+                Lists.<String>newArrayList("321", ".git", "48717"),//
+                Lists.<String>newArrayList("478", "read.txt", "2574"));
+        assertThat(raw, is(expected));
+    }
 }
