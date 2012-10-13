@@ -1,26 +1,18 @@
 package fixtures.common.transformers;
 
-import static fixtures.common.transformers.EmailTransformer.A_HEADER;
-import static fixtures.common.transformers.EmailTransformer.COPIE_CACHEE_HEADER;
-import static fixtures.common.transformers.EmailTransformer.DE_HEADER;
-import static fixtures.common.transformers.EmailTransformer.MESSAGE_HEADER;
-import static fixtures.common.transformers.EmailTransformer.PIECE_JOINTE_HEADER;
-import static fixtures.common.transformers.EmailTransformer.REPONDRE_A_HEADER;
-import static fixtures.common.transformers.EmailTransformer.SUJET_HEADER;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Collection;
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import cucumber.table.DataTable;
 import fixtures.common.datatable.DatatableUtils;
 import fixtures.common.mail.MailBean;
 import org.junit.Test;
+
+import java.util.Collection;
+import java.util.List;
+
+import static fixtures.common.transformers.EmailTransformer.*;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
 
 public class EmailTransformerTest {
     @Test(expected = IllegalArgumentException.class)
@@ -66,7 +58,6 @@ public class EmailTransformerTest {
         EmailTransformer emailTransformer = new EmailTransformer(dataTable);
         DataTable dataTableEmail = emailTransformer.toDataTable(mailBeans);
         //
-        //
         List<List<String>> expected = Lists
                 .<List<String>>newArrayList(Lists.<String>newArrayList(SUJET_HEADER, MESSAGE_HEADER),
                         Lists.<String>newArrayList("mon sujet", "mon message"));
@@ -109,7 +100,7 @@ public class EmailTransformerTest {
     public void testFileTransformer_many_mails_few_header() throws Exception {
         List<String> headers = Lists.newArrayList(A_HEADER, SUJET_HEADER);
         List<String> list01 = Lists
-                .newArrayList("Hello", "how are you ?", "to@to.com", "cc@cc.com", "from@from,com", "PJ", "reply");
+                .newArrayList("to@to.com", "Hello", "how are you ?");
         DataTable dataTable = DatatableUtils.getDatatable(headers, Lists.<List<String>>newArrayList(headers, list01));
         //
         MailBean mailBean01 = mock(MailBean.class);

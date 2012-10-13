@@ -1,19 +1,15 @@
 package fixtures.common.transformers;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import cucumber.table.DataTable;
 import fixtures.common.mail.MailBean;
-import fixtures.common.transformers.model.EmailPropertyEnum;
 import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
+import org.elasticsearch.common.collect.Maps;
+
+import java.util.*;
 
 public class EmailTransformer extends AbstractDataTableTransformer<Collection<MailBean>> {
     public static final String SUJET_HEADER = "sujet";
@@ -45,8 +41,12 @@ public class EmailTransformer extends AbstractDataTableTransformer<Collection<Ma
         int line = 0;
         for (MailBean mailBean : sorted) {
             List<String> cells = new ArrayList<String>();
+	        Map<String,String> mailToRow = mailToRow(mailBean);
             for (String headerValue : headersAsCells) {
-                cells.addAll(populate(mailBean, headerValue));
+	            if (!mailToRow.containsKey(headerValue)) {
+                    throw new IllegalStateException("le header '" + headerValue + "' n'est pas géré par EmailTransformer");
+                }
+                cells.add(mailToRow.get(headerValue));
             }
             rows.add(new DataTableRow(new ArrayList<Comment>(), cells, line));
             line++;
@@ -54,44 +54,17 @@ public class EmailTransformer extends AbstractDataTableTransformer<Collection<Ma
         return rows;
     }
 
-    private List<String> populate(final MailBean mailBean, final String headerValue) {
-        EmailPropertyEnum emailProperty = EmailPropertyEnum.getEmailPropertyFromLabel(headerValue);
-        if (emailProperty==null) {
-            throw new IllegalStateException("le header '" + headerValue + "' n'est pas géré par EmailTransformer");
-        }
-        return fillCells(mailBean, emailProperty);
-    }
-
-    private List<String> fillCells(final MailBean mailBean, final EmailPropertyEnum emailProperty) {
-        List<String> cells = Lists.newArrayList();
-        switch (emailProperty) {
-            case SUJET_HEADER:
-                cells.add(mailBean.getSubject());
-                break;
-            case MESSAGE_HEADER:
-                cells.add(Label.cleanLabel(mailBean.getBody()));
-                break;
-            case REPONDRE_A_HEADER:
-                cells.add(mailBean.getReplyTo());
-                break;
-            case DE_HEADER:
-                cells.add(mailBean.getFrom());
-                break;
-            case A_HEADER:
-                cells.add(mailBean.getTo());
-                break;
-            case COPIE_CACHEE_HEADER:
-                cells.add(mailBean.getBcc());
-                break;
-            case PIECE_JOINTE_HEADER:
-                cells.add(mailBean.getAttachment());
-                break;
-            default:
-                break;
-        }
-
-        return cells;
-    }
+	private Map<String, String> mailToRow(MailBean mailBean) {
+		Map<String, String> mapMailBean = Maps.newHashMap();
+		mapMailBean.put(A_HEADER, mailBean.getTo());
+		mapMailBean.put(DE_HEADER, mailBean.getFrom());
+		mapMailBean.put(COPIE_CACHEE_HEADER, mailBean.getBcc());
+		mapMailBean.put(REPONDRE_A_HEADER, mailBean.getReplyTo());
+		mapMailBean.put(SUJET_HEADER, mailBean.getSubject());
+		mapMailBean.put(MESSAGE_HEADER, Label.cleanLabel(mailBean.getBody()));
+		mapMailBean.put(PIECE_JOINTE_HEADER, mailBean.getAttachment());
+		return mapMailBean;
+	}
 
     private class MailBeanComparator implements Comparator<MailBean> {
         @Override
