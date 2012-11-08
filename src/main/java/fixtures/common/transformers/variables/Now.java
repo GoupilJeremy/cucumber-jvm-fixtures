@@ -42,7 +42,7 @@ public class Now implements Function<String, String> {
                 //
                 checkStart(group);
                 int offset = getOffset(groupSplitted);
-                datePattern = getDatePattern(groupSplitted);
+                datePattern = getDatePattern(group);
                 DateTime now = DateTime.now().plusDays(offset);
                 strToProceed = matcher.replaceAll(now.toString(datePattern));
             } catch (VariableException ve) {
@@ -60,17 +60,31 @@ public class Now implements Function<String, String> {
         }
     }
 
-    private String getDatePattern(final Iterable<String> groupSplitted) {
-        List<String> listPatternDates = Lists
-                .newArrayList(Iterables.filter(groupSplitted, new PatternMatcherPredicate(DATE_PATTERN)));
-        if (listPatternDates == null || listPatternDates.size() == 0) {
+    private String getDatePattern(final String group) {
+        String patternDate = getPatternDate(group);
+        if (Strings.isNullOrEmpty(patternDate)) {
             return DEFAULT_PATTERN;
-        } else if (listPatternDates.size() == 1) {
-            return listPatternDates.get(0).replaceAll("\\(", "").replaceAll("\\)", "");
         } else {
-            throw new VariableException(
-                    "Trop de pattern pour la date (1 seul doit être précisé): " + listPatternDates.toString());
+            return patternDate;
         }
+    }
+
+    private String getPatternDate(final String group) {
+        if (Strings.isNullOrEmpty(group)) {
+            return "";
+        }
+        int first = group.indexOf("(");
+        int second = group.indexOf(")");
+        if (first == -1 || second == -1) {
+            return "";
+        }
+        if (second < group.length()) {
+            String after = group.substring(second+1);
+            if (after.contains("(") && after.contains(")")) {
+                throw new VariableException("Trop de pattern pour la date (1 seul doit être précisé): " + group);
+            }
+        }
+        return group.substring(first + 1, second);
     }
 
     private int getOffset(final Iterable<String> groupSplitted) {
