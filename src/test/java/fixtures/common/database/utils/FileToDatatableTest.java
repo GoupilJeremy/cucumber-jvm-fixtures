@@ -8,7 +8,7 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import cucumber.table.DataTable;
+import cucumber.api.DataTable;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 

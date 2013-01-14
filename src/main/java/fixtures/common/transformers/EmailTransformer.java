@@ -3,7 +3,7 @@ package fixtures.common.transformers;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import cucumber.table.DataTable;
+import cucumber.api.DataTable;
 import fixtures.common.mail.MailBean;
 import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;

@@ -101,36 +101,12 @@ public class RecursiveToStringStyleTest {
             this.infos = infos;
         }
 
-        public Integer getId() {
-            return id;
-        }
 
-        public void setId(final Integer id) {
-            this.id = id;
-        }
-
-        public String getLabel() {
-            return label;
-        }
-
-        public void setLabel(final String label) {
-            this.label = label;
-        }
-
-        public DummyObject getDummyObject() {
-            return dummyObject;
-        }
 
         public void setDummyObject(final DummyObject dummyObject) {
             this.dummyObject = dummyObject;
         }
 
-        public List<String> getInfos() {
-            return infos;
-        }
 
-        public void setInfos(final List<String> infos) {
-            this.infos = infos;
-        }
     }
 }

@@ -1,22 +1,22 @@
 package fixtures.common.database.utils;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-
 import com.google.common.base.Charsets;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.ibm.icu.text.Transliterator;
-import cucumber.runtime.converters.LocalizedXStreams;
-import cucumber.table.DataTable;
-import cucumber.table.TableConverter;
+import cucumber.api.DataTable;
+import cucumber.runtime.table.TableConverter;
+import cucumber.runtime.xstream.LocalizedXStreams;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 
 public class FileToDatatable {
     private static final Transliterator ACCENTS_CONVERTER = Transliterator.getInstance("NFD;[:M:]Remove;NFC;");

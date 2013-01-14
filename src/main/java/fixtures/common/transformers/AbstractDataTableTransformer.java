@@ -3,7 +3,7 @@ package fixtures.common.transformers;
 import java.util.ArrayList;
 import java.util.List;
 
-import cucumber.table.DataTable;
+import cucumber.api.DataTable;
 import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 import org.apache.commons.lang.Validate;

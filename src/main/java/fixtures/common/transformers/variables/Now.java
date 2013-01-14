@@ -25,9 +25,7 @@ public class Now implements Function<String, String> {
 
     private static final Pattern ADD_DAYS_PATTERN = Pattern.compile("^[-+]{1}[0-9]+$");
 
-    private static final Pattern DATE_PATTERN = Pattern.compile("^\\([\\w -/:]+\\)");
-
-    private static final Splitter SPLITTER = Splitter.on(" ");
+	private static final Splitter SPLITTER = Splitter.on(" ");
 
     @Override
     public String apply(final String input) {
@@ -56,7 +54,7 @@ public class Now implements Function<String, String> {
 
     private void checkStart(final String group) {
         if (!group.startsWith(NOW + " ") && !group.equals(NOW)) {
-            throw new VariableException("Boom = " + group);
+            throw new VariableException("Début invalide pour : " + group);
         }
     }
 

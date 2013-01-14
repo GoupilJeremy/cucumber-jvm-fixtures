@@ -1,7 +1,7 @@
 package fixtures.common.transformers;
 
 import com.google.common.collect.Lists;
-import cucumber.table.DataTable;
+import cucumber.api.DataTable;
 import fixtures.common.datatable.DatatableUtils;
 import fixtures.common.mail.MailBean;
 import org.junit.Test;
