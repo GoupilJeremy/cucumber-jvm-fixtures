@@ -1,11 +1,7 @@
 package fixtures.common.mail;
 
-import com.google.common.base.Strings;
-import fixtures.common.transformers.Label;
-import org.junit.Test;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -16,8 +12,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import com.google.common.base.Strings;
+import fixtures.common.transformers.Label;
+import org.junit.Test;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
 
 public class MailBeanTest {
 
