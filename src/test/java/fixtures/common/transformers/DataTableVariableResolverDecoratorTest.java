@@ -8,7 +8,7 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import cucumber.table.DataTable;
+import cucumber.api.DataTable;
 import fixtures.common.datatable.DatatableUtils;
 import org.joda.time.DateTime;
 import org.junit.Test;

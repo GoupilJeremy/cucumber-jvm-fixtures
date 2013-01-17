@@ -5,7 +5,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import com.google.common.collect.Lists;
-import cucumber.table.DataTable;
+import cucumber.api.DataTable;
 import org.junit.Test;
 
 public class RowsToObjectTest {

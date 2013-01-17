@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ObjectArrays;
+import cucumber.api.DataTable;
 import cucumber.runtime.CucumberException;
-import cucumber.table.DataTable;
 import fixtures.common.RowToObjectDataSource;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;

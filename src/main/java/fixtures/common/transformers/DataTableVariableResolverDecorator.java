@@ -9,9 +9,9 @@ import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Maps;
-import cucumber.runtime.converters.LocalizedXStreams;
-import cucumber.table.DataTable;
-import cucumber.table.TableConverter;
+import cucumber.api.DataTable;
+import cucumber.runtime.table.TableConverter;
+import cucumber.runtime.xstream.LocalizedXStreams;
 import gherkin.formatter.model.DataTableRow;
 
 public class DataTableVariableResolverDecorator extends DataTable {
@@ -25,7 +25,7 @@ public class DataTableVariableResolverDecorator extends DataTable {
 
     public DataTableVariableResolverDecorator(DataTable dataTable, Map<String, String> context) {
         super(new ArrayList<DataTableRow>(), new TableConverter(getXStream(), null));
-        Preconditions.checkArgument(dataTable != null, "la datatable ne peut ëtre null");
+        Preconditions.checkArgument(dataTable != null, "la datatable ne peut être null");
 
         this.dataTableToDecorate = dataTable;
         this.context = context;

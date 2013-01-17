@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.google.common.base.Preconditions;
-import cucumber.table.DataTable;
+import cucumber.api.DataTable;
 
 public class DatatableUtils {
     private DatatableUtils() {

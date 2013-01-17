@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import cucumber.table.DataTable;
+import cucumber.api.DataTable;
 import fixtures.common.datatable.DatatableUtils;
 import org.apache.commons.lang.NotImplementedException;
 import org.hamcrest.core.Is;

@@ -16,10 +16,10 @@ import java.util.Locale;
 
 import com.google.common.collect.Lists;
 import com.google.common.io.LineProcessor;
+import cucumber.api.DataTable;
 import cucumber.runtime.CucumberException;
-import cucumber.runtime.converters.LocalizedXStreams;
-import cucumber.table.DataTable;
-import cucumber.table.TableConverter;
+import cucumber.runtime.table.TableConverter;
+import cucumber.runtime.xstream.LocalizedXStreams;
 import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 import org.junit.Before;
