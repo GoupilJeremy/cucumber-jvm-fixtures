@@ -14,8 +14,8 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.google.common.io.LineProcessor;
-import cucumber.api.DataTable;
 import cucumber.runtime.CucumberException;
+import cucumber.api.DataTable;
 import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 

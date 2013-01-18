@@ -1,10 +1,5 @@
 package fixtures.common.transformers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Collections2;
@@ -13,6 +8,11 @@ import cucumber.api.DataTable;
 import cucumber.runtime.table.TableConverter;
 import cucumber.runtime.xstream.LocalizedXStreams;
 import gherkin.formatter.model.DataTableRow;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class DataTableVariableResolverDecorator extends DataTable {
     private DataTable dataTableToDecorate;

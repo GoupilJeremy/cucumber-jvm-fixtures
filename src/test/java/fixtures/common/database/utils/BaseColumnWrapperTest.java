@@ -51,5 +51,6 @@ public class BaseColumnWrapperTest {
                 .<IBaseColumnToTable>newArrayList(FromXToDatatableEnum.A, FromXToDatatableEnum.B,
                         FromXToDatatableEnum.C, FromXToDatatableEnum.D);
         assertThat(baseColumnToTable, is(expected));
+	    assertThat(baseColumnToTable.get(0).getColumnType(),is(FromXToDatatableEnum.A.getColumnType()));
     }
 }

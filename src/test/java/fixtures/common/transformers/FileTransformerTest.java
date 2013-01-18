@@ -1,19 +1,5 @@
 package fixtures.common.transformers;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
 import com.google.common.collect.Lists;
 import com.google.common.io.LineProcessor;
 import cucumber.api.DataTable;
@@ -24,6 +10,17 @@ import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 public class FileTransformerTest {
     private DataTable dataTable;

@@ -256,9 +256,7 @@ public class MockJavaMailSenderTest {
 
     @Test(expected = MailAuthenticationException.class)
     public void testSend_MimeMessagePreparator_prepare_throws_runtimeException() throws Exception {
-        String to = MockJavaMailSender.EXCEPTION_EMAIL;
-        String from = "from@email.com";
-        MimeMessagePreparator mimeMessagePreparator = new InnerExceptionMessagePreparator();
+	    MimeMessagePreparator mimeMessagePreparator = new InnerExceptionMessagePreparator();
         //
         MockJavaMailSender mockJavaMailSender = new MockJavaMailSender();
         try {
