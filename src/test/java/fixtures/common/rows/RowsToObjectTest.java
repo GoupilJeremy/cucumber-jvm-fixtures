@@ -4,7 +4,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItems;
-import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -13,10 +17,6 @@ import cucumber.runtime.CucumberException;
 import fixtures.common.RowToObjectDataSource;
 import fixtures.common.datatable.DatatableUtils;
 import org.junit.Test;
-import org.mockito.Mockito;
-
-import java.lang.reflect.Constructor;
-import java.util.*;
 
 public class RowsToObjectTest {
 
@@ -64,7 +64,7 @@ public class RowsToObjectTest {
 		DataTable datatable = DatatableUtils.getDatatable(header, values);
 		RowsToObject rowsToObject = new RowsToObject(datatable, rowToObjectDataSource, clazz);
 		// set context
-		Map<Object, Object> context = Maps.newHashMap();
+		Map<String, Object> context = Maps.newHashMap();
 		context.put("ctx", "val");
 		context.put("ctx2", 1587);
 		rowsToObject.setContext(context);
