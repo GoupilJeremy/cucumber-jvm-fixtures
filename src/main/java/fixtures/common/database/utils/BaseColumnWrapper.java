@@ -15,6 +15,9 @@ public class BaseColumnWrapper {
     private final static Function<IBaseColumnToTable, String> GET_BASE_COLUMN_NAME = new Function<IBaseColumnToTable, String>() {
         @Override
         public String apply(final IBaseColumnToTable input) {
+            if (input == null) {
+                return "";
+            }
             return input.getBaseColumnName();
         }
     };
@@ -22,6 +25,9 @@ public class BaseColumnWrapper {
     private final static Function<IBaseColumnToTable, String> GET_DATATABLE_COLUMN_NAME = new Function<IBaseColumnToTable, String>() {
         @Override
         public String apply(final IBaseColumnToTable input) {
+            if (input == null) {
+                return "";
+            }
             return input.getDatatableColumnName();
         }
     };

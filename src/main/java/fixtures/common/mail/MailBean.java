@@ -1,12 +1,5 @@
 package fixtures.common.mail;
 
-import fixtures.common.transformers.Label;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.CharEncoding;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.mail.SimpleMailMessage;
-
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -19,6 +12,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import fixtures.common.transformers.Label;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.mail.SimpleMailMessage;
 
 public class MailBean {
 	private static final String CARRIAGE_RETURN = "\n";
@@ -73,7 +73,6 @@ public class MailBean {
 		String extractedAttachment = StringUtils.EMPTY;
 		if (content instanceof MimeMultipart) {
 			MimeMultipart mimeMultipart = (MimeMultipart) content;
-			//MimeMultipart bodyPart = (MimeMultipart) mimeMultipart.getBodyPart(0).getContent();
 			// on a une pièce jointe
 			if (mimeMultipart.getCount() > 1) {
 				Object contentMultipart = mimeMultipart.getBodyPart(1).getContent();

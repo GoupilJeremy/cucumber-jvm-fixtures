@@ -71,8 +71,8 @@ public class Now implements Function<String, String> {
         if (Strings.isNullOrEmpty(group)) {
             return "";
         }
-        int first = group.indexOf("(");
-        int second = group.indexOf(")");
+        int first = group.indexOf('(');
+        int second = group.indexOf(')');
         if (first == -1 || second == -1) {
             return "";
         }

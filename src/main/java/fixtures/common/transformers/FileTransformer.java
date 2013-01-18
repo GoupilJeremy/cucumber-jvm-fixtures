@@ -2,6 +2,7 @@ package fixtures.common.transformers;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,8 +15,8 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.google.common.io.LineProcessor;
-import cucumber.runtime.CucumberException;
 import cucumber.api.DataTable;
+import cucumber.runtime.CucumberException;
 import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 
@@ -83,7 +84,9 @@ public class FileTransformer extends AbstractDataTableTransformer<File> {
         }
     }
 
-    private static class ColumnComparator implements Comparator<DataTableRow> {
+    private static class ColumnComparator implements Comparator<DataTableRow>, Serializable {
+        private static final long serialVersionUID = 1L;
+
         private String column;
 
         private int index;
