@@ -159,7 +159,7 @@ public class MailBeanTest {
 		//
 	}
 
-  //  @Ignore("Ne passe pas avec Maven mais marche avec Intellij : à regarder pourquoi")
+    @Ignore("Ne passe pas avec Maven mais marche avec Intellij : à regarder pourquoi")
 	@Test
 	public void test_MailBean_mimeMessage_with_file_attachment() throws Exception {
 		String text = "my body for mail";
