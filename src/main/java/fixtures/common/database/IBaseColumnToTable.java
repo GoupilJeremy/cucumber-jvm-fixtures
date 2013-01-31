@@ -1,4 +1,4 @@
-package fixtures.common.database.utils;
+package fixtures.common.database;
 
 public interface IBaseColumnToTable {
     String getBaseColumnName();

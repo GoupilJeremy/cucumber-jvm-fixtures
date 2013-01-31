@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Lists;
-import fixtures.common.rows.RowToObjectTest;
+import fixtures.common.datatable.rows.RowToObjectTest;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.junit.Before;

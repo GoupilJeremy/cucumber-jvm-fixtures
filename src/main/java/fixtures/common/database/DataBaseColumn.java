@@ -1,4 +1,4 @@
-package fixtures.common.database.utils;
+package fixtures.common.database;
 
 import javax.annotation.Nullable;
 import java.sql.Types;

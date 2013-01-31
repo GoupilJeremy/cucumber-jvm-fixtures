@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Strings;
-import fixtures.common.rows.RowToObject;
+import fixtures.common.datatable.rows.RowToObject;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 
 public abstract class Document extends RowToObject<ElasticSearchWrapper, XContentBuilder> {

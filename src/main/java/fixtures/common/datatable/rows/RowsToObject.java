@@ -1,4 +1,4 @@
-package fixtures.common.rows;
+package fixtures.common.datatable.rows;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ObjectArrays;

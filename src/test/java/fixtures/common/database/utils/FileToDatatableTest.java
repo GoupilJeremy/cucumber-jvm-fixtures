@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import cucumber.api.DataTable;
+import fixtures.common.file.FileToDatatable;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package fixtures.common.rows;
+package fixtures.common.datatable.rows;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

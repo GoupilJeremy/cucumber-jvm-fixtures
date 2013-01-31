@@ -6,6 +6,8 @@ import static org.junit.Assert.assertThat;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import fixtures.common.database.BaseColumnWrapper;
+import fixtures.common.database.IBaseColumnToTable;
 import org.junit.Test;
 import org.junit.matchers.JUnitMatchers;
 

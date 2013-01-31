@@ -1,4 +1,4 @@
-package fixtures.common.database.utils;
+package fixtures.common.file;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Splitter;

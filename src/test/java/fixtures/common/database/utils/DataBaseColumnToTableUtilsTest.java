@@ -10,6 +10,7 @@ import java.util.Map;
 import cucumber.api.DataTable;
 import cucumber.runtime.table.TableConverter;
 import cucumber.runtime.xstream.LocalizedXStreams;
+import fixtures.common.database.DataBaseColumnToTableUtils;
 import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 import org.junit.Test;

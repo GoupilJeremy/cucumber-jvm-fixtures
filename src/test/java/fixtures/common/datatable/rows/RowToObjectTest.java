@@ -1,4 +1,4 @@
-package fixtures.common.rows;
+package fixtures.common.datatable.rows;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -11,6 +11,7 @@ import java.util.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import fixtures.common.RowToObjectDataSource;
+import fixtures.common.datatable.rows.RowToObject;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 import org.junit.Test;

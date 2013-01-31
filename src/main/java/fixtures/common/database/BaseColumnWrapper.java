@@ -1,4 +1,4 @@
-package fixtures.common.database.utils;
+package fixtures.common.database;
 
 import java.util.ArrayList;
 import java.util.EnumSet;

@@ -1,4 +1,4 @@
-package fixtures.common.rows;
+package fixtures.common.datatable.rows;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -16,6 +16,8 @@ import cucumber.api.DataTable;
 import cucumber.runtime.CucumberException;
 import fixtures.common.RowToObjectDataSource;
 import fixtures.common.datatable.DatatableUtils;
+import fixtures.common.datatable.rows.RowToObject;
+import fixtures.common.datatable.rows.RowsToObject;
 import org.junit.Test;
 
 public class RowsToObjectTest {
