@@ -1,5 +1,8 @@
 package fixtures.common.transformers;
 
+import javax.annotation.Nullable;
+
+import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -11,7 +14,7 @@ import org.elasticsearch.common.collect.Maps;
 
 import java.util.*;
 
-public class EmailTransformer extends AbstractDataTableTransformer<Collection<MailBean>> {
+public class EmailTransformer extends AbstractDataTableTransformer<MailBean> implements Function<MailBean, Map<String, String>> {
     public static final String SUJET_HEADER = "sujet";
 
     public static final String MESSAGE_HEADER = "message";
@@ -30,41 +33,28 @@ public class EmailTransformer extends AbstractDataTableTransformer<Collection<Ma
         super(dataTable);
     }
 
+
     @Override
-    protected List<DataTableRow> buildRowForDataTable(final Collection<MailBean> mailBeans,
+    protected List<DataTableRow> buildRowForDataTable(final Collection<MailBean> objects,
             final List<DataTableRow> rows) {
-        Preconditions.checkArgument(mailBeans != null, "la liste de mail ne peut ëtre null");
-
-        List<MailBean> sorted = Lists.newArrayList(mailBeans);
+        List<MailBean> sorted = Lists.newArrayList(objects);
         Collections.sort(sorted, new MailBeanComparator());
-
-        int line = 0;
-        for (MailBean mailBean : sorted) {
-            List<String> cells = new ArrayList<String>();
-	        Map<String,String> mailToRow = mailToRow(mailBean);
-            for (String headerValue : headersAsCells) {
-	            if (!mailToRow.containsKey(headerValue)) {
-                    throw new IllegalStateException("le header '" + headerValue + "' n'est pas géré par EmailTransformer");
-                }
-                cells.add(mailToRow.get(headerValue));
-            }
-            rows.add(new DataTableRow(new ArrayList<Comment>(), cells, line));
-            line++;
-        }
-        return rows;
+        return super.buildRowForDataTable(objects, rows);
     }
 
-	private Map<String, String> mailToRow(MailBean mailBean) {
-		Map<String, String> mapMailBean = Maps.newHashMap();
-		mapMailBean.put(A_HEADER, mailBean.getTo());
-		mapMailBean.put(DE_HEADER, mailBean.getFrom());
-		mapMailBean.put(COPIE_CACHEE_HEADER, mailBean.getBcc());
-		mapMailBean.put(REPONDRE_A_HEADER, mailBean.getReplyTo());
-		mapMailBean.put(SUJET_HEADER, mailBean.getSubject());
-		mapMailBean.put(MESSAGE_HEADER, Label.cleanLabel(mailBean.getBody()));
-		mapMailBean.put(PIECE_JOINTE_HEADER, mailBean.getAttachment());
-		return mapMailBean;
-	}
+    @Nullable
+    @Override
+    public Map<String, String> apply(@Nullable final MailBean mailBean) {
+        Map<String, String> mapMailBean = Maps.newHashMap();
+        mapMailBean.put(A_HEADER, mailBean.getTo());
+        mapMailBean.put(DE_HEADER, mailBean.getFrom());
+        mapMailBean.put(COPIE_CACHEE_HEADER, mailBean.getBcc());
+        mapMailBean.put(REPONDRE_A_HEADER, mailBean.getReplyTo());
+        mapMailBean.put(SUJET_HEADER, mailBean.getSubject());
+        mapMailBean.put(MESSAGE_HEADER, Label.cleanLabel(mailBean.getBody()));
+        mapMailBean.put(PIECE_JOINTE_HEADER, mailBean.getAttachment());
+        return mapMailBean;
+    }
 
     private class MailBeanComparator implements Comparator<MailBean> {
         @Override
@@ -74,6 +64,4 @@ public class EmailTransformer extends AbstractDataTableTransformer<Collection<Ma
             return mailTo01.compareTo(mailTo02);
         }
     }
-
-
 }

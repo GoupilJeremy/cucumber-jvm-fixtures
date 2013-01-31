@@ -19,10 +19,11 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import cucumber.api.DataTable;
 import cucumber.runtime.table.TableDiffException;
+import fixtures.common.transformers.AbstractDataTableTransformer;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 
-public class DatatableFromDataBaseComparator {
+public class DatatableFromDataBaseComparator extends AbstractDataTableTransformer<Map<String,Object>>{
     private static final String DATE_PATTERN = "dd/MM/yyyy";
 
     private static final String TRUE_VALUE = "oui";
@@ -36,18 +37,20 @@ public class DatatableFromDataBaseComparator {
     private List<List<String>> listFiltered;
 
     private List<String> headers;
+    private  TableFromDatabaseWrapper wrapper;
 
     private DatatableFromDataBaseComparator(final DataTable table, final List<Map<String, Object>> queryResultFromDatabase,
             Class<? extends IBaseColumnToTable> baseColumnToTable) {
+        super(table);
         this.table = table;
-        final TableFromDatabaseWrapper wrapper = new TableFromDatabaseWrapper(baseColumnToTable);
+        wrapper = new TableFromDatabaseWrapper(baseColumnToTable);
         headers = this.table.raw().get(0);
         final Collection<List<String>> filteredTable =
 
                 Collections2.transform(queryResultFromDatabase, new Function<Map<String, Object>, List<String>>() {
                     @Override
-                    public List<String> apply(@Nullable final Map<String, Object> input) {
-                        final Map<String, String> line = replaceKeysFromDatabase(input, wrapper);
+                    public List<String> apply(@Nullable final Map<String, Object> databaseRow) {
+                        final Map<String, String> line = DatatableFromDataBaseComparator.this.apply(databaseRow);
                         return reorderLine(headers, line);
                     }
                 });
@@ -67,6 +70,9 @@ public class DatatableFromDataBaseComparator {
         listToCompare.addAll(listFiltered);
         table.diff(listToCompare);
     }
+
+
+
 
     /**
      * tri ascendant par défaut
@@ -101,28 +107,6 @@ public class DatatableFromDataBaseComparator {
         return reorderedLine;
     }
 
-    private Map<String, String> replaceKeysFromDatabase(final Map<String, Object> input,
-            final TableFromDatabaseWrapper wrapper) {
-        Map<String, String> result = new HashMap<String, String>();
-        Map<String, Object> transformedLine = filterKeysFromDatabase(input, wrapper.getBaseColumnNames());
-
-        for (Map.Entry<String, Object> entry : transformedLine.entrySet()) {
-            //je remplace la clé en base par la clé du tableau
-            Object content = entry.getValue();
-            IBaseColumnToTable columnEnum = getEnum(entry.getKey(), wrapper.getBaseColumnToTable());
-            String finalContent = (content == null) ? StringUtils.EMPTY : content.toString();
-            if (columnEnum.getColumnType() == Types.BOOLEAN) {
-                finalContent = finalContent.equals(TRUE_DATABASE_VALUE) ? TRUE_VALUE : FALSE_VALUE;
-            } else if (columnEnum.getColumnType() == Types.DATE && content != null) {
-                Date date = (Date) content;
-                finalContent = new LocalDate(date.getTime()).toString(DATE_PATTERN);
-            }
-            result.put(columnEnum.getDatatableColumnName(), finalContent);
-        }
-
-        return result;
-    }
-
     private Map<String, Object> filterKeysFromDatabase(final Map<String, Object> input,
             final Collection<String> keysInDatabase) {
         return Maps.filterKeys(input, new Predicate<String>() {
@@ -131,6 +115,28 @@ public class DatatableFromDataBaseComparator {
                 return keysInDatabase.contains(key);
             }
         });
+    }
+
+    @Override
+    protected Map<String, String> apply(final Map<String, Object> databaseRow) {
+        Map<String, String> result = new HashMap<String, String>();
+            Map<String, Object> transformedLine = filterKeysFromDatabase(databaseRow, wrapper.getBaseColumnNames());
+
+            for (Map.Entry<String, Object> cell : transformedLine.entrySet()) {
+                //je remplace la clé en base par la clé du tableau
+                Object content = cell.getValue();
+                IBaseColumnToTable columnEnum = getEnum(cell.getKey(), wrapper.getBaseColumnToTable());
+                String finalContent = (content == null) ? StringUtils.EMPTY : content.toString();
+                if (columnEnum.getColumnType() == Types.BOOLEAN) {
+                    finalContent = finalContent.equals(TRUE_DATABASE_VALUE) ? TRUE_VALUE : FALSE_VALUE;
+                } else if (columnEnum.getColumnType() == Types.DATE && content != null) {
+                    Date date = (Date) content;
+                    finalContent = new LocalDate(date.getTime()).toString(DATE_PATTERN);
+                }
+                result.put(columnEnum.getDatatableColumnName(), finalContent);
+            }
+
+            return result;
     }
 
     private class RowComparator implements Comparator<List<String>> {
@@ -150,4 +156,6 @@ public class DatatableFromDataBaseComparator {
             return (list01.get(index).compareTo(list02.get(index))) * order;
         }
     }
+
+
 }

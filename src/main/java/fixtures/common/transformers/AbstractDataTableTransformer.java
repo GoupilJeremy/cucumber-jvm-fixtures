@@ -1,14 +1,20 @@
 package fixtures.common.transformers;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import cucumber.api.DataTable;
+import fixtures.common.mail.MailBean;
 import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 import org.apache.commons.lang.Validate;
 
-public abstract class AbstractDataTableTransformer<T> implements IDataTableTransformer<T> {
+public abstract class AbstractDataTableTransformer<T> implements IDataTableTransformer<Collection<T>> {
     protected List<String> headersAsCells;
 
     private AbstractDataTableTransformer() {
@@ -22,7 +28,7 @@ public abstract class AbstractDataTableTransformer<T> implements IDataTableTrans
         this.headersAsCells = raw.get(0);
     }
 
-    public DataTable toDataTable(T transform) {
+    public DataTable toDataTable(Collection<T> transform) {
         List<DataTableRow> rows = new ArrayList<DataTableRow>();
         addHeaderInRows(rows);
         return new DataTable(buildRowForDataTable(transform, rows), null);
@@ -32,5 +38,24 @@ public abstract class AbstractDataTableTransformer<T> implements IDataTableTrans
         rows.add(new DataTableRow(new ArrayList<Comment>(), headersAsCells, 0));
     }
 
-    protected abstract List<DataTableRow> buildRowForDataTable(final T transform, List<DataTableRow> rows);
+    protected List<DataTableRow> buildRowForDataTable(final Collection<T> objects, final List<DataTableRow> rows) {
+        Preconditions.checkArgument(objects != null, "la collection d'objets ne peut être null");
+
+        int line = 0;
+        for (T object : objects) {
+            List<String> cells = new ArrayList<String>();
+            Map<String, String> mailToRow = apply(object);
+            for (String headerValue : headersAsCells) {
+                if (!mailToRow.containsKey(headerValue)) {
+                    throw new IllegalStateException("le header '" + headerValue + "' n'est pas trouvé");
+                }
+                cells.add(mailToRow.get(headerValue));
+            }
+            rows.add(new DataTableRow(new ArrayList<Comment>(), cells, line));
+            line++;
+        }
+        return rows;
+    }
+
+    protected abstract Map<String, String> apply(final T object);
 }

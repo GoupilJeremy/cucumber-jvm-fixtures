@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
@@ -19,8 +21,9 @@ import cucumber.api.DataTable;
 import cucumber.runtime.CucumberException;
 import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
+import org.apache.commons.lang.NotImplementedException;
 
-public class FileTransformer extends AbstractDataTableTransformer<File> {
+public class FileTransformer extends AbstractDataTableTransformer<DataTableRow> {
     private static final Charset CHARSET = Charset.forName("ISO-8859-15");
 
     private static final String SEPARATOR = "\t";
@@ -31,28 +34,40 @@ public class FileTransformer extends AbstractDataTableTransformer<File> {
         super(dataTable);
     }
 
+    @Override
+    protected Map<String, String> apply(final DataTableRow object) {
+        throw new NotImplementedException("this method isn't needed for this implementation");
+    }
+
     public FileTransformer(DataTable dataTable, String column) {
         super(dataTable);
         this.column = Strings.nullToEmpty(column);
     }
 
-    @Override
-    protected List<DataTableRow> buildRowForDataTable(final File file, final List<DataTableRow> rows) {
+
+    public DataTable toDataTable(File file) {
         Preconditions.checkArgument(file != null, "le fichier ne peut ëtre null");
         Preconditions.checkArgument(file.exists(), "le fichier doit exister");
         final List<DataTableRow> dataTableRows;
-        try {
-            dataTableRows = Files.readLines(file, CHARSET, newLineProcessor());
-        } catch (IOException e) {
-            throw new CucumberException("Test cucumber", e);
-        }
+                try {
+                    dataTableRows = Files.readLines(file, CHARSET, newLineProcessor());
+                } catch (IOException e) {
+                    throw new CucumberException("Test cucumber", e);
+                }
+        return toDataTable(dataTableRows);
+    }
+
+    @Override
+    protected List<DataTableRow> buildRowForDataTable(final Collection<DataTableRow> dataTableRows, final List<DataTableRow> rows) {
+
+        ArrayList<DataTableRow> rowsList = Lists.newArrayList(dataTableRows);
 
         if (dataTableRows != null && !dataTableRows.isEmpty() && !Strings.isNullOrEmpty(column)) {
-            ColumnComparator columnComparator = new ColumnComparator(column, dataTableRows.get(0));
-            Collections.sort(dataTableRows, columnComparator);
+            DataTableRowComparator dataTableRowComparator = new DataTableRowComparator(column, rowsList.get(0));
+            Collections.sort(rowsList, dataTableRowComparator);
         }
 
-        return dataTableRows;
+        return rowsList;
     }
 
     protected LineProcessor<List<DataTableRow>> newLineProcessor() {
@@ -84,14 +99,14 @@ public class FileTransformer extends AbstractDataTableTransformer<File> {
         }
     }
 
-    private static class ColumnComparator implements Comparator<DataTableRow>, Serializable {
+    private static class DataTableRowComparator implements Comparator<DataTableRow>, Serializable {
         private static final long serialVersionUID = 1L;
 
         private String column;
 
         private int index;
 
-        public ColumnComparator(final String column, final DataTableRow firstRow) {
+        public DataTableRowComparator(final String column, final DataTableRow firstRow) {
             this.column = column;
             this.index = firstRow.getCells().indexOf(column);
         }
