@@ -18,17 +18,18 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import cucumber.api.DataTable;
+import cucumber.runtime.table.TableDiffException;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 
-public class DataBaseColumn {
-    public static final String DATE_PATTERN = "dd/MM/yyyy";
+public class DatatableFromDataBaseComparator {
+    private static final String DATE_PATTERN = "dd/MM/yyyy";
 
-    public static final String TRUE_VALUE = "oui";
+    private static final String TRUE_VALUE = "oui";
 
-    public static final String FALSE_VALUE = "non";
+    private static final String FALSE_VALUE = "non";
 
-    public static final String TRUE_DATABASE_VALUE = "1";
+    private static final String TRUE_DATABASE_VALUE = "1";
 
     private DataTable table;
 
@@ -36,14 +37,14 @@ public class DataBaseColumn {
 
     private List<String> headers;
 
-    public DataBaseColumn(final DataTable table, final List<Map<String, Object>> query,
+    private DatatableFromDataBaseComparator(final DataTable table, final List<Map<String, Object>> queryResultFromDatabase,
             Class<? extends IBaseColumnToTable> baseColumnToTable) {
         this.table = table;
-        final BaseColumnWrapper wrapper = new BaseColumnWrapper(baseColumnToTable);
+        final TableFromDatabaseWrapper wrapper = new TableFromDatabaseWrapper(baseColumnToTable);
         headers = this.table.raw().get(0);
         final Collection<List<String>> filteredTable =
 
-                Collections2.transform(query, new Function<Map<String, Object>, List<String>>() {
+                Collections2.transform(queryResultFromDatabase, new Function<Map<String, Object>, List<String>>() {
                     @Override
                     public List<String> apply(@Nullable final Map<String, Object> input) {
                         final Map<String, String> line = replaceKeysFromDatabase(input, wrapper);
@@ -55,7 +56,12 @@ public class DataBaseColumn {
         listFiltered.addAll(filteredTable);
     }
 
-    public void compare() {
+    public static DatatableFromDataBaseComparator from(final DataTable table, final List<Map<String, Object>> query,
+                Class<? extends IBaseColumnToTable> baseColumnToTable){
+        return new DatatableFromDataBaseComparator(table,query,baseColumnToTable);
+    }
+
+    public void compare() throws TableDiffException {
         List<List<String>> listToCompare = new ArrayList<List<String>>();
         listToCompare.add(headers);
         listToCompare.addAll(listFiltered);
@@ -65,16 +71,16 @@ public class DataBaseColumn {
     /**
      * tri ascendant par défaut
      */
-    public DataBaseColumn sortBy(String column) {
+    public DatatableFromDataBaseComparator sortBy(String column) {
         return sortBy(column, true);
     }
 
-    public DataBaseColumn sortBy(String column, boolean asc) {
+    public DatatableFromDataBaseComparator sortBy(String column, boolean asc) {
         int index = headers.indexOf(column);
         if (index < 0) {
             throw new IllegalArgumentException("Colonne [" + column + "] inexistante pour le tri");
         }
-        Collections.sort(listFiltered, new BaseColumnComparator(index, asc));
+        Collections.sort(listFiltered, new RowComparator(index, asc));
         return this;
     }
 
@@ -96,7 +102,7 @@ public class DataBaseColumn {
     }
 
     private Map<String, String> replaceKeysFromDatabase(final Map<String, Object> input,
-            final BaseColumnWrapper wrapper) {
+            final TableFromDatabaseWrapper wrapper) {
         Map<String, String> result = new HashMap<String, String>();
         Map<String, Object> transformedLine = filterKeysFromDatabase(input, wrapper.getBaseColumnNames());
 
@@ -127,12 +133,12 @@ public class DataBaseColumn {
         });
     }
 
-    private class BaseColumnComparator implements Comparator<List<String>> {
+    private class RowComparator implements Comparator<List<String>> {
         private int index;
 
         private int order = 1;
 
-        public BaseColumnComparator(final int index, final boolean asc) {
+        public RowComparator(final int index, final boolean asc) {
             this.index = index;
             if (!asc) {
                 order = -1;

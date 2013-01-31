@@ -1,4 +1,4 @@
-package fixtures.common.database.utils;
+package fixtures.common.database;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -6,25 +6,24 @@ import static org.junit.Assert.assertThat;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import fixtures.common.database.BaseColumnWrapper;
 import fixtures.common.database.IBaseColumnToTable;
 import org.junit.Test;
 import org.junit.matchers.JUnitMatchers;
 
-public class BaseColumnWrapperTest {
+public class TableFromDatabaseWrapperTest {
     @Test(expected = IllegalArgumentException.class)
     public void testConstructor_enum_is_null() throws Exception {
-        new BaseColumnWrapper(null);
+        new TableFromDatabaseWrapper(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testConstructor_enum_is_not_good_instance() throws Exception {
-        new BaseColumnWrapper(String.class);
+        new TableFromDatabaseWrapper(String.class);
     }
 
     @Test
     public void testGetBaseColumnNames() throws Exception {
-        BaseColumnWrapper wrapper = new BaseColumnWrapper(FromXToDatatableEnum.class);
+        TableFromDatabaseWrapper wrapper = new TableFromDatabaseWrapper(FromXToDatatableEnum.class);
         List<String> baseColumnNames = wrapper.getBaseColumnNames();
         //
         assertThat(baseColumnNames.size(), is(FromXToDatatableEnum.values().length));
@@ -35,7 +34,7 @@ public class BaseColumnWrapperTest {
 
     @Test
     public void testGetDatatableColumnNames() throws Exception {
-        BaseColumnWrapper wrapper = new BaseColumnWrapper(FromXToDatatableEnum.class);
+        TableFromDatabaseWrapper wrapper = new TableFromDatabaseWrapper(FromXToDatatableEnum.class);
         List<String> baseColumnNames = wrapper.getDatatableColumnNames();
         //
         assertThat(baseColumnNames.size(), is(FromXToDatatableEnum.values().length));
@@ -46,7 +45,7 @@ public class BaseColumnWrapperTest {
 
     @Test
     public void testGetBaseColumnToTable() throws Exception {
-        BaseColumnWrapper wrapper = new BaseColumnWrapper(FromXToDatatableEnum.class);
+        TableFromDatabaseWrapper wrapper = new TableFromDatabaseWrapper(FromXToDatatableEnum.class);
         List<IBaseColumnToTable> baseColumnToTable = wrapper.getBaseColumnToTable();
 
         List<IBaseColumnToTable> expected = Lists

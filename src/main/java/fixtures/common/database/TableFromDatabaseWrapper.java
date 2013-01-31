@@ -9,7 +9,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
-public class BaseColumnWrapper {
+class TableFromDatabaseWrapper {
     private EnumSet enumSet;
 
     private final static Function<IBaseColumnToTable, String> GET_BASE_COLUMN_NAME = new Function<IBaseColumnToTable, String>() {
@@ -32,7 +32,7 @@ public class BaseColumnWrapper {
         }
     };
 
-    public BaseColumnWrapper(Class myEnum) {
+    public TableFromDatabaseWrapper(Class myEnum) {
         Preconditions.checkArgument(myEnum != null, "la classe ne peut être null");
         Preconditions.checkArgument(myEnum.isEnum(), "la classe n'est une Enum");
         enumSet = EnumSet.allOf(myEnum);

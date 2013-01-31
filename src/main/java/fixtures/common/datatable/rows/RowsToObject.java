@@ -33,7 +33,7 @@ public class RowsToObject<Res> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RowsToObject.class);
 
 	/**
-	 * à utiliser si on souhaite partager des variables entre steps via la Map context.
+	 * à utiliser si on souhaite partager des variables entre steps via la Map context via #setContext .
 	 */
 	public RowsToObject(DataTable dataTable, RowToObjectDataSource rowToObjectDataSource,
 	                    Class<? extends RowToObject> clazz) {
