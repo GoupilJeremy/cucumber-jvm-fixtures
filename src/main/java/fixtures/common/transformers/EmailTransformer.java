@@ -42,9 +42,9 @@ public class EmailTransformer extends AbstractDataTableTransformer<MailBean> imp
         return super.buildRowForDataTable(objects, rows);
     }
 
-    @Nullable
+
     @Override
-    public Map<String, String> apply(@Nullable final MailBean mailBean) {
+    public Map<String, String> apply(final MailBean mailBean) {
         Map<String, String> mapMailBean = Maps.newHashMap();
         mapMailBean.put(A_HEADER, mailBean.getTo());
         mapMailBean.put(DE_HEADER, mailBean.getFrom());

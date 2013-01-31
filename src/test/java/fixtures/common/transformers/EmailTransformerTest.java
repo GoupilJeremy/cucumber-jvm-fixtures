@@ -15,8 +15,8 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 public class EmailTransformerTest {
-    @Test(expected = IllegalArgumentException.class)
-    public void testFileTransformer_mails_null() throws Exception {
+    @Test(expected = NullPointerException.class)
+    public void testEmailTransformer_mails_null() throws Exception {
         List<String> headers = Lists.newArrayList(SUJET_HEADER);
         List<String> list01 = Lists.newArrayList("Hello");
         DataTable dataTable = DatatableUtils.getDatatable(headers, Lists.<List<String>>newArrayList(headers, list01));
@@ -27,7 +27,7 @@ public class EmailTransformerTest {
     }
 
     @Test
-    public void testFileTransformer_mails_empty() throws Exception {
+    public void testEmailTransformer_mails_empty() throws Exception {
         List<String> headers = Lists.newArrayList(SUJET_HEADER);
         List<String> list01 = Lists.newArrayList("Hello");
         DataTable dataTable = DatatableUtils.getDatatable(headers, Lists.<List<String>>newArrayList(headers, list01));
@@ -41,7 +41,7 @@ public class EmailTransformerTest {
     }
 
     @Test
-    public void testFileTransformer_mails_ok_only_few_header() throws Exception {
+    public void testEmailTransformer_mails_ok_only_few_header() throws Exception {
         List<String> headers = Lists.newArrayList(SUJET_HEADER, MESSAGE_HEADER);
         List<String> list01 = Lists.newArrayList("Hello", "how are you ?");
         DataTable dataTable = DatatableUtils.getDatatable(headers, Lists.<List<String>>newArrayList(headers, list01));
@@ -65,7 +65,7 @@ public class EmailTransformerTest {
     }
 
     @Test
-    public void testFileTransformer_mails_ok_all_header() throws Exception {
+    public void testEmailTransformer_mails_ok_all_header() throws Exception {
         List<String> headers = Lists
                 .newArrayList(SUJET_HEADER, MESSAGE_HEADER, A_HEADER, COPIE_CACHEE_HEADER, DE_HEADER,
                         PIECE_JOINTE_HEADER, REPONDRE_A_HEADER);
@@ -97,7 +97,7 @@ public class EmailTransformerTest {
     }
 
     @Test
-    public void testFileTransformer_many_mails_few_header() throws Exception {
+    public void testEmailTransformer_many_mails_few_header() throws Exception {
         List<String> headers = Lists.newArrayList(A_HEADER, SUJET_HEADER);
         List<String> list01 = Lists
                 .newArrayList("to@to.com", "Hello", "how are you ?");
@@ -120,14 +120,14 @@ public class EmailTransformerTest {
         //
         List<List<String>> expected = Lists
                 .<List<String>>newArrayList(Lists.<String>newArrayList(A_HEADER, SUJET_HEADER),
-                        Lists.<String>newArrayList(null, "mon sujet 03"),
                         Lists.<String>newArrayList("to02@mail.com", "mon sujet 02"),
-                        Lists.<String>newArrayList("to@mail.com", "mon sujet"));
-        assertThat(dataTableEmail.raw(), is(expected));
+                        Lists.<String>newArrayList("to@mail.com", "mon sujet"),
+        Lists.<String>newArrayList(null, "mon sujet 03"));
+                assertThat(dataTableEmail.raw(), is(expected));
     }
 
     @Test(expected = IllegalStateException.class)
-    public void testFileTransformer_mails_ok_bad_header() throws Exception {
+    public void testEmailTransformer_mails_ok_bad_header() throws Exception {
         List<String> headers = Lists.newArrayList("bad header", "too bad");
         List<String> list01 = Lists.newArrayList("boom", "badaboum");
         DataTable dataTable = DatatableUtils.getDatatable(headers, Lists.<List<String>>newArrayList(headers, list01));

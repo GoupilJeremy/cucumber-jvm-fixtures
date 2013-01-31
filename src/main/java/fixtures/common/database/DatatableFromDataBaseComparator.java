@@ -49,9 +49,13 @@ public class DatatableFromDataBaseComparator extends AbstractDataTableTransforme
 
                 Collections2.transform(queryResultFromDatabase, new Function<Map<String, Object>, List<String>>() {
                     @Override
-                    public List<String> apply(@Nullable final Map<String, Object> databaseRow) {
+                    public List<String> apply(final Map<String, Object> databaseRow) {
+                        if(databaseRow!=null){
                         final Map<String, String> line = DatatableFromDataBaseComparator.this.apply(databaseRow);
                         return reorderLine(headers, line);
+                        }else {
+                            return Lists.newArrayList();
+                        }
                     }
                 });
 
@@ -64,7 +68,10 @@ public class DatatableFromDataBaseComparator extends AbstractDataTableTransforme
         return new DatatableFromDataBaseComparator(table,query,baseColumnToTable);
     }
 
-    public void compare() throws TableDiffException {
+    /**
+     * @throws TableDiffException
+     */
+    public void compare()  {
         List<List<String>> listToCompare = new ArrayList<List<String>>();
         listToCompare.add(headers);
         listToCompare.addAll(listFiltered);
