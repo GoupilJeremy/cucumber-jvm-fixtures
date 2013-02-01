@@ -19,11 +19,11 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import cucumber.api.DataTable;
 import cucumber.runtime.table.TableDiffException;
-import fixtures.common.transformers.AbstractDataTableTransformer;
+import fixtures.common.transformers.AbstractDataTableBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.LocalDate;
 
-public class DatatableFromDataBaseComparator extends AbstractDataTableTransformer<Map<String,Object>>{
+public class DatatableFromDataBaseComparator extends AbstractDataTableBuilder<Map<String,Object>> {
     private static final String DATE_PATTERN = "dd/MM/yyyy";
 
     private static final String TRUE_VALUE = "oui";
@@ -36,15 +36,14 @@ public class DatatableFromDataBaseComparator extends AbstractDataTableTransforme
 
     private List<List<String>> listFiltered;
 
-    private List<String> headers;
     private  TableFromDatabaseWrapper wrapper;
 
     private DatatableFromDataBaseComparator(final DataTable table, final List<Map<String, Object>> queryResultFromDatabase,
             Class<? extends IBaseColumnToTable> baseColumnToTable) {
-        super(table);
+        super(table,queryResultFromDatabase);
         this.table = table;
         wrapper = new TableFromDatabaseWrapper(baseColumnToTable);
-        headers = this.table.raw().get(0);
+
         final Collection<List<String>> filteredTable =
 
                 Collections2.transform(queryResultFromDatabase, new Function<Map<String, Object>, List<String>>() {
@@ -52,7 +51,7 @@ public class DatatableFromDataBaseComparator extends AbstractDataTableTransforme
                     public List<String> apply(final Map<String, Object> databaseRow) {
                         if(databaseRow!=null){
                         final Map<String, String> line = DatatableFromDataBaseComparator.this.apply(databaseRow);
-                        return reorderLine(headers, line);
+                        return reorderLine(headersAsCells, line);
                         }else {
                             return Lists.newArrayList();
                         }
@@ -73,13 +72,10 @@ public class DatatableFromDataBaseComparator extends AbstractDataTableTransforme
      */
     public void compare()  {
         List<List<String>> listToCompare = new ArrayList<List<String>>();
-        listToCompare.add(headers);
+        listToCompare.add(headersAsCells);
         listToCompare.addAll(listFiltered);
         table.diff(listToCompare);
     }
-
-
-
 
     /**
      * tri ascendant par défaut
@@ -89,7 +85,7 @@ public class DatatableFromDataBaseComparator extends AbstractDataTableTransforme
     }
 
     public DatatableFromDataBaseComparator sortBy(String column, boolean asc) {
-        int index = headers.indexOf(column);
+        int index = headersAsCells.indexOf(column);
         if (index < 0) {
             throw new IllegalArgumentException("Colonne [" + column + "] inexistante pour le tri");
         }

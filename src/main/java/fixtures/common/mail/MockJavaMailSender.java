@@ -100,8 +100,9 @@ public class MockJavaMailSender implements JavaMailSender {
     }
 
     public DataTable toDataTable(Collection<MailBean> mailsSent, DataTable expected) {
-        EmailTransformer emailTransformer = new EmailTransformer(expected);
-        return emailTransformer.toDataTable(mailsSent);
+
+        EmailTransformer emailTransformer = EmailTransformer.from(expected, mailsSent);
+        return emailTransformer.toDataTable();
     }
 
     private static class MailSubjectPredicate implements Predicate<MailBean> {

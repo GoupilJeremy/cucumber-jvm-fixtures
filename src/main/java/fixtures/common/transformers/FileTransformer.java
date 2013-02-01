@@ -23,15 +23,16 @@ import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 import org.apache.commons.lang.NotImplementedException;
 
-public class FileTransformer extends AbstractDataTableTransformer<DataTableRow> {
+public class FileTransformer extends AbstractDataTableBuilder<DataTableRow> {
     private static final Charset CHARSET = Charset.forName("ISO-8859-15");
 
     private static final String SEPARATOR = "\t";
 
     private String column;
 
-    public FileTransformer(DataTable dataTable) {
-        super(dataTable);
+    private FileTransformer(final DataTable dataTableFromFeatureFileToCompare,
+            final Collection<DataTableRow> collection) {
+        super(dataTableFromFeatureFileToCompare, collection);
     }
 
     @Override
@@ -39,26 +40,24 @@ public class FileTransformer extends AbstractDataTableTransformer<DataTableRow> 
         throw new NotImplementedException("this method isn't needed for this implementation");
     }
 
-    public FileTransformer(DataTable dataTable, String column) {
-        super(dataTable);
-        this.column = Strings.nullToEmpty(column);
-    }
+    public static FileTransformer from(DataTable dataTable, String column, File file) {
 
-
-    public DataTable toDataTable(File file) {
-        Preconditions.checkArgument(file != null, "le fichier ne peut ëtre null");
+        Preconditions.checkArgument(file != null, "le fichier ne peut etre null");
         Preconditions.checkArgument(file.exists(), "le fichier doit exister");
         final List<DataTableRow> dataTableRows;
-                try {
-                    dataTableRows = Files.readLines(file, CHARSET, newLineProcessor());
-                } catch (IOException e) {
-                    throw new CucumberException("Test cucumber", e);
-                }
-        return toDataTable(dataTableRows);
+        try {
+            dataTableRows = Files.readLines(file, CHARSET, newLineProcessor());
+        } catch (IOException e) {
+            throw new CucumberException("Test cucumber", e);
+        }
+        FileTransformer fileTransformer = new FileTransformer(dataTable,dataTableRows);
+        fileTransformer.setColumn(Strings.nullToEmpty(column));
+        return fileTransformer;
     }
 
     @Override
-    protected List<DataTableRow> buildRowForDataTable(final Collection<DataTableRow> dataTableRows, final List<DataTableRow> rows) {
+    protected List<DataTableRow> buildRowForDataTable(final Collection<DataTableRow> dataTableRows,
+            final List<DataTableRow> rows) {
 
         ArrayList<DataTableRow> rowsList = Lists.newArrayList(dataTableRows);
 
@@ -70,8 +69,12 @@ public class FileTransformer extends AbstractDataTableTransformer<DataTableRow> 
         return rowsList;
     }
 
-    protected LineProcessor<List<DataTableRow>> newLineProcessor() {
+    protected static LineProcessor<List<DataTableRow>> newLineProcessor() {
         return new InnerLineProcessor();
+    }
+
+    protected void setColumn(final String column) {
+        this.column = column;
     }
 
     // =============================================================================================
@@ -102,13 +105,13 @@ public class FileTransformer extends AbstractDataTableTransformer<DataTableRow> 
     private static class DataTableRowComparator implements Comparator<DataTableRow>, Serializable {
         private static final long serialVersionUID = 1L;
 
-        private String column;
+        private String sortColumnName;
 
         private int index;
 
-        public DataTableRowComparator(final String column, final DataTableRow firstRow) {
-            this.column = column;
-            this.index = firstRow.getCells().indexOf(column);
+        public DataTableRowComparator(final String sortColumnName, final DataTableRow firstRow) {
+            this.sortColumnName = sortColumnName;
+            this.index = firstRow.getCells().indexOf(sortColumnName);
         }
 
         @Override
@@ -119,7 +122,7 @@ public class FileTransformer extends AbstractDataTableTransformer<DataTableRow> 
             String cell01 = dataTableRow01.getCells().get(index);
             String cell02 = dataTableRow02.getCells().get(index);
             // la colonne avec le header reste en premier
-            if (cell01.equals(column)) {
+            if (cell01.equals(sortColumnName)) {
                 return -1;
             }
             return cell01.compareTo(cell02);

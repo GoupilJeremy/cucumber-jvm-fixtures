@@ -7,6 +7,14 @@ Cette librairie ajoute des fonctionalités à Cucumber-JVM, d'intégration avec 
 # transformers vers une Datatable Cucumber-JVM
 
 ## Intégration avec une base de données
+
+pour transformer le contenu d'une table en une datatable:
+List<Map<String, Object>> query
+Datatable datatable
+ Class<? extends IBaseColumnToTable> baseColumnToTable
+
+DatatableFromDataBaseComparator.from(datatable,query,baseColumnToTable).toDataTable()
+
 pour comparer une datatable attendue, avec le contenu d'une table de base de données:
 
 DatatableFromDataBaseComparator.from(table, query, FromXToDatatableEnum.class).compare();

@@ -1,20 +1,16 @@
 package fixtures.common.transformers;
 
-import javax.annotation.Nullable;
-
 import com.google.common.base.Function;
-import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import cucumber.api.DataTable;
 import fixtures.common.mail.MailBean;
-import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 import org.elasticsearch.common.collect.Maps;
 
 import java.util.*;
 
-public class EmailTransformer extends AbstractDataTableTransformer<MailBean> implements Function<MailBean, Map<String, String>> {
+public class EmailTransformer extends AbstractDataTableBuilder<MailBean> implements Function<MailBean, Map<String, String>> {
     public static final String SUJET_HEADER = "sujet";
 
     public static final String MESSAGE_HEADER = "message";
@@ -29,10 +25,10 @@ public class EmailTransformer extends AbstractDataTableTransformer<MailBean> imp
 
     public static final String PIECE_JOINTE_HEADER = "piece jointe";
 
-    public EmailTransformer(DataTable dataTable) {
-        super(dataTable);
+    private EmailTransformer(final DataTable dataTableFromFeatureFileToCompare,
+            final Collection<MailBean> collection) {
+        super(dataTableFromFeatureFileToCompare, collection);
     }
-
 
     @Override
     protected List<DataTableRow> buildRowForDataTable(final Collection<MailBean> objects,
@@ -40,6 +36,12 @@ public class EmailTransformer extends AbstractDataTableTransformer<MailBean> imp
         List<MailBean> sorted = Lists.newArrayList(objects);
         Collections.sort(sorted, new MailBeanComparator());
         return super.buildRowForDataTable(objects, rows);
+    }
+
+
+    public static EmailTransformer from(final DataTable dataTableFromFeatureFileToCompare,
+                final Collection<MailBean> collection){
+        return new EmailTransformer(dataTableFromFeatureFileToCompare,collection);
     }
 
 

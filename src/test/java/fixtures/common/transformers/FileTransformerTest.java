@@ -40,10 +40,9 @@ public class FileTransformerTest {
     @Test(expected = IllegalArgumentException.class)
     public void testFileTransformer_file_null() throws Exception {
 
-        File file = null;
-        //
-        FileTransformer fileTransformer = new FileTransformer(dataTable);
-        fileTransformer.toDataTable(file);
+
+        FileTransformer fileTransformer = FileTransformer.from(dataTable, null, null);
+        fileTransformer.toDataTable();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -51,8 +50,8 @@ public class FileTransformerTest {
 
         File file = new File("unknow.jstl");
         //
-        FileTransformer fileTransformer = new FileTransformer(dataTable);
-        fileTransformer.toDataTable(file);
+        FileTransformer fileTransformer = FileTransformer.from(dataTable, null, file);
+        fileTransformer.toDataTable();
     }
 
     @Test
@@ -60,8 +59,9 @@ public class FileTransformerTest {
 
         File file = new File(getClass().getClassLoader().getResource("files/file_to_transform.txt").getFile());
         //
-        FileTransformer fileTransformer = new FileTransformer(dataTable);
-        final DataTable dataTableFromFile = fileTransformer.toDataTable(file);
+        FileTransformer fileTransformer = FileTransformer.from(dataTable,null,file);
+
+        final DataTable dataTableFromFile = fileTransformer.toDataTable();
         List<List<String>> raw = dataTableFromFile.raw();
         //
         List<List<String>> expected = Lists.<List<String>>newArrayList(Lists.<String>newArrayList("ID", "FILE", "REF"),
@@ -74,9 +74,8 @@ public class FileTransformerTest {
     public void testFileTransformer_file_exist_with_no_tab_separator() throws Exception {
 
         File file = new File(getClass().getClassLoader().getResource("files/file_to_transform_no_tab.txt").getFile());
-        //
-        FileTransformer fileTransformer = new FileTransformer(dataTable);
-        final DataTable dataTableFromFile = fileTransformer.toDataTable(file);
+        FileTransformer fileTransformer = FileTransformer.from(dataTable,null,file);
+        final DataTable dataTableFromFile = fileTransformer.toDataTable();
         List<List<String>> raw = dataTableFromFile.raw();
         //
         List<List<String>> expected = Lists.<List<String>>newArrayList(Lists.<String>newArrayList("ID  FILE     REF"),
@@ -84,32 +83,15 @@ public class FileTransformerTest {
         assertThat(raw, is(expected));
     }
 
-    @Test(expected = CucumberException.class)
-    public void testFileTransformer_throw_IOException() throws Exception {
 
-        File file = new File(getClass().getClassLoader().getResource("files/file_to_transform.txt").getFile());
-        LineProcessor<List<DataTableRow>> lineProcessor = mock(LineProcessor.class);
-        //
-        when(lineProcessor.processLine(anyString())).thenThrow(new IOException("fake exception"));
-        //
-        FileTransformer fileTransformer = new FileTransformer(dataTable);
-        FileTransformer spyFileTransformer = spy(fileTransformer);
-        //
-        doReturn(lineProcessor).when(spyFileTransformer).newLineProcessor();
-        //
-        final DataTable dataTableFromFile = spyFileTransformer.toDataTable(file);
-        dataTableFromFile.raw();
-    }
-
-    // sort
 
     @Test
     public void test_fileTransformer_column_is_null() throws Exception {
         File file = new File(getClass().getClassLoader().getResource("files/file_to_transform_to_sort.txt").getFile());
         //
         String column = null;
-        FileTransformer fileTransformer = new FileTransformer(dataTable, column);
-        final DataTable dataTableFromFile = fileTransformer.toDataTable(file);
+        FileTransformer fileTransformer = FileTransformer.from(dataTable,column,file);
+        final DataTable dataTableFromFile = fileTransformer.toDataTable();
         List<List<String>> raw = dataTableFromFile.raw();
         //ID, FILE, REF], [478, read.txt, 2574], [12, fs.sys, 1878D], [321 .git    48717
 
@@ -127,8 +109,8 @@ public class FileTransformerTest {
         File file = new File(getClass().getClassLoader().getResource("files/file_to_transform_to_sort.txt").getFile());
         //
         String column = "unknown";
-        FileTransformer fileTransformer = new FileTransformer(dataTable, column);
-        final DataTable dataTableFromFile = fileTransformer.toDataTable(file);
+        FileTransformer fileTransformer = FileTransformer.from(dataTable,column,file);
+        final DataTable dataTableFromFile = fileTransformer.toDataTable();
         List<List<String>> raw = dataTableFromFile.raw();
         //ID, FILE, REF], [478, read.txt, 2574], [12, fs.sys, 1878D], [321 .git    48717
 
@@ -146,8 +128,8 @@ public class FileTransformerTest {
         File file = new File(getClass().getClassLoader().getResource("files/file_to_transform_to_sort.txt").getFile());
         //
         String column = "ID";
-        FileTransformer fileTransformer = new FileTransformer(dataTable, column);
-        final DataTable dataTableFromFile = fileTransformer.toDataTable(file);
+        FileTransformer fileTransformer = FileTransformer.from(dataTable,column,file);
+        final DataTable dataTableFromFile = fileTransformer.toDataTable();
         List<List<String>> raw = dataTableFromFile.raw();
         //ID, FILE, REF], [478, read.txt, 2574], [12, fs.sys, 1878D], [321 .git    48717
 
