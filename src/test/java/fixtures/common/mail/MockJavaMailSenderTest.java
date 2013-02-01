@@ -284,7 +284,7 @@ public class MockJavaMailSenderTest {
         when(mailBean.getBcc()).thenReturn("bcc@mail.com");
         when(mailBean.getSubject()).thenReturn("mon sujet");
         when(mailBean.getBody()).thenReturn("mon message");
-        Collection<MailBean> mailBeans = Lists.newArrayList(mailBean);
+        List<MailBean> mailBeans = Lists.newArrayList(mailBean);
         //
         //
         MockJavaMailSender mockJavaMailSender = new MockJavaMailSender();

@@ -121,6 +121,11 @@ public class DatatableFromDataBaseComparator extends AbstractDataTableBuilder<Ma
     }
 
     @Override
+    protected Comparator<Map<String, Object>> getComparator() {
+        return null;
+    }
+
+    @Override
     protected Map<String, String> apply(final Map<String, Object> databaseRow) {
         Map<String, String> result = new HashMap<String, String>();
             Map<String, Object> transformedLine = filterKeysFromDatabase(databaseRow, wrapper.getBaseColumnNames());

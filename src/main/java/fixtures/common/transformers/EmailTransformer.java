@@ -26,21 +26,17 @@ public class EmailTransformer extends AbstractDataTableBuilder<MailBean> impleme
     public static final String PIECE_JOINTE_HEADER = "piece jointe";
 
     private EmailTransformer(final DataTable dataTableFromFeatureFileToCompare,
-            final Collection<MailBean> collection) {
+            final List<MailBean> collection) {
         super(dataTableFromFeatureFileToCompare, collection);
     }
 
-    @Override
-    protected List<DataTableRow> buildRowForDataTable(final Collection<MailBean> objects,
-            final List<DataTableRow> rows) {
-        List<MailBean> sorted = Lists.newArrayList(objects);
-        Collections.sort(sorted, new MailBeanComparator());
-        return super.buildRowForDataTable(objects, rows);
+
+    protected MailBeanComparator getComparator() {
+        return new MailBeanComparator();
     }
 
-
     public static EmailTransformer from(final DataTable dataTableFromFeatureFileToCompare,
-                final Collection<MailBean> collection){
+                final List<MailBean> collection){
         return new EmailTransformer(dataTableFromFeatureFileToCompare,collection);
     }
 

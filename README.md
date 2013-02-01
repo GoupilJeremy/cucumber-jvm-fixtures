@@ -13,7 +13,7 @@ List<Map<String, Object>> query
 Datatable datatable
  Class<? extends IBaseColumnToTable> baseColumnToTable
 
-DatatableFromDataBaseComparator.from(datatable,query,baseColumnToTable).toDataTable()
+DatatableFromDataBaseComparator.from(datatable,query,baseColumnToTable).toDataTable();
 
 pour comparer une datatable attendue, avec le contenu d'une table de base de données:
 

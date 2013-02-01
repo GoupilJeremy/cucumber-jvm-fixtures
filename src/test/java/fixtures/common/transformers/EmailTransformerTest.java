@@ -15,13 +15,13 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
 public class EmailTransformerTest {
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testEmailTransformer_mails_null() throws Exception {
         List<String> headers = Lists.newArrayList(SUJET_HEADER);
         List<String> list01 = Lists.newArrayList("Hello");
         DataTable dataTable = DatatableUtils.getDatatable(headers, Lists.<List<String>>newArrayList(headers, list01));
         //
-        Collection<MailBean> mailBeans = null;
+        List<MailBean> mailBeans = null;
         EmailTransformer emailTransformer = EmailTransformer.from(dataTable,mailBeans);
         emailTransformer.toDataTable();
     }
@@ -32,7 +32,7 @@ public class EmailTransformerTest {
         List<String> list01 = Lists.newArrayList("Hello");
         DataTable dataTable = DatatableUtils.getDatatable(headers, Lists.<List<String>>newArrayList(headers, list01));
         //
-        Collection<MailBean> mailBeans = Lists.newArrayList();
+        List<MailBean> mailBeans = Lists.newArrayList();
         EmailTransformer emailTransformer = EmailTransformer.from(dataTable, mailBeans);
         DataTable dataTableEmail = emailTransformer.toDataTable();
         //
@@ -54,7 +54,7 @@ public class EmailTransformerTest {
         when(mailBean.getSubject()).thenReturn("mon sujet");
         when(mailBean.getBody()).thenReturn("mon message");
         //
-        Collection<MailBean> mailBeans = Lists.newArrayList(mailBean);
+        List<MailBean> mailBeans = Lists.newArrayList(mailBean);
         EmailTransformer emailTransformer = EmailTransformer.from(dataTable, mailBeans);
         DataTable dataTableEmail = emailTransformer.toDataTable();
         //
@@ -82,7 +82,7 @@ public class EmailTransformerTest {
         when(mailBean.getBody()).thenReturn("mon message with" + Label.NON_BREAKING_SPACE + "non-breaking space");
         when(mailBean.getReplyTo()).thenReturn("replyTo@mail.com");
         //
-        Collection<MailBean> mailBeans = Lists.newArrayList(mailBean);
+        List<MailBean> mailBeans = Lists.newArrayList(mailBean);
         EmailTransformer emailTransformer = EmailTransformer.from(dataTable, mailBeans);
         DataTable dataTableEmail = emailTransformer.toDataTable();
         //
@@ -113,15 +113,16 @@ public class EmailTransformerTest {
         when(mailBean03.getTo()).thenReturn(null);
         when(mailBean03.getSubject()).thenReturn("mon sujet 03");
         //
-        Collection<MailBean> mailBeans = Lists.newArrayList(mailBean02, mailBean01, mailBean03);
+        List<MailBean> mailBeans = Lists.newArrayList(mailBean02, mailBean01, mailBean03);
         EmailTransformer emailTransformer = EmailTransformer.from(dataTable, mailBeans);
         DataTable dataTableEmail = emailTransformer.toDataTable();
         //
         List<List<String>> expected = Lists
                 .<List<String>>newArrayList(Lists.<String>newArrayList(A_HEADER, SUJET_HEADER),
+                        Lists.<String>newArrayList(null, "mon sujet 03"),
                         Lists.<String>newArrayList("to02@mail.com", "mon sujet 02"),
-                        Lists.<String>newArrayList("to@mail.com", "mon sujet"),
-                        Lists.<String>newArrayList(null, "mon sujet 03"));
+                        Lists.<String>newArrayList("to@mail.com", "mon sujet"));
+
         assertThat(dataTableEmail.raw(), is(expected));
     }
 
@@ -140,7 +141,7 @@ public class EmailTransformerTest {
         when(mailBean.getBody()).thenReturn("mon message");
         when(mailBean.getReplyTo()).thenReturn("replyTo@mail.com");
         //
-        Collection<MailBean> mailBeans = Lists.newArrayList(mailBean);
+        List<MailBean> mailBeans = Lists.newArrayList(mailBean);
         EmailTransformer emailTransformer = EmailTransformer.from(dataTable, mailBeans);
         emailTransformer.toDataTable();
     }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.google.common.io.LineProcessor;
 import cucumber.api.DataTable;
@@ -31,13 +33,21 @@ public class FileTransformer extends AbstractDataTableBuilder<DataTableRow> {
     private String column;
 
     private FileTransformer(final DataTable dataTableFromFeatureFileToCompare,
-            final Collection<DataTableRow> collection) {
+            final List<DataTableRow> collection) {
         super(dataTableFromFeatureFileToCompare, collection);
     }
 
     @Override
     protected Map<String, String> apply(final DataTableRow object) {
-        throw new NotImplementedException("this method isn't needed for this implementation");
+        HashMap<String,String> map = Maps.newHashMap();
+        List<String> cells = object.getCells();
+
+        for (int i = 0; i <cells.size(); i++) {
+            String head = headersAsCells.get(i);
+            String value = cells.get(i);
+            map.put(head,value);
+        }
+        return map;
     }
 
     public static FileTransformer from(DataTable dataTable, String column, File file) {
@@ -55,18 +65,24 @@ public class FileTransformer extends AbstractDataTableBuilder<DataTableRow> {
         return fileTransformer;
     }
 
+
+
     @Override
-    protected List<DataTableRow> buildRowForDataTable(final Collection<DataTableRow> dataTableRows,
+    protected List<DataTableRow> buildRowForDataTable(final List<DataTableRow> dataTableRows,
             final List<DataTableRow> rows) {
 
         ArrayList<DataTableRow> rowsList = Lists.newArrayList(dataTableRows);
 
         if (dataTableRows != null && !dataTableRows.isEmpty() && !Strings.isNullOrEmpty(column)) {
-            DataTableRowComparator dataTableRowComparator = new DataTableRowComparator(column, rowsList.get(0));
-            Collections.sort(rowsList, dataTableRowComparator);
+           rowsList.addAll(super.buildRowForDataTable(dataTableRows, rows));
         }
 
         return rowsList;
+    }
+
+    @Override
+    protected Comparator<DataTableRow> getComparator() {
+        return new DataTableRowComparator(column, headersAsCells);
     }
 
     protected static LineProcessor<List<DataTableRow>> newLineProcessor() {
@@ -109,9 +125,9 @@ public class FileTransformer extends AbstractDataTableBuilder<DataTableRow> {
 
         private int index;
 
-        public DataTableRowComparator(final String sortColumnName, final DataTableRow firstRow) {
+        public DataTableRowComparator(final String sortColumnName, final List<String> headersAsCells) {
             this.sortColumnName = sortColumnName;
-            this.index = firstRow.getCells().indexOf(sortColumnName);
+            this.index = headersAsCells.indexOf(sortColumnName);
         }
 
         @Override
