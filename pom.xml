@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<parent>
-		<groupId>com.adenclassifieds</groupId>
-		<artifactId>aden-parent</artifactId>
-		<version>5</version>
-	</parent>
+
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>cucumber-jvm-fixtures</artifactId>
@@ -29,14 +25,11 @@
 	</repositories>
 
 	<properties>
-		<!-- encoding -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<testSourceDirectory.path>src/test/java</testSourceDirectory.path>
-		<!-- cucumber -->
 		<cucumber.jvm.version>1.1.1</cucumber.jvm.version>
 	</properties>
 
-	<!-- Plugin de Build -->
 	<build>
 		<plugins>
 			<plugin>
@@ -99,7 +92,6 @@
 			<artifactId>guava</artifactId>
 			<version>12.0</version>
 		</dependency>
-		<!-- cucumber -->
 		<dependency>
 			<groupId>info.cukes</groupId>
 			<artifactId>cucumber-core</artifactId>
