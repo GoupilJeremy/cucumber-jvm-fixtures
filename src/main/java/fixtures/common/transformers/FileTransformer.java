@@ -25,7 +25,7 @@ import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 import org.apache.commons.lang.NotImplementedException;
 
-public class FileTransformer extends AbstractDataTableBuilder<DataTableRow> {
+public class FileTransformer extends AbstractDataTableBuilder<String> {
     private static final Charset CHARSET = Charset.forName("ISO-8859-15");
 
     private static final String SEPARATOR = "\t";
@@ -33,11 +33,11 @@ public class FileTransformer extends AbstractDataTableBuilder<DataTableRow> {
     private String column;
 
     private FileTransformer(final DataTable dataTableFromFeatureFileToCompare,
-            final List<DataTableRow> collection) {
+            final List<String> collection) {
         super(dataTableFromFeatureFileToCompare, collection);
     }
 
-    @Override
+
     protected Map<String, String> apply(final DataTableRow object) {
         HashMap<String,String> map = Maps.newHashMap();
         List<String> cells = object.getCells();
@@ -54,38 +54,42 @@ public class FileTransformer extends AbstractDataTableBuilder<DataTableRow> {
 
         Preconditions.checkArgument(file != null, "le fichier ne peut etre null");
         Preconditions.checkArgument(file.exists(), "le fichier doit exister");
-        final List<DataTableRow> dataTableRows;
+        final List<String> dataTableRows;
         try {
             dataTableRows = Files.readLines(file, CHARSET, newLineProcessor());
         } catch (IOException e) {
             throw new CucumberException("Test cucumber", e);
         }
-        FileTransformer fileTransformer = new FileTransformer(dataTable,dataTableRows);
-        fileTransformer.setColumn(Strings.nullToEmpty(column));
+        FileTransformer fileTransformer = new FileTransformer(dataTable, dataTableRows);
+        fileTransformer.setColumn(column);
         return fileTransformer;
+
     }
 
-
-
     @Override
-    protected List<DataTableRow> buildRowForDataTable(final List<DataTableRow> dataTableRows,
+    protected List<DataTableRow> buildRowForDataTable(final List<String> dataTableRows,
             final List<DataTableRow> rows) {
 
-        ArrayList<DataTableRow> rowsList = Lists.newArrayList(dataTableRows);
+
 
         if (dataTableRows != null && !dataTableRows.isEmpty() && !Strings.isNullOrEmpty(column)) {
-           rowsList.addAll(super.buildRowForDataTable(dataTableRows, rows));
+           return super.buildRowForDataTable(dataTableRows, rows);
         }
 
-        return rowsList;
+        return Lists.newArrayList();
     }
 
     @Override
-    protected Comparator<DataTableRow> getComparator() {
+    protected Comparator<String> getComparator() {
         return new DataTableRowComparator(column, headersAsCells);
     }
 
-    protected static LineProcessor<List<DataTableRow>> newLineProcessor() {
+    @Override
+    protected Map<String, String> apply(final String object) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    protected static LineProcessor<List<String>> newLineProcessor() {
         return new InnerLineProcessor();
     }
 
@@ -97,28 +101,26 @@ public class FileTransformer extends AbstractDataTableBuilder<DataTableRow> {
     // inner class
     // =============================================================================================
 
-    private static class InnerLineProcessor implements LineProcessor<List<DataTableRow>> {
-        private List<DataTableRow> dataTableRows = new ArrayList<DataTableRow>();
+    private static class InnerLineProcessor implements LineProcessor<List<String>> {
+        private  List<String> cells= new ArrayList<String>();
 
-        private int counter = 0;
 
         @Override
         public boolean processLine(final String line) throws IOException {
             final Splitter splitter = Splitter.on(SEPARATOR);
-            final Iterable<String> cells = splitter.split(Label.cleanLabel(line));
-            DataTableRow dataTableRow = new DataTableRow(new ArrayList<Comment>(), Lists.newArrayList(cells), counter);
-            dataTableRows.add(dataTableRow);
-            counter++;
+            ArrayList<String> strings = Lists.newArrayList(splitter.split(Label.cleanLabel(line)));
+            cells.addAll(strings);
+
             return true;
         }
 
         @Override
-        public List<DataTableRow> getResult() {
-            return dataTableRows;
+        public List<String> getResult() {
+            return cells;
         }
     }
 
-    private static class DataTableRowComparator implements Comparator<DataTableRow>, Serializable {
+    private static class DataTableRowComparator implements Comparator<String>, Serializable {
         private static final long serialVersionUID = 1L;
 
         private String sortColumnName;
@@ -131,12 +133,16 @@ public class FileTransformer extends AbstractDataTableBuilder<DataTableRow> {
         }
 
         @Override
-        public int compare(final DataTableRow dataTableRow01, final DataTableRow dataTableRow02) {
+        public int compare(final String line01, final String line02) {
             if (index < 0) {
                 return 0;
             }
-            String cell01 = dataTableRow01.getCells().get(index);
-            String cell02 = dataTableRow02.getCells().get(index);
+
+            final Splitter splitter = Splitter.on(SEPARATOR);
+            List<String> split = Lists.newArrayList(splitter.split(line01));
+            String cell01 = split.get(index);
+            List<String> split2 = Lists.newArrayList(splitter.split(line02));
+            String cell02 = split2.get(index);
             // la colonne avec le header reste en premier
             if (cell01.equals(sortColumnName)) {
                 return -1;

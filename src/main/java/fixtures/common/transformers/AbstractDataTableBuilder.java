@@ -62,5 +62,5 @@ public abstract class AbstractDataTableBuilder<T> implements IDataTableBuilder<C
 
     protected abstract Comparator<T> getComparator();
 
-    protected abstract Map<String, String> apply(final T object);
+    protected abstract Map<String, String> apply(final T line);
 }
