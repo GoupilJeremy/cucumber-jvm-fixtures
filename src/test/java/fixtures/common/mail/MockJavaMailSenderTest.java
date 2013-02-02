@@ -1,18 +1,5 @@
 package fixtures.common.mail;
 
-import static fixtures.common.transformers.EmailTransformer.MESSAGE_HEADER;
-import static fixtures.common.transformers.EmailTransformer.SUJET_HEADER;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.io.InputStream;
-import java.util.Collection;
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import cucumber.api.DataTable;
 import fixtures.common.datatable.DatatableUtils;
@@ -23,6 +10,18 @@ import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.List;
+
+import static fixtures.common.transformers.EmailTransformer.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class MockJavaMailSenderTest {
     @Test(expected = NotImplementedException.class)
@@ -273,7 +272,7 @@ public class MockJavaMailSenderTest {
 
     @Test
     public void testToDataTable() throws Exception {
-        List<String> headers = Lists.newArrayList(SUJET_HEADER, MESSAGE_HEADER);
+        List<String> headers = Lists.newArrayList(SUJET_HEADER,A_HEADER, MESSAGE_HEADER);
         List<String> list01 = Lists.newArrayList("Hello", "how are you ?");
         DataTable dataTable = DatatableUtils.getDatatable(headers, Lists.<List<String>>newArrayList(headers, list01));
         //
@@ -291,8 +290,8 @@ public class MockJavaMailSenderTest {
         DataTable dataTableEmail = mockJavaMailSender.toDataTable(mailBeans, dataTable);
         //
         List<List<String>> expected = Lists
-                .<List<String>>newArrayList(Lists.<String>newArrayList(SUJET_HEADER, MESSAGE_HEADER),
-                        Lists.<String>newArrayList("mon sujet", "mon message"));
+                .<List<String>>newArrayList(Lists.<String>newArrayList(SUJET_HEADER,A_HEADER, MESSAGE_HEADER),
+                        Lists.<String>newArrayList("mon sujet","to@mail.com", "mon message"));
         assertThat(dataTableEmail.raw(), Is.is(expected));
     }
 

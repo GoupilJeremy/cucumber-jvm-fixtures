@@ -1,17 +1,5 @@
 package fixtures.common.elasticsearch;
 
-import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.collect.Lists;
 import fixtures.common.datatable.rows.RowToObjectTest;
 import org.apache.commons.lang.StringUtils;
@@ -20,6 +8,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.io.IOException;
+import java.util.*;
+
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
+import static org.mockito.Mockito.*;
 
 public class DocumentTest extends RowToObjectTest {
     private static final String MANDATORY_HEADER = "needed";

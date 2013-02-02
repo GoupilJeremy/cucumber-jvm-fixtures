@@ -1,18 +1,18 @@
 package fixtures.common.transformers;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import com.google.common.base.Function;
+import com.google.common.collect.Maps;
+import org.hamcrest.core.Is;
+import org.joda.time.DateTimeUtils;
+import org.junit.Test;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Maps;
-import org.hamcrest.core.Is;
-import org.joda.time.DateTimeUtils;
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class VariableResolverStringDecoratorTest {
     private static final int FIXED_TIME = 100;

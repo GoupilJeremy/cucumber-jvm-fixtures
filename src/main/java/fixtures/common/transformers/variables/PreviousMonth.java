@@ -1,10 +1,10 @@
 package fixtures.common.transformers.variables;
 
-import java.util.Locale;
-
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import org.joda.time.MutableDateTime;
+
+import java.util.Locale;
 
 public class PreviousMonth implements Function<String, String> {
     private static final String PREVIOUS_MONTH_VARIABLE_NAME = "\\$\\{moisPrecedent\\}";

@@ -1,12 +1,12 @@
 package fixtures.common.steputils;
 
-import java.util.Collection;
-import java.util.Map;
-
 import fixtures.common.StepParameter;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Component;
+
+import java.util.Collection;
+import java.util.Map;
 
 @Component
 public class ScenarioTools extends ApplicationObjectSupport {

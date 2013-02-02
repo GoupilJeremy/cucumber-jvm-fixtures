@@ -1,15 +1,15 @@
 package fixtures.common.transformers.variables;
 
+import com.google.common.collect.Maps;
+import org.junit.Test;
+
+import java.util.Map;
+
 import static fixtures.common.transformers.variables.LocalDateCurrentMonthAndYearInContext.CURRENT_MONTH;
 import static fixtures.common.transformers.variables.LocalDateCurrentMonthAndYearInContext.CURRENT_YEAR;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-
-import java.util.Map;
-
-import com.google.common.collect.Maps;
-import org.junit.Test;
 
 public class LocalDateCurrentMonthAndYearInContextTest {
     @Test

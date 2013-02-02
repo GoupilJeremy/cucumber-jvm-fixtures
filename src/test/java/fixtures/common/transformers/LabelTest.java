@@ -1,12 +1,12 @@
 package fixtures.common.transformers;
 
-import static fixtures.common.transformers.Label.NON_BREAKING_SPACE;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import org.junit.Test;
 
 import java.lang.reflect.Constructor;
 
-import org.junit.Test;
+import static fixtures.common.transformers.Label.NON_BREAKING_SPACE;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class LabelTest {
     @Test

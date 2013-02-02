@@ -1,13 +1,13 @@
 package fixtures.common.velocity;
 
-import java.io.Writer;
-import java.net.URL;
-
 import com.google.common.base.Charsets;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.Writer;
+import java.net.URL;
 
 /**
  * recherche un template velocity suivant le chemin donné ou dans le répertoire /mails.

@@ -1,12 +1,12 @@
 package fixtures.common.transformers;
 
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import gherkin.formatter.model.DataTableRow;
+
+import java.util.List;
+import java.util.Map;
 
 public class VariableResolverRowDecorator extends DataTableRow {
     private static final long serialVersionUID = 1L;

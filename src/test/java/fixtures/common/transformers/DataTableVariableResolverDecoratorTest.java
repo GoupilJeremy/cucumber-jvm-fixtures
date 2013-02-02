@@ -1,17 +1,17 @@
 package fixtures.common.transformers;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import cucumber.api.DataTable;
 import fixtures.common.datatable.DatatableUtils;
 import org.joda.time.DateTime;
 import org.junit.Test;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class DataTableVariableResolverDecoratorTest {
     @Test(expected = IllegalArgumentException.class)

@@ -1,12 +1,12 @@
 package fixtures.common.transformers.variables;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
 import com.google.common.primitives.Ints;
 import org.joda.time.MutableDateTime;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NumericMonth implements Function<String, String> {
     private static final String MONTH_PATTERN = "MM";

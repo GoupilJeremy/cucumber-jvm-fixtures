@@ -1,9 +1,9 @@
 package fixtures.common.transformers.variables;
 
+import com.google.common.base.Function;
+
 import javax.annotation.Nullable;
 import java.util.Map;
-
-import com.google.common.base.Function;
 
 public class LocalDateCurrentMonthAndYearInContext implements Function<String, String> {
     public static final String CURRENT_MONTH = "currentMonth";

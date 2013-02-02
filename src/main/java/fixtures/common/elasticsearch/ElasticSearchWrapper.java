@@ -1,10 +1,5 @@
 package fixtures.common.elasticsearch;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.List;
-import java.util.Random;
-
 import fixtures.common.RowToObjectDataSource;
 import org.elasticsearch.action.admin.cluster.node.shutdown.NodesShutdownRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
@@ -18,6 +13,11 @@ import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.util.List;
+import java.util.Random;
 
 public class ElasticSearchWrapper implements RowToObjectDataSource {
     private static final Logger LOGGER = LoggerFactory.getLogger(ElasticSearchWrapper.class);

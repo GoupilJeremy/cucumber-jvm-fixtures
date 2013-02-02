@@ -6,7 +6,6 @@ import fixtures.common.datatable.DatatableUtils;
 import fixtures.common.mail.MailBean;
 import org.junit.Test;
 
-import java.util.Collection;
 import java.util.List;
 
 import static fixtures.common.transformers.EmailTransformer.*;
@@ -28,7 +27,7 @@ public class EmailTransformerTest {
 
     @Test
     public void testEmailTransformer_mails_empty() throws Exception {
-        List<String> headers = Lists.newArrayList(SUJET_HEADER);
+        List<String> headers = Lists.newArrayList(SUJET_HEADER,A_HEADER);
         List<String> list01 = Lists.newArrayList("Hello");
         DataTable dataTable = DatatableUtils.getDatatable(headers, Lists.<List<String>>newArrayList(headers, list01));
         //
@@ -36,13 +35,13 @@ public class EmailTransformerTest {
         EmailTransformer emailTransformer = EmailTransformer.from(dataTable, mailBeans);
         DataTable dataTableEmail = emailTransformer.toDataTable();
         //
-        List<List<String>> expected = Lists.<List<String>>newArrayList(Lists.<String>newArrayList(SUJET_HEADER));
+        List<List<String>> expected = Lists.<List<String>>newArrayList(Lists.<String>newArrayList(SUJET_HEADER,A_HEADER));
         assertThat(dataTableEmail.raw(), is(expected));
     }
 
     @Test
     public void testEmailTransformer_mails_ok_only_few_header() throws Exception {
-        List<String> headers = Lists.newArrayList(SUJET_HEADER, MESSAGE_HEADER);
+        List<String> headers = Lists.newArrayList(SUJET_HEADER,A_HEADER, MESSAGE_HEADER);
         List<String> list01 = Lists.newArrayList("Hello", "how are you ?");
         DataTable dataTable = DatatableUtils.getDatatable(headers, Lists.<List<String>>newArrayList(headers, list01));
         //
@@ -59,8 +58,8 @@ public class EmailTransformerTest {
         DataTable dataTableEmail = emailTransformer.toDataTable();
         //
         List<List<String>> expected = Lists
-                .<List<String>>newArrayList(Lists.<String>newArrayList(SUJET_HEADER, MESSAGE_HEADER),
-                        Lists.<String>newArrayList("mon sujet", "mon message"));
+                .<List<String>>newArrayList(Lists.<String>newArrayList(SUJET_HEADER,A_HEADER, MESSAGE_HEADER),
+                        Lists.<String>newArrayList("mon sujet","to@mail.com", "mon message"));
         assertThat(dataTableEmail.raw(), is(expected));
     }
 
@@ -126,7 +125,7 @@ public class EmailTransformerTest {
         assertThat(dataTableEmail.raw(), is(expected));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testEmailTransformer_mails_ok_bad_header() throws Exception {
         List<String> headers = Lists.newArrayList("bad header", "too bad");
         List<String> list01 = Lists.newArrayList("boom", "badaboum");

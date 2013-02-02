@@ -1,17 +1,5 @@
 package fixtures.common.transformers;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Serializable;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
@@ -21,9 +9,16 @@ import com.google.common.io.Files;
 import com.google.common.io.LineProcessor;
 import cucumber.api.DataTable;
 import cucumber.runtime.CucumberException;
-import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
-import org.apache.commons.lang.NotImplementedException;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FileTransformer extends AbstractDataTableBuilder<String> {
     private static final Charset CHARSET = Charset.forName("ISO-8859-15");
@@ -62,6 +57,7 @@ public class FileTransformer extends AbstractDataTableBuilder<String> {
         }
         FileTransformer fileTransformer = new FileTransformer(dataTable, dataTableRows);
         fileTransformer.setColumn(column);
+        fileTransformer.compareWith(new DataTableRowComparator(column, headersAsCells));
         return fileTransformer;
 
     }
@@ -79,14 +75,11 @@ public class FileTransformer extends AbstractDataTableBuilder<String> {
         return Lists.newArrayList();
     }
 
-    @Override
-    protected Comparator<String> getComparator() {
-        return new DataTableRowComparator(column, headersAsCells);
-    }
+
 
     @Override
     protected Map<String, String> apply(final String object) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     protected static LineProcessor<List<String>> newLineProcessor() {
@@ -97,9 +90,6 @@ public class FileTransformer extends AbstractDataTableBuilder<String> {
         this.column = column;
     }
 
-    // =============================================================================================
-    // inner class
-    // =============================================================================================
 
     private static class InnerLineProcessor implements LineProcessor<List<String>> {
         private  List<String> cells= new ArrayList<String>();
@@ -120,7 +110,7 @@ public class FileTransformer extends AbstractDataTableBuilder<String> {
         }
     }
 
-    private static class DataTableRowComparator implements Comparator<String>, Serializable {
+    private static class DataTableRowComparator extends LineComparator<String> implements Serializable {
         private static final long serialVersionUID = 1L;
 
         private String sortColumnName;
@@ -138,16 +128,20 @@ public class FileTransformer extends AbstractDataTableBuilder<String> {
                 return 0;
             }
 
-            final Splitter splitter = Splitter.on(SEPARATOR);
-            List<String> split = Lists.newArrayList(splitter.split(line01));
-            String cell01 = split.get(index);
-            List<String> split2 = Lists.newArrayList(splitter.split(line02));
-            String cell02 = split2.get(index);
+            String cell01 = getValue(line01);
+            String cell02 = getValue(line02);
             // la colonne avec le header reste en premier
             if (cell01.equals(sortColumnName)) {
                 return -1;
             }
             return cell01.compareTo(cell02);
+        }
+
+        @Override
+        protected String getValue(String row) {
+            final Splitter splitter = Splitter.on(SEPARATOR);
+            List<String> split = Lists.newArrayList(splitter.split(row));
+            return split.get(index);
         }
     }
 }

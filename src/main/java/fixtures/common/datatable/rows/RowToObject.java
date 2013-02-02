@@ -1,13 +1,5 @@
 package fixtures.common.datatable.rows;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.base.Strings;
 import fixtures.common.RowToObjectDataSource;
 import org.apache.commons.collections.MapUtils;
@@ -17,6 +9,10 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 /**
  * map une ligne de tableau cucumber vers un objet.

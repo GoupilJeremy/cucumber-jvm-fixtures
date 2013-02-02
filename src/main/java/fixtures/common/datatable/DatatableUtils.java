@@ -1,10 +1,10 @@
 package fixtures.common.datatable;
 
-import java.util.List;
-import java.util.Locale;
-
 import com.google.common.base.Preconditions;
 import cucumber.api.DataTable;
+
+import java.util.List;
+import java.util.Locale;
 
 public class DatatableUtils {
     private DatatableUtils() {

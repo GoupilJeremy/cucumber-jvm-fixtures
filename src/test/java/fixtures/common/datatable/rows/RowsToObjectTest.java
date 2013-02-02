@@ -1,24 +1,22 @@
 package fixtures.common.datatable.rows;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.matchers.JUnitMatchers.hasItems;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import cucumber.api.DataTable;
 import cucumber.runtime.CucumberException;
 import fixtures.common.RowToObjectDataSource;
 import fixtures.common.datatable.DatatableUtils;
-import fixtures.common.datatable.rows.RowToObject;
-import fixtures.common.datatable.rows.RowsToObject;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.hasItems;
 
 public class RowsToObjectTest {
 

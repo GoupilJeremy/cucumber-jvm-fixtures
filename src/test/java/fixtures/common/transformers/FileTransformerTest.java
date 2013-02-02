@@ -1,9 +1,7 @@
 package fixtures.common.transformers;
 
 import com.google.common.collect.Lists;
-import com.google.common.io.LineProcessor;
 import cucumber.api.DataTable;
-import cucumber.runtime.CucumberException;
 import cucumber.runtime.table.TableConverter;
 import cucumber.runtime.xstream.LocalizedXStreams;
 import gherkin.formatter.model.Comment;
@@ -12,15 +10,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
 
 public class FileTransformerTest {
     private DataTable dataTable;

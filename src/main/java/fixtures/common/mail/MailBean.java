@@ -1,5 +1,12 @@
 package fixtures.common.mail;
 
+import fixtures.common.transformers.Label;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.mail.SimpleMailMessage;
+
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -12,13 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import fixtures.common.transformers.Label;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.CharEncoding;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.mail.SimpleMailMessage;
 
 public class MailBean {
 	private static final String CARRIAGE_RETURN = "\n";

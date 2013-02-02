@@ -1,15 +1,15 @@
 package fixtures.common.velocity;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.io.StringWriter;
-import java.io.Writer;
-
 import com.google.common.base.Charsets;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
 import org.junit.Test;
+
+import java.io.StringWriter;
+import java.io.Writer;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class MockVelocityEngineTest {
     @Test

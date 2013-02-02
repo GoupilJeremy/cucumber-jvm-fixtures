@@ -1,15 +1,15 @@
 package fixtures.common.datatable;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
-import java.lang.reflect.Constructor;
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import cucumber.api.DataTable;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
+
+import java.lang.reflect.Constructor;
+import java.util.List;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class DatatableUtilsTest {
     @Test

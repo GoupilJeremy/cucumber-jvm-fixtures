@@ -1,20 +1,12 @@
 package fixtures.common.transformers;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import fixtures.common.transformers.variables.*;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
-import fixtures.common.transformers.variables.CapitalizePreviousMonth;
-import fixtures.common.transformers.variables.LocalDateCurrentMonthAndYearInContext;
-import fixtures.common.transformers.variables.Now;
-import fixtures.common.transformers.variables.NumericMonth;
-import fixtures.common.transformers.variables.PreviousMonth;
-import fixtures.common.transformers.variables.PreviousMonthAndYear;
-import fixtures.common.transformers.variables.PreviousMonthUpper;
-import fixtures.common.transformers.variables.VariableFunction;
-import fixtures.common.transformers.variables.YearOfPreviousMonth;
 
 public class VariableResolverStringDecorator {
     private VariableResolverStringDecorator() {

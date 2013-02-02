@@ -1,9 +1,9 @@
 package fixtures.common.transformers.variables;
 
-import static org.junit.Assert.assertThat;
-
 import org.hamcrest.core.Is;
 import org.junit.Test;
+
+import static org.junit.Assert.assertThat;
 
 public class VariableExceptionTest {
     @Test

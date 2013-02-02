@@ -2,13 +2,12 @@ package fixtures.common.transformers;
 
 import com.google.common.base.Function;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import cucumber.api.DataTable;
 import fixtures.common.mail.MailBean;
-import gherkin.formatter.model.DataTableRow;
 import org.elasticsearch.common.collect.Maps;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 public class EmailTransformer extends AbstractDataTableBuilder<MailBean> implements Function<MailBean, Map<String, String>> {
     public static final String SUJET_HEADER = "sujet";
@@ -31,13 +30,13 @@ public class EmailTransformer extends AbstractDataTableBuilder<MailBean> impleme
     }
 
 
-    protected MailBeanComparator getComparator() {
-        return new MailBeanComparator();
-    }
 
     public static EmailTransformer from(final DataTable dataTableFromFeatureFileToCompare,
                 final List<MailBean> collection){
-        return new EmailTransformer(dataTableFromFeatureFileToCompare,collection);
+        EmailTransformer emailTransformer = new EmailTransformer(dataTableFromFeatureFileToCompare, collection);
+        emailTransformer.compareWith(new MailBeanComparator());
+        emailTransformer.sortBy(A_HEADER);
+        return emailTransformer;
     }
 
 
@@ -54,12 +53,10 @@ public class EmailTransformer extends AbstractDataTableBuilder<MailBean> impleme
         return mapMailBean;
     }
 
-    private class MailBeanComparator implements Comparator<MailBean> {
+    private static class MailBeanComparator extends LineComparator<MailBean> {
         @Override
-        public int compare(final MailBean mailBean01, final MailBean mailBean02) {
-            String mailTo01 = Strings.nullToEmpty(mailBean01.getTo());
-            String mailTo02 = Strings.nullToEmpty(mailBean02.getTo());
-            return mailTo01.compareTo(mailTo02);
+        protected String getValue(MailBean row) {
+            return Strings.nullToEmpty(row.getTo());
         }
     }
 }

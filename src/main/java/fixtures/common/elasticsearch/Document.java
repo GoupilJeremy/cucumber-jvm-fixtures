@@ -1,14 +1,14 @@
 package fixtures.common.elasticsearch;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import com.google.common.base.Strings;
+import fixtures.common.datatable.rows.RowToObject;
+import org.elasticsearch.common.xcontent.XContentBuilder;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Strings;
-import fixtures.common.datatable.rows.RowToObject;
-import org.elasticsearch.common.xcontent.XContentBuilder;
+import static com.google.common.base.Preconditions.checkArgument;
 
 public abstract class Document extends RowToObject<ElasticSearchWrapper, XContentBuilder> {
     public Document(Map<String, Integer> headers, final List<String> row, final ElasticSearchWrapper dataSource) {

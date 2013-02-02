@@ -1,13 +1,13 @@
 package fixtures.common.transformers;
 
-import static org.hamcrest.core.Is.is;
-
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.List;
+
+import static org.hamcrest.core.Is.is;
 
 public class RecursiveToStringStyleTest {
     @Test

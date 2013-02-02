@@ -1,10 +1,10 @@
 package fixtures.common.transformers.variables;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
 import org.joda.time.DateTime;
 import org.junit.Test;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class NumericMonthTest {
     @Test

@@ -1,10 +1,10 @@
 package fixtures.common.transformers;
 
-import java.util.Collection;
-
 import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+
+import java.util.Collection;
 
 public class RecursiveToStringStyle extends ToStringStyle {
     private static final int INFINITE_DEPTH = -1;

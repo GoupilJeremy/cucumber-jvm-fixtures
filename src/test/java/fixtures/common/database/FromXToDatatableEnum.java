@@ -2,8 +2,6 @@ package fixtures.common.database;
 
 import java.sql.Types;
 
-import fixtures.common.database.IBaseColumnToTable;
-
 public enum FromXToDatatableEnum implements IBaseColumnToTable {
 
     A("a", "A", Types.NUMERIC),

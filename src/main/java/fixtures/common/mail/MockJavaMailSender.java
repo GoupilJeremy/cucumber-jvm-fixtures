@@ -1,13 +1,5 @@
 package fixtures.common.mail;
 
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Properties;
-
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -22,6 +14,14 @@ import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Properties;
 
 public class MockJavaMailSender implements JavaMailSender {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MockJavaMailSender.class);

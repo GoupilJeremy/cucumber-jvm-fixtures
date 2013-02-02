@@ -1,13 +1,13 @@
 package fixtures.common.database;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 
 class TableFromDatabaseWrapper {
     private EnumSet enumSet;

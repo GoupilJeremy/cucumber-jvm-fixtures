@@ -1,12 +1,12 @@
 package fixtures.common.transformers.variables;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import org.joda.time.MutableDateTime;
+import org.junit.Test;
 
 import java.util.Locale;
 
-import org.joda.time.MutableDateTime;
-import org.junit.Test;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class YearOfPreviousMonthTest {
     @Test

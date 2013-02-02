@@ -1,17 +1,17 @@
 package fixtures.common.database;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.io.FileNotFoundException;
-import java.lang.reflect.Constructor;
-import java.util.List;
-
 import com.google.common.collect.Lists;
 import cucumber.api.DataTable;
 import fixtures.common.file.FileToDatatable;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
+
+import java.io.FileNotFoundException;
+import java.lang.reflect.Constructor;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class FileToDatatableTest {
     @Test

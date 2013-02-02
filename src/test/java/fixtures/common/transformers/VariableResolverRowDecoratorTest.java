@@ -1,12 +1,5 @@
 package fixtures.common.transformers;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -15,6 +8,13 @@ import gherkin.formatter.model.DataTableRow;
 import gherkin.formatter.model.Row;
 import org.joda.time.DateTimeUtils;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class VariableResolverRowDecoratorTest {
     private static final int FIXED_TIME = 100;

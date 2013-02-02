@@ -1,19 +1,13 @@
 package fixtures.common.database;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 import cucumber.api.DataTable;
 import cucumber.runtime.table.TableConverter;
 import cucumber.runtime.xstream.LocalizedXStreams;
-import fixtures.common.database.FromXToDatatableEnum;
 import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 import org.junit.Test;
+
+import java.util.*;
 
 public class DatatableFromDataBaseComparatorTest {
 
@@ -32,13 +26,13 @@ public class DatatableFromDataBaseComparatorTest {
            rows.add(new DataTableRow(comments, Arrays.asList("666", "john", "foobar"), 2));
            rows.add(new DataTableRow(comments, Arrays.asList("877", "rob", "foobar"), 3));
            //
-           final List<Map<String, Object>> query = new ArrayList<Map<String, Object>>();
+           final List<Map<String,  ? extends Comparable>> query = new ArrayList<Map<String,  ? extends Comparable>>();
            query.add(createMap("125", "bob", "bob@email.com", "foobar"));
            query.add(createMap("666", "john", "johon@email.com", "foobar"));
            query.add(createMap("877", "rob", "rob@email.com", "foobar"));
 
            DataTable table = new DataTable(rows, new TableConverter(getXStream(), null));
-           DatatableFromDataBaseComparator.from(table, query, FromXToDatatableEnum.class).compare();
+           table.diff(DatatableFromDataBaseComparator.from(table, query, FromXToDatatableEnum.class).sortBy(FromXToDatatableEnum.A.getDatatableColumnName()).toDataTable());
        }
 
        private static LocalizedXStreams.LocalizedXStream getXStream() {
@@ -56,13 +50,13 @@ public class DatatableFromDataBaseComparatorTest {
            rows.add(new DataTableRow(comments, Arrays.asList("666","john", "foobar"), 2));
            rows.add(new DataTableRow(comments, Arrays.asList("877","rob", "foobar"), 3));
            //
-           final List<Map<String, Object>> query = new ArrayList<Map<String, Object>>();
+           final List<Map<String,  ? extends Comparable>> query = new ArrayList<Map<String,  ? extends Comparable>>();
            query.add(createMap("125", "bob", "bob@email.com", "foobar"));
            query.add(createMap("666", "john", "johon@email.com", "foobar"));
            query.add(createMap("877", "rob", "rob@email.com", "foobar"));
 
            DataTable table = new DataTable(rows, new TableConverter(getXStream(), null));
-           DatatableFromDataBaseComparator.from(table, query, FromXToDatatableEnum.class).compare();
+           table.diff(DatatableFromDataBaseComparator.from(table, query, FromXToDatatableEnum.class).sortBy(FromXToDatatableEnum.A.getDatatableColumnName()).toDataTable());
        }
 
        @Test
@@ -75,18 +69,17 @@ public class DatatableFromDataBaseComparatorTest {
            rows.add(new DataTableRow(comments, Arrays.asList("666", "john", "foobar"), 2));
            rows.add(new DataTableRow(comments, Arrays.asList("877", "rob", "foobar"), 3));
            //
-           final List<Map<String, Object>> query = new ArrayList<Map<String, Object>>();
+           final List<Map<String,  ? extends Comparable>> query = new ArrayList<Map<String,  ? extends Comparable>>();
            query.add(createMap("125", "bob", "bob@email.com", "foobar"));
            query.add(createMap("666", "john", "johon@email.com", "foobar"));
            query.add(createMap("877", "rob", "rob@email.com", "foobar"));
 
            DataTable table = new DataTable(rows, new TableConverter(getXStream(), null));
-           DatatableFromDataBaseComparator.from(table, query, FromXToDatatableEnum.class).compare();
+           table.diff(DatatableFromDataBaseComparator.from(table, query, FromXToDatatableEnum.class).sortBy(FromXToDatatableEnum.A.getDatatableColumnName()).toDataTable());
        }
 
        @Test
        public void testCompareBaseToTable_reordered_columns_by_id_from_base() throws Exception {
-           // table
            List<DataTableRow> rows = new ArrayList<DataTableRow>();
            ArrayList<Comment> comments = new ArrayList<Comment>();
            rows.add(new DataTableRow(comments, Arrays.asList(FromXToDatatableEnum.A.getDatatableColumnName(), FromXToDatatableEnum.B.getDatatableColumnName(), FromXToDatatableEnum.D.getDatatableColumnName()), 0));
@@ -94,35 +87,34 @@ public class DatatableFromDataBaseComparatorTest {
            rows.add(new DataTableRow(comments, Arrays.asList("666","john" , "foobar"), 2));
            rows.add(new DataTableRow(comments, Arrays.asList("877","rob" , "foobar"), 3));
            //
-           final List<Map<String, Object>> query = new ArrayList<Map<String, Object>>();
+           final List<Map<String,  ? extends Comparable>> query = new ArrayList<Map<String,  ? extends Comparable>>();
            query.add(createMap("877", "rob", "rob@email.com", "foobar"));
            query.add(createMap("125", "bob", "bob@email.com", "foobar"));
            query.add(createMap("666", "john", "johon@email.com", "foobar"));
 
-           DataTable table = new DataTable(rows, new TableConverter(getXStream(), null));
-           DatatableFromDataBaseComparator.from(table, query, FromXToDatatableEnum.class).sortBy(FromXToDatatableEnum.A.getDatatableColumnName())
-                   .compare();
+           DataTable expected = new DataTable(rows, new TableConverter(getXStream(), null));
+           expected.diff(DatatableFromDataBaseComparator.from(expected, query, FromXToDatatableEnum.class).sortBy(FromXToDatatableEnum.A.getDatatableColumnName()).toDataTable());
        }
 
        @Test
        public void testCompareBaseToTable_reordered_columns_by_name_from_base() throws Exception {
-           // table
+           // expected
            List<DataTableRow> rows = new ArrayList<DataTableRow>();
            ArrayList<Comment> comments = new ArrayList<Comment>();
            DataTableRow dataTableHeaderRow = getDataTableRow(comments);
            rows.add(dataTableHeaderRow);
-           rows.add(new DataTableRow(comments, Arrays.asList("rob", "666", "foobar"), 3));
-           rows.add(new DataTableRow(comments, Arrays.asList("john", "877", "foobar"), 2));
            rows.add(new DataTableRow(comments, Arrays.asList("bob", "125", "foobar"), 1));
+           rows.add(new DataTableRow(comments, Arrays.asList("john", "877", "foobar"), 2));
+           rows.add(new DataTableRow(comments, Arrays.asList("rob", "666", "foobar"), 3));
            //
-           final List<Map<String, Object>> query = new ArrayList<Map<String, Object>>();
+           final List<Map<String,  ? extends Comparable>> query = new ArrayList<Map<String,  ? extends Comparable>>();
            query.add(createMap( "rob","666","foobar", "rob@email.com" ));
            query.add(createMap("bob", "125","foobar" , "bob@email.com"));
            query.add(createMap( "john","877", "foobar", "johon@email.com"));
 
-           DataTable table = new DataTable(rows, new TableConverter(getXStream(), null));
-           DatatableFromDataBaseComparator.from(table, query, FromXToDatatableEnum.class)
-                   .sortBy(FromXToDatatableEnum.A.getDatatableColumnName(), false).compare();
+           DataTable expected = new DataTable(rows, new TableConverter(getXStream(), null));
+           expected.diff(DatatableFromDataBaseComparator.from(expected, query, FromXToDatatableEnum.class)
+                   .sortBy(FromXToDatatableEnum.A.getDatatableColumnName(), false).toDataTable());
        }
 
        private DataTableRow getDataTableRow(final ArrayList<Comment> comments) {
@@ -131,8 +123,8 @@ public class DatatableFromDataBaseComparatorTest {
                        HEADER_DATATABLE_INDEX);
        }
 
-       private Map<String, Object> createMap(String foo, String bar, String qix, String pioupiou) {
-           Map<String, Object> map = new HashMap<String, Object>();
+       private Map<String,  ? extends Comparable> createMap(String foo, String bar, String qix, String pioupiou) {
+           Map<String, String> map = new HashMap<String, String>();
            map.put(FromXToDatatableEnum.A.getBaseColumnName(), foo);
            map.put(FromXToDatatableEnum.B.getBaseColumnName(), bar);
            map.put(FromXToDatatableEnum.C.getBaseColumnName(), qix);

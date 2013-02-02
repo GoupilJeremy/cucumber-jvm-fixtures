@@ -1,13 +1,13 @@
 package fixtures.common.transformers;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
-import java.util.Map;
-
 import com.google.common.collect.Maps;
 import fixtures.common.transformers.variables.VariableFunction;
 import org.junit.Test;
+
+import java.util.Map;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 public class VariableFunctionTest {
     @Test
