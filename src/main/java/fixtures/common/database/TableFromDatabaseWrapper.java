@@ -34,7 +34,7 @@ class TableFromDatabaseWrapper {
 
     public TableFromDatabaseWrapper(Class myEnum) {
         Preconditions.checkArgument(myEnum != null, "la classe ne peut être null");
-        Preconditions.checkArgument(myEnum.isEnum(), "la classe n'est une Enum");
+        Preconditions.checkArgument(myEnum.isEnum(), "la classe n'est pas une Enum");
         enumSet = EnumSet.allOf(myEnum);
     }
 

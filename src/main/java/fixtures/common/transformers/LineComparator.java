@@ -8,10 +8,10 @@ public abstract class LineComparator<Line> implements Comparator<Line>{
 
 
 
-    protected String column;
+    protected String sortColumn;
 
     public  LineComparator sortBy(String column,boolean asc){
-        this.column = column;
+        this.sortColumn = column;
         if (!asc) {
             order = -1;
         }
@@ -20,11 +20,11 @@ public abstract class LineComparator<Line> implements Comparator<Line>{
 
     @Override
     public int compare(final Line row1, final Line row2) {
-        if(column==null){
-            throw new IllegalStateException("sort column has not been set");
+        if(sortColumn ==null){
+            throw new IllegalStateException("sort sortColumn has not been set");
         }
-        Comparable value1 = getValue(row1);
-        Comparable value2 = getValue(row2);
+        Comparable value1 = getValue(row1, sortColumn);
+        Comparable value2 = getValue(row2, sortColumn);
         int result;
         // la colonne avec le header reste en premier
 
@@ -34,7 +34,7 @@ public abstract class LineComparator<Line> implements Comparator<Line>{
             result = 1;
         }else if (value1 == null){
             result = -1;
-        }else if (value1.equals(column)) {
+        }else if (value1.equals(sortColumn)) {
             result= -1;
         }else {
             result = (value1.compareTo(value2)) * order;
@@ -42,11 +42,11 @@ public abstract class LineComparator<Line> implements Comparator<Line>{
         return result;
     }
 
-    public String getColumn() {
-        return column;
+    public String getSortColumn() {
+        return sortColumn;
     }
 
-    protected abstract Comparable getValue(Line row);
+    protected abstract Comparable getValue(Line row,String columnName);
 
 
 

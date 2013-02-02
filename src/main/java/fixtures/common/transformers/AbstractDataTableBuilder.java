@@ -1,16 +1,15 @@
 package fixtures.common.transformers;
 
+import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import cucumber.api.DataTable;
 import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 import org.apache.commons.lang.Validate;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class AbstractDataTableBuilder<Line> implements IDataTableBuilder {
     public static final int HEADERS_INDEX = 0;
@@ -32,7 +31,24 @@ public abstract class AbstractDataTableBuilder<Line> implements IDataTableBuilde
         return this;
     }
 
+    private List<Line> filterAndReorderLines(List<Line> lines){
+        final Collection<List<String>> filteredTable =
 
+                Collections2.transform(lines, new Function<Line, List<String>>() {
+                    @Override
+                    public List<String> apply(final Line line) {
+                        if (line != null) {
+                            return reorderLine(headersAsCells, line);
+                        } else {
+                            return Lists.newArrayList();
+                        }
+                    }
+                });
+
+        List<Line> listFiltered = Lists.newArrayList();
+//        List<Line> listFiltered.addAll(filteredTable);
+        return listFiltered;
+    }
 
     public DataTable toDataTable() {
         List<DataTableRow> rows = new ArrayList<DataTableRow>();
@@ -48,7 +64,7 @@ public abstract class AbstractDataTableBuilder<Line> implements IDataTableBuilde
         Preconditions.checkArgument(lines != null, "la liste d'objets ne peut être null");
         List<Line> sorted = Lists.newArrayList(lines);
 
-        if(comparator!=null && comparator.getColumn()!=null){
+        if(comparator!=null && comparator.getSortColumn()!=null){
             Collections.sort(sorted, comparator);
         }
 
@@ -84,6 +100,21 @@ public abstract class AbstractDataTableBuilder<Line> implements IDataTableBuilde
         comparator.sortBy(column,asc);
         return this;
 
+    }
+
+    /**
+     * filter and reorder cells according to headers list.
+     * @param headers
+     * @param line
+     * @return
+     */
+    protected List<String> reorderLine(final List<String> headers, final Line line) {
+        List<String> reorderedLine = Lists.newArrayList();
+        Map<String, String> map = apply(line);
+        for (String header : headers) {
+            reorderedLine.add(map.get(header));
+        }
+        return reorderedLine;
     }
 
     protected abstract Map<String, String> apply(final Line line);

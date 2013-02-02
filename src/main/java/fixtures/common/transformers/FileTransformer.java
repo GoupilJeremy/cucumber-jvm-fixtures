@@ -115,21 +115,18 @@ public class FileTransformer extends AbstractDataTableBuilder<String> {
 
         private String sortColumnName;
 
-        private int index;
 
         public DataTableRowComparator(final String sortColumnName, final List<String> headersAsCells) {
             this.sortColumnName = sortColumnName;
-            this.index = headersAsCells.indexOf(sortColumnName);
+
         }
 
         @Override
         public int compare(final String line01, final String line02) {
-            if (index < 0) {
-                return 0;
-            }
 
-            String cell01 = getValue(line01);
-            String cell02 = getValue(line02);
+
+            String cell01 = getValue(line01,sortColumnName);
+            String cell02 = getValue(line02,sortColumnName);
             // la colonne avec le header reste en premier
             if (cell01.equals(sortColumnName)) {
                 return -1;
@@ -138,7 +135,11 @@ public class FileTransformer extends AbstractDataTableBuilder<String> {
         }
 
         @Override
-        protected String getValue(String row) {
+        protected String getValue(String row,String sortColumnName) {
+            int index = headersAsCells.indexOf(sortColumnName);
+            if (index < 0) {
+                throw new IllegalStateException("la colonne de tri est absente");
+            }
             final Splitter splitter = Splitter.on(SEPARATOR);
             List<String> split = Lists.newArrayList(splitter.split(row));
             return split.get(index);

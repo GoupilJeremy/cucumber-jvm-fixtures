@@ -16,8 +16,8 @@ public enum FromXToDatatableEnum implements IBaseColumnToTable {
     private int databaseType;
 
     FromXToDatatableEnum(final String datatableColumnName, final String databaseColumnName, final int databaseType) {
-        this.databaseColumnName = databaseColumnName;
         this.datatableColumnName = datatableColumnName;
+        this.databaseColumnName = databaseColumnName;
         this.databaseType = databaseType;
     }
 

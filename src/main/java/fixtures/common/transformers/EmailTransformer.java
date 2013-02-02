@@ -55,7 +55,7 @@ public class EmailTransformer extends AbstractDataTableBuilder<MailBean> impleme
 
     private static class MailBeanComparator extends LineComparator<MailBean> {
         @Override
-        protected String getValue(MailBean row) {
+        protected String getValue(MailBean row,String columnName) {
             return Strings.nullToEmpty(row.getTo());
         }
     }

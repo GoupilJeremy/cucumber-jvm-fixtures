@@ -62,7 +62,7 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
 				value = v;
 			}
 		} else if (context == null || !context.containsKey(column)) {
-			LOGGER.debug("column name no present into step:'" + column + "'");
+			LOGGER.debug("sortColumn name no present into step:'" + column + "'");
 		}
 		return value;
 	}
@@ -87,7 +87,7 @@ public abstract class RowToObject<D extends RowToObjectDataSource, Res> {
 		} catch (IllegalAccessException e) {
 			LOGGER.error(e.getMessage());
 		}
-		throw new IllegalArgumentException("value " + value + " of column " + column + " cannot be cast ");
+		throw new IllegalArgumentException("value " + value + " of sortColumn " + column + " cannot be cast ");
 	}
 
 	public String getValue(String column) {

@@ -71,13 +71,7 @@ public class DatatableFromDataBaseComparator extends AbstractDataTableBuilder<Ma
         });
     }
 
-    private List<String> reorderLine(final List<String> headers, final Map<String, String> line) {
-        List<String> reorderedLine = Lists.newArrayList();
-        for (String header : headers) {
-            reorderedLine.add(line.get(header));
-        }
-        return reorderedLine;
-    }
+
 
     private Map<String,? extends Comparable> filterKeysFromDatabase(final Map<String,? extends Comparable> input,
                                                            final Collection<String> keysInDatabase) {
@@ -116,7 +110,7 @@ public class DatatableFromDataBaseComparator extends AbstractDataTableBuilder<Ma
     private static class RowComparator extends LineComparator<Map<String,? extends Comparable>> {
 
         @Override
-        protected Comparable getValue(Map<String, ? extends Comparable> row) {
+        protected Comparable getValue(Map<String, ? extends Comparable> row,String column) {
             return  row.get(column);
         }
     }

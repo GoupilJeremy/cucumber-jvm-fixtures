@@ -15,9 +15,9 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 public class RowToObjectTest {
-	protected static final String FIRST_COLUMN_NAME = "dummy column name";
+	protected static final String FIRST_COLUMN_NAME = "dummy sortColumn name";
 
-	protected static final String FIRST_COLUMN_VALUE = "dummy column value";
+	protected static final String FIRST_COLUMN_VALUE = "dummy sortColumn value";
 
 	protected static final int FIRST_COLUMN_INDEX = 0;
 
@@ -27,7 +27,7 @@ public class RowToObjectTest {
 
 	protected static final Integer BAD_COLUMN_INDEX = 1;
 
-	protected static final String SECOND_COLUMN_NAME = "second column name";
+	protected static final String SECOND_COLUMN_NAME = "second sortColumn name";
 
 	private static final String NOT_IN_LIST = "no_in_list";
 
