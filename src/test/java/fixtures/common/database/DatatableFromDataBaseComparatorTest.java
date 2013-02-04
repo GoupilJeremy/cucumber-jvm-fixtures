@@ -34,9 +34,9 @@ public class DatatableFromDataBaseComparatorTest {
            DataTable table = new DataTable(rows, new TableConverter(getXStream(), null));
            table.diff(//
                    DatatableFromDataBaseComparator.from(table, query)//
-                   .replaceHeadersWith(FromXToDatatableEnum.class)
-                   .sortBy(FromXToDatatableEnum.A.getDatatableColumnName())//
-                   .toDataTable());
+                           .mapHeadersWith(FromXToDatatableEnum.class)
+                           .sortBy(FromXToDatatableEnum.A.getDatatableColumnName())//
+                           .toDataTable());
        }
 
        private static LocalizedXStreams.LocalizedXStream getXStream() {
@@ -59,7 +59,7 @@ public class DatatableFromDataBaseComparatorTest {
            query.add(createMapWithBaseColumn("877", "rob", "rob@email.com", "foobar"));
 
            DataTable expected = new DataTable(expectedRows, new TableConverter(getXStream(), null));
-           expected.diff(DatatableFromDataBaseComparator.from(expected, query).replaceHeadersWith(FromXToDatatableEnum.class).sortBy(FromXToDatatableEnum.A.getDatatableColumnName()).toDataTable());
+           expected.diff(DatatableFromDataBaseComparator.from(expected, query).mapHeadersWith(FromXToDatatableEnum.class).sortBy(FromXToDatatableEnum.A.getDatatableColumnName()).toDataTable());
        }
 
        @Test
@@ -78,7 +78,7 @@ public class DatatableFromDataBaseComparatorTest {
            query.add(createMapWithBaseColumn("877", "rob", "rob@email.com", "foobar"));
 
            DataTable table = new DataTable(rows, new TableConverter(getXStream(), null));
-           table.diff(DatatableFromDataBaseComparator.from(table, query).replaceHeadersWith(FromXToDatatableEnum.class).sortBy(FromXToDatatableEnum.A.getDatatableColumnName()).toDataTable());
+           table.diff(DatatableFromDataBaseComparator.from(table, query).mapHeadersWith(FromXToDatatableEnum.class).sortBy(FromXToDatatableEnum.A.getDatatableColumnName()).toDataTable());
        }
 
        @Test
@@ -116,7 +116,7 @@ public class DatatableFromDataBaseComparatorTest {
            query.add(createMapWithBaseColumn("bbb", "877", "foobar", "johon@email.com"));
 
            DataTable expected = new DataTable(rows, new TableConverter(getXStream(), null));
-           expected.diff(DatatableFromDataBaseComparator.from(expected, query).replaceHeadersWith(FromXToDatatableEnum.class)
+           expected.diff(DatatableFromDataBaseComparator.from(expected, query).mapHeadersWith(FromXToDatatableEnum.class)
                    .sortBy(FromXToDatatableEnum.A.getDatatableColumnName(), true).toDataTable());
        }
 
@@ -137,7 +137,7 @@ public class DatatableFromDataBaseComparatorTest {
         query.add(createMapWithBaseColumn("bbb", "877", "foobar", "johon@email.com"));
 
         DataTable expected = new DataTable(rows, new TableConverter(getXStream(), null));
-        expected.diff(DatatableFromDataBaseComparator.from(expected, query).replaceHeadersWith(FromXToDatatableEnum.class)
+        expected.diff(DatatableFromDataBaseComparator.from(expected, query).mapHeadersWith(FromXToDatatableEnum.class)
                 .sortBy(FromXToDatatableEnum.A.getDatatableColumnName(), false).toDataTable());
     }
 

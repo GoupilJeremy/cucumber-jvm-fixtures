@@ -1,5 +1,7 @@
 package fixtures.common.database;
 
+import fixtures.common.transformers.MapperContainer;
+
 import java.sql.Types;
 
 public enum FromXToDatatableEnum implements MapperContainer {

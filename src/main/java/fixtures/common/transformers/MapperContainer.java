@@ -1,4 +1,4 @@
-package fixtures.common.database;
+package fixtures.common.transformers;
 
 public interface MapperContainer {
     String getReplacementColumnName();

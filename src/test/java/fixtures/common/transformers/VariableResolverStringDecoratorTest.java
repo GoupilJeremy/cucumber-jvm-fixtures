@@ -2,6 +2,7 @@ package fixtures.common.transformers;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
+import fixtures.common.transformers.variables.VariableResolverStringDecorator;
 import org.hamcrest.core.Is;
 import org.joda.time.DateTimeUtils;
 import org.junit.Test;

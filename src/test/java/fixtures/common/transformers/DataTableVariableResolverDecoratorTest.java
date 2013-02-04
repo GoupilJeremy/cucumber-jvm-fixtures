@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import cucumber.api.DataTable;
 import fixtures.common.datatable.DatatableUtils;
+import fixtures.common.transformers.variables.DataTableVariableResolverDecorator;
 import org.joda.time.DateTime;
 import org.junit.Test;
 

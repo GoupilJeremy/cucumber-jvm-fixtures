@@ -3,6 +3,8 @@ package fixtures.common.transformers;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import fixtures.common.transformers.variables.VariableResolverRowDecorator;
+import fixtures.common.transformers.variables.VariableResolverStringDecorator;
 import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 import gherkin.formatter.model.Row;

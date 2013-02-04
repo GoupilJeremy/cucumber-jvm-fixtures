@@ -3,12 +3,13 @@ package fixtures.common.transformers;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import cucumber.api.DataTable;
-import fixtures.common.database.MapperContainer;
 import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 import org.apache.commons.lang.Validate;
 
+import java.sql.Types;
 import java.util.*;
 
 public abstract class AbstractDataTableBuilder<Line> implements IDataTableBuilder {
@@ -28,14 +29,13 @@ public abstract class AbstractDataTableBuilder<Line> implements IDataTableBuilde
                        "la datatable doit contenir au moins une ligne contenant les headers,\n afin de connaître lors de la méthode 'transform', quelle propriété de l'objet mettre dans la cellule");
                this.headersAsCells = raw.get(HEADERS_INDEX);
 
-    }
 
+    }
 
     public AbstractDataTableBuilder compareWithLocale(Locale locale) {
         this.locale = locale;
         return this;
     }
-
 
     public DataTable toDataTable() {
         List<DataTableRow> gherkinRows = buildRowsForDataTable(lines);
@@ -47,7 +47,12 @@ public abstract class AbstractDataTableBuilder<Line> implements IDataTableBuilde
     }
 
     protected List<DataTableRow> buildRowsForDataTable(final List<Line> lines) {
-        comparator = new LineComparator(headersAsCells, locale);
+        Map<String,Integer> headersMap = Maps.newHashMap();
+        for (int i = 0; i < headersAsCells.size(); i++) {
+            headersMap.put(headersAsCells.get(i),i);
+        }
+        comparator = new LineComparator(headersMap, locale);
+
         Preconditions.checkArgument(lines != null, "la liste d'objets ne peut être null");
         List<Line> sorted = Lists.newArrayList(lines);
 
@@ -80,24 +85,31 @@ public abstract class AbstractDataTableBuilder<Line> implements IDataTableBuilde
         return rows;
     }
 
-//    private List<String> replaceValues(List<String> headersAsCells) {
+    private Map<String,String> replaceValues(Map<String,String> headersAndValues) {
 
+        String DATE_PATTERN = "dd/MM/yyyy";
+        String TRUE_VALUE = "oui";
+        String FALSE_VALUE = "non";
+         final String TRUE_DATABASE_VALUE = "1";
 
-//            for (Map.Entry<String,  ? extends Comparable> cell : transformedLine.entrySet()) {
-//                //je remplace la clé en base par la clé du tableau
-//                Object content = cell.getValue();
-//                MapperContainer columnEnum = getEnum(cell.getKey(), wrapper.getReplacementColumnToTable());
-//                String finalContent = (content == null) ? StringUtils.EMPTY : content.toString();
-//                if (columnEnum.getColumnType() == Types.BOOLEAN) {
-//                    finalContent = finalContent.equals(TRUE_DATABASE_VALUE) ? TRUE_VALUE : FALSE_VALUE;
-//                } else if (columnEnum.getColumnType() == Types.DATE && content != null) {
-//                    Date date = (Date) content;
-//                    finalContent = new LocalDate(date.getTime()).toString(DATE_PATTERN);
-//                }
-//                result.put(columnEnum.getDatatableColumnName(), finalContent);
+        Map<String,String> modifiedMap = Maps.newHashMap();
+        for (Map.Entry<String,String> entry : headersAndValues.entrySet()) {
+            String header = entry.getKey();
+            String value = entry.getValue();
+            int type = Integer.parseInt(headersMapper.headersNamesAndTypes.get(header));
+            String modifiedValue = value;
+            if (Types.BOOLEAN==type) {
+                modifiedValue = modifiedValue.equals(TRUE_DATABASE_VALUE) ? TRUE_VALUE : FALSE_VALUE;
+            }
+//            else if (Types.DATE ==type && modifiedValue != null) {
+//                Date date = (Date) modifiedValue;
+//                modifiedValue = new LocalDate(date.getTime()).toString(DATE_PATTERN);
 //            }
-//        return null;
-//    }
+            modifiedMap.put(header,modifiedValue);
+        }
+
+        return modifiedMap;
+    }
 
     public AbstractDataTableBuilder sortBy(String column) {
         return  sortBy(column, true);
@@ -110,9 +122,7 @@ public abstract class AbstractDataTableBuilder<Line> implements IDataTableBuilde
 
     }
 
-
-
-    public AbstractDataTableBuilder replaceHeadersWith(Class<? extends MapperContainer> mapperContainer){
+    public AbstractDataTableBuilder mapHeadersWith(Class<? extends MapperContainer> mapperContainer){
         headersMapper = new HeadersMapper(mapperContainer);
         return this;
     }
@@ -126,6 +136,7 @@ public abstract class AbstractDataTableBuilder<Line> implements IDataTableBuilde
     protected List<String> reorderLine(final List<String> headers, final Line line) {
         List<String> reorderedLine = Lists.newArrayList();
         Map<String, String> map = toMap(line);
+        //map = replaceValues(map);
         if(map==null){
             throw new IllegalStateException("failure: line hasn't been converted into map; map is null");
         }

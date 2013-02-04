@@ -1,8 +1,7 @@
-package fixtures.common.transformers;
+package fixtures.common.transformers.variables;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
-import fixtures.common.transformers.variables.*;
 
 import java.util.Arrays;
 import java.util.List;

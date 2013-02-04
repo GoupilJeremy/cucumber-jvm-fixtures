@@ -2,7 +2,6 @@ package fixtures.common.transformers;
 
 import com.google.common.collect.Lists;
 import fixtures.common.database.FromXToDatatableEnum;
-import fixtures.common.database.MapperContainer;
 import org.junit.Test;
 import org.junit.matchers.JUnitMatchers;
 

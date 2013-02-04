@@ -1,7 +1,6 @@
 package fixtures.common.transformers;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
 import gherkin.formatter.model.DataTableRow;
 
 import java.text.Collator;
@@ -19,12 +18,10 @@ public  class LineComparator implements Comparator<DataTableRow>{
 
     protected String sortColumn;
 
-    private Map<String,Integer> headersMap =Maps.newHashMap();
+    private Map<String,Integer> headers;
 
-    public LineComparator(List<String> headers, Locale locale) {
-        for (int i = 0; i < headers.size(); i++) {
-            headersMap.put(headers.get(i),i);
-        }
+    public LineComparator(Map<String,Integer> headers, Locale locale) {
+        this.headers = headers;
         collator= Collator.getInstance(locale);
         collator.setStrength(Collator.PRIMARY);
     }
@@ -43,7 +40,7 @@ public  class LineComparator implements Comparator<DataTableRow>{
             throw new IllegalStateException("sort sortColumn has not been set");
         }
         List<String> cells1 = row1.getCells();
-        Integer sortColumnIndex = headersMap.get(sortColumn);
+        Integer sortColumnIndex = headers.get(sortColumn);
         String value1 = cells1.get(sortColumnIndex);
         List<String> cells2 = row2.getCells();
         String value2 = cells2.get(sortColumnIndex);

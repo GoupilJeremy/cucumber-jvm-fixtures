@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import fixtures.common.database.MapperContainer;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -14,7 +13,11 @@ import java.util.Map;
 
 class HeadersMapper {
     private EnumSet enumSet;
-    Map<String,String> headersMap = Maps.newHashMap();
+
+
+
+    Map<String,String> headersNamesAndReplacement = Maps.newHashMap();
+    Map<String,String> headersNamesAndTypes = Maps.newHashMap();
     private final static Function<MapperContainer, String> GET_REPLACEMENT_COLUMN_NAME = new Function<MapperContainer, String>() {
         @Override
         public String apply(final MapperContainer input) {
@@ -35,14 +38,27 @@ class HeadersMapper {
         }
     };
 
+    private final static Function<MapperContainer, String> GET_COLUMN_TYPE = new Function<MapperContainer, String>() {
+        @Override
+        public String apply(final MapperContainer input) {
+            if (input == null) {
+                return "0";
+            }
+            Integer integer = new Integer(input.getColumnType());
+            return integer.toString();
+        }
+    };
+
     public HeadersMapper(Class myEnum) {
         Preconditions.checkArgument(myEnum != null, "la classe ne peut être null");
         Preconditions.checkArgument(myEnum.isEnum(), "la classe n'est pas une Enum");
         enumSet = EnumSet.allOf(myEnum);
         List<String> datatableColumnNames = getDatatableColumnNames();
         List<String> replacementColumnNames = getReplacementColumnNames();
+        List<String> columnTypes = getDatatableColumnTypes();
         for (int i = 0; i < datatableColumnNames.size(); i++) {
-            headersMap.put(datatableColumnNames.get(i),replacementColumnNames.get(i));
+            headersNamesAndReplacement.put(datatableColumnNames.get(i), replacementColumnNames.get(i));
+            headersNamesAndTypes.put(datatableColumnNames.get(i), columnTypes.get(i));
         }
     }
 
@@ -58,6 +74,10 @@ class HeadersMapper {
         return getColumns(GET_DATATABLE_COLUMN_NAME);
     }
 
+    public List<String> getDatatableColumnTypes() {
+        return getColumns(GET_COLUMN_TYPE);
+    }
+
     private List<String> getColumns(Function<MapperContainer, String> function) {
         List<String> results = Lists.newArrayList();
         results.addAll(Collections2.transform(enumSet, function));
@@ -67,7 +87,7 @@ class HeadersMapper {
     public List<String> replaceColumns(List<String> headers){
         ArrayList<String> replacedHeaders = Lists.newArrayList();
         for (String header : headers) {
-            String replacedHeader = headersMap.get(header);
+            String replacedHeader = headersNamesAndReplacement.get(header);
             if(replacedHeader!=null){
             replacedHeaders.add(replacedHeader);
             }else{
@@ -75,5 +95,9 @@ class HeadersMapper {
             }
         }
         return replacedHeaders;
+    }
+
+    public Map<String, String> getHeadersNamesAndReplacement() {
+        return headersNamesAndReplacement;
     }
 }

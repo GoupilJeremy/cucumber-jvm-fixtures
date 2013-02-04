@@ -8,17 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public class DatatableFromDataBaseComparator extends AbstractDataTableBuilder<Map<String,? extends Comparable>> {
-    private static final String DATE_PATTERN = "dd/MM/yyyy";
-
-    private static final String TRUE_VALUE = "oui";
-
-    private static final String FALSE_VALUE = "non";
-
-    private static final String TRUE_DATABASE_VALUE = "1";
-
-
-
-
 
     private DatatableFromDataBaseComparator(final DataTable table, final List<Map<String, ? extends Comparable>> queryResultFromDatabase) {
         super(table,queryResultFromDatabase);
@@ -28,9 +17,6 @@ public class DatatableFromDataBaseComparator extends AbstractDataTableBuilder<Ma
         DatatableFromDataBaseComparator datatableFromDataBaseComparator = new DatatableFromDataBaseComparator(table, query);
         return datatableFromDataBaseComparator;
     }
-
-
-
 
 
     @Override
