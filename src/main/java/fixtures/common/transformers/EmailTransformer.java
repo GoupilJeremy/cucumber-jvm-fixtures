@@ -38,8 +38,8 @@ public class EmailTransformer extends AbstractDataTableBuilder<MailBean> {
 
 
     @Override
-    public Map<String, String> toMap(final MailBean mailBean) {
-        Map<String, String> mapMailBean = Maps.newHashMap();
+    public Map<String, Object> toMap(final MailBean mailBean) {
+        Map<String, Object> mapMailBean = Maps.newHashMap();
         mapMailBean.put(A_HEADER, mailBean.getTo());
         mapMailBean.put(DE_HEADER, mailBean.getFrom());
         mapMailBean.put(COPIE_CACHEE_HEADER, mailBean.getBcc());

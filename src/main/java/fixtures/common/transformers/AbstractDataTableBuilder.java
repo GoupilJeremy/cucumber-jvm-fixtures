@@ -1,5 +1,13 @@
 package fixtures.common.transformers;
 
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -8,9 +16,7 @@ import cucumber.api.DataTable;
 import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 import org.apache.commons.lang.Validate;
-
-import java.sql.Types;
-import java.util.*;
+import org.joda.time.LocalDate;
 
 public abstract class AbstractDataTableBuilder<Line> implements IDataTableBuilder {
     public static final int HEADERS_INDEX = 0;
@@ -56,15 +62,14 @@ public abstract class AbstractDataTableBuilder<Line> implements IDataTableBuilde
         Preconditions.checkArgument(lines != null, "la liste d'objets ne peut être null");
         List<Line> sorted = Lists.newArrayList(lines);
 
-        List<String> replacedHeaders = headersAsCells;
-        if(headersMapper!=null){
-            replacedHeaders = headersMapper.replaceColumns(headersAsCells);
-        }
+       if(headersMapper==null){
+           headersMapper = new HeadersMapper(headersAsCells);
+       }
 
         int lineNumber = 0;
         List<DataTableRow> rows = Lists.newArrayList();
         for (Line lineContainer : sorted) {
-            List<String> cells = reorderLine(replacedHeaders,lineContainer);
+            List<String> cells = reorderLine(headersAsCells,lineContainer);
             DataTableRow dtRow = new DataTableRow(new ArrayList<Comment>(), cells, lineNumber);
             rows.add(dtRow);
             lineNumber++;
@@ -87,10 +92,7 @@ public abstract class AbstractDataTableBuilder<Line> implements IDataTableBuilde
 
     private Map<String,String> replaceValues(Map<String,String> headersAndValues) {
 
-        String DATE_PATTERN = "dd/MM/yyyy";
-        String TRUE_VALUE = "oui";
-        String FALSE_VALUE = "non";
-         final String TRUE_DATABASE_VALUE = "1";
+
 
         Map<String,String> modifiedMap = Maps.newHashMap();
         for (Map.Entry<String,String> entry : headersAndValues.entrySet()) {
@@ -98,13 +100,7 @@ public abstract class AbstractDataTableBuilder<Line> implements IDataTableBuilde
             String value = entry.getValue();
             int type = Integer.parseInt(headersMapper.headersNamesAndTypes.get(header));
             String modifiedValue = value;
-            if (Types.BOOLEAN==type) {
-                modifiedValue = modifiedValue.equals(TRUE_DATABASE_VALUE) ? TRUE_VALUE : FALSE_VALUE;
-            }
-//            else if (Types.DATE ==type && modifiedValue != null) {
-//                Date date = (Date) modifiedValue;
-//                modifiedValue = new LocalDate(date.getTime()).toString(DATE_PATTERN);
-//            }
+
             modifiedMap.put(header,modifiedValue);
         }
 
@@ -129,23 +125,29 @@ public abstract class AbstractDataTableBuilder<Line> implements IDataTableBuilde
 
     /**
      * filter and reorder cells according to headers list.
-     * @param headers
+     *
+     * @param headersAsCells
      * @param line
      * @return
      */
-    protected List<String> reorderLine(final List<String> headers, final Line line) {
+    protected List<String> reorderLine(final List<String> headersAsCells, final Line line) {
         List<String> reorderedLine = Lists.newArrayList();
-        Map<String, String> map = toMap(line);
-        //map = replaceValues(map);
+        Map<String, Object> map = toMap(line);
         if(map==null){
             throw new IllegalStateException("failure: line hasn't been converted into map; map is null");
         }
         List<String> notFoundHeaders = Lists.newArrayList();
-        for (String header : headers) {
-            if (!map.containsKey(header)) {
+        final Map<String, String> headersNamesAndReplacement = headersMapper.getHeadersNamesAndReplacement();
+        final Map<String, String> headersNamesAndTypes = headersMapper.getHeadersNamesAndTypes();
+        for (String header : headersAsCells) {
+            final String replacedHeader = headersNamesAndReplacement.get(header);
+            if (!map.containsKey(replacedHeader)) {
                 notFoundHeaders.add(header);
             }else {
-                reorderedLine.add(map.get(header));
+                final String type = headersNamesAndTypes.get(header);
+                final Object valueFromDataSource = map.get(replacedHeader);
+
+                reorderedLine.add(replaceValue(type, valueFromDataSource));
             }
         }
         if(!notFoundHeaders.isEmpty()){
@@ -155,5 +157,9 @@ public abstract class AbstractDataTableBuilder<Line> implements IDataTableBuilde
         return reorderedLine;
     }
 
-    protected abstract Map<String, String> toMap(final Line line);
+    protected String replaceValue(final String type, final Object valueFromDataSource) {
+        return valueFromDataSource.toString();
+    }
+
+    protected abstract Map<String, Object> toMap(final Line line);
 }

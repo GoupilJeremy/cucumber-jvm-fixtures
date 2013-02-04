@@ -17,6 +17,9 @@ class HeadersMapper {
 
 
     Map<String,String> headersNamesAndReplacement = Maps.newHashMap();
+
+
+
     Map<String,String> headersNamesAndTypes = Maps.newHashMap();
     private final static Function<MapperContainer, String> GET_REPLACEMENT_COLUMN_NAME = new Function<MapperContainer, String>() {
         @Override
@@ -62,6 +65,16 @@ class HeadersMapper {
         }
     }
 
+     public HeadersMapper(List<String> headers) {
+        Preconditions.checkArgument(headers != null, "headers are null");
+
+//        List<String> columnTypes = getDatatableColumnTypes();
+        for (int i = 0; i < headers.size(); i++) {
+            headersNamesAndReplacement.put(headers.get(i), headers.get(i));
+           headersNamesAndTypes.put(headers.get(i), "-1");
+        }
+    }
+
     public List<MapperContainer> getReplacementColumnToTable() {
         return new ArrayList<MapperContainer>(enumSet);
     }
@@ -99,5 +112,9 @@ class HeadersMapper {
 
     public Map<String, String> getHeadersNamesAndReplacement() {
         return headersNamesAndReplacement;
+    }
+
+    public Map<String, String> getHeadersNamesAndTypes() {
+        return headersNamesAndTypes;
     }
 }

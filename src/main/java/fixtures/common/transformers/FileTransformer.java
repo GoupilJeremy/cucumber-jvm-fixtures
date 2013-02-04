@@ -63,8 +63,8 @@ public class FileTransformer extends AbstractDataTableBuilder<String> {
 
 
     @Override
-    protected Map<String, String> toMap(final String line) {
-        HashMap<String,String> map = Maps.newHashMap();
+    protected Map<String, Object> toMap(final String line) {
+        HashMap<String,Object> map = Maps.newHashMap();
         final Splitter splitter = Splitter.on(SEPARATOR);
         List<String> cells = Lists.newArrayList(splitter.split(Label.cleanLabel(line)));
 
