@@ -1,7 +1,7 @@
 package fixtures.common.database;
 
-public interface IBaseColumnToTable {
-    String getBaseColumnName();
+public interface MapperContainer {
+    String getReplacementColumnName();
 
     String getDatatableColumnName();
 

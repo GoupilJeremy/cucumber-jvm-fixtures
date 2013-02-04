@@ -2,7 +2,7 @@ package fixtures.common.database;
 
 import java.sql.Types;
 
-public enum FromXToDatatableEnum implements IBaseColumnToTable {
+public enum FromXToDatatableEnum implements MapperContainer {
 
     A("a", "A", Types.NUMERIC),
     B("b", "B", Types.VARCHAR),
@@ -22,7 +22,7 @@ public enum FromXToDatatableEnum implements IBaseColumnToTable {
     }
 
     @Override
-    public String getBaseColumnName() {
+    public String getReplacementColumnName() {
         return databaseColumnName;
     }
 

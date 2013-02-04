@@ -1,7 +1,5 @@
 package fixtures.common.transformers;
 
-import com.google.common.base.Function;
-import com.google.common.base.Strings;
 import cucumber.api.DataTable;
 import fixtures.common.mail.MailBean;
 import org.elasticsearch.common.collect.Maps;
@@ -9,7 +7,7 @@ import org.elasticsearch.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
 
-public class EmailTransformer extends AbstractDataTableBuilder<MailBean> implements Function<MailBean, Map<String, String>> {
+public class EmailTransformer extends AbstractDataTableBuilder<MailBean> {
     public static final String SUJET_HEADER = "sujet";
 
     public static final String MESSAGE_HEADER = "message";
@@ -34,14 +32,13 @@ public class EmailTransformer extends AbstractDataTableBuilder<MailBean> impleme
     public static EmailTransformer from(final DataTable dataTableFromFeatureFileToCompare,
                 final List<MailBean> collection){
         EmailTransformer emailTransformer = new EmailTransformer(dataTableFromFeatureFileToCompare, collection);
-        emailTransformer.compareWith(new MailBeanComparator());
         emailTransformer.sortBy(A_HEADER);
         return emailTransformer;
     }
 
 
     @Override
-    public Map<String, String> apply(final MailBean mailBean) {
+    public Map<String, String> toMap(final MailBean mailBean) {
         Map<String, String> mapMailBean = Maps.newHashMap();
         mapMailBean.put(A_HEADER, mailBean.getTo());
         mapMailBean.put(DE_HEADER, mailBean.getFrom());
@@ -53,10 +50,5 @@ public class EmailTransformer extends AbstractDataTableBuilder<MailBean> impleme
         return mapMailBean;
     }
 
-    private static class MailBeanComparator extends LineComparator<MailBean> {
-        @Override
-        protected String getValue(MailBean row,String columnName) {
-            return Strings.nullToEmpty(row.getTo());
-        }
-    }
+
 }

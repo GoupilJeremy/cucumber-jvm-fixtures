@@ -13,7 +13,6 @@ import gherkin.formatter.model.DataTableRow;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,17 +32,7 @@ public class FileTransformer extends AbstractDataTableBuilder<String> {
     }
 
 
-    protected Map<String, String> apply(final DataTableRow object) {
-        HashMap<String,String> map = Maps.newHashMap();
-        List<String> cells = object.getCells();
 
-        for (int i = 0; i <cells.size(); i++) {
-            String head = headersAsCells.get(i);
-            String value = cells.get(i);
-            map.put(head,value);
-        }
-        return map;
-    }
 
     public static FileTransformer from(DataTable dataTable, String column, File file) {
 
@@ -57,19 +46,15 @@ public class FileTransformer extends AbstractDataTableBuilder<String> {
         }
         FileTransformer fileTransformer = new FileTransformer(dataTable, dataTableRows);
         fileTransformer.setColumn(column);
-        fileTransformer.compareWith(new DataTableRowComparator(column, headersAsCells));
         return fileTransformer;
 
     }
 
     @Override
-    protected List<DataTableRow> buildRowForDataTable(final List<String> dataTableRows,
-            final List<DataTableRow> rows) {
-
-
+    protected List<DataTableRow> buildRowsForDataTable(final List<String> dataTableRows) {
 
         if (dataTableRows != null && !dataTableRows.isEmpty() && !Strings.isNullOrEmpty(column)) {
-           return super.buildRowForDataTable(dataTableRows, rows);
+           return super.buildRowsForDataTable(dataTableRows);
         }
 
         return Lists.newArrayList();
@@ -78,8 +63,17 @@ public class FileTransformer extends AbstractDataTableBuilder<String> {
 
 
     @Override
-    protected Map<String, String> apply(final String object) {
-        return null;
+    protected Map<String, String> toMap(final String line) {
+        HashMap<String,String> map = Maps.newHashMap();
+        final Splitter splitter = Splitter.on(SEPARATOR);
+        List<String> cells = Lists.newArrayList(splitter.split(Label.cleanLabel(line)));
+
+        for (int i = 0; i <cells.size(); i++) {
+            String head = headersAsCells.get(i);
+            String value = cells.get(i);
+            map.put(head,value);
+        }
+        return map;
     }
 
     protected static LineProcessor<List<String>> newLineProcessor() {
@@ -110,39 +104,5 @@ public class FileTransformer extends AbstractDataTableBuilder<String> {
         }
     }
 
-    private static class DataTableRowComparator extends LineComparator<String> implements Serializable {
-        private static final long serialVersionUID = 1L;
 
-        private String sortColumnName;
-
-
-        public DataTableRowComparator(final String sortColumnName, final List<String> headersAsCells) {
-            this.sortColumnName = sortColumnName;
-
-        }
-
-        @Override
-        public int compare(final String line01, final String line02) {
-
-
-            String cell01 = getValue(line01,sortColumnName);
-            String cell02 = getValue(line02,sortColumnName);
-            // la colonne avec le header reste en premier
-            if (cell01.equals(sortColumnName)) {
-                return -1;
-            }
-            return cell01.compareTo(cell02);
-        }
-
-        @Override
-        protected String getValue(String row,String sortColumnName) {
-            int index = headersAsCells.indexOf(sortColumnName);
-            if (index < 0) {
-                throw new IllegalStateException("la colonne de tri est absente");
-            }
-            final Splitter splitter = Splitter.on(SEPARATOR);
-            List<String> split = Lists.newArrayList(splitter.split(row));
-            return split.get(index);
-        }
-    }
 }

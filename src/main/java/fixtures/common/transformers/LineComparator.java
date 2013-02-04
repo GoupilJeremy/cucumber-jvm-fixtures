@@ -1,14 +1,32 @@
 package fixtures.common.transformers;
 
-import java.util.Comparator;
+import com.google.common.collect.Maps;
+import gherkin.formatter.model.DataTableRow;
 
-public abstract class LineComparator<Line> implements Comparator<Line>{
+import java.text.Collator;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+public  class LineComparator implements Comparator<DataTableRow>{
 
     private int order = 1;
 
+    private Collator collator;
 
 
     protected String sortColumn;
+
+    private Map<String,Integer> headersMap =Maps.newHashMap();
+
+    public LineComparator(List<String> headers, Locale locale) {
+        for (int i = 0; i < headers.size(); i++) {
+            headersMap.put(headers.get(i),i);
+        }
+        collator= Collator.getInstance(locale);
+        collator.setStrength(Collator.PRIMARY);
+    }
 
     public  LineComparator sortBy(String column,boolean asc){
         this.sortColumn = column;
@@ -19,12 +37,15 @@ public abstract class LineComparator<Line> implements Comparator<Line>{
     }
 
     @Override
-    public int compare(final Line row1, final Line row2) {
+    public int compare(final DataTableRow row1, final DataTableRow row2) {
         if(sortColumn ==null){
             throw new IllegalStateException("sort sortColumn has not been set");
         }
-        Comparable value1 = getValue(row1, sortColumn);
-        Comparable value2 = getValue(row2, sortColumn);
+        List<String> cells1 = row1.getCells();
+        Integer sortColumnIndex = headersMap.get(sortColumn);
+        String value1 = cells1.get(sortColumnIndex);
+        List<String> cells2 = row2.getCells();
+        String value2 = cells2.get(sortColumnIndex);
         int result;
         // la colonne avec le header reste en premier
 
@@ -37,7 +58,7 @@ public abstract class LineComparator<Line> implements Comparator<Line>{
         }else if (value1.equals(sortColumn)) {
             result= -1;
         }else {
-            result = (value1.compareTo(value2)) * order;
+            result = (collator.compare(value1, value2)) * order;
         }
         return result;
     }
@@ -46,7 +67,10 @@ public abstract class LineComparator<Line> implements Comparator<Line>{
         return sortColumn;
     }
 
-    protected abstract Comparable getValue(Line row,String columnName);
+    public boolean isAsc(){
+        return order == 1;
+    }
+
 
 
 
