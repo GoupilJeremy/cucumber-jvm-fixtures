@@ -119,8 +119,8 @@ public class EmailTransformerTest {
         List<List<String>> expected = Lists
                 .<List<String>>newArrayList(Lists.<String>newArrayList(A_HEADER, SUJET_HEADER),
                         Lists.<String>newArrayList(null, "mon sujet 03"),
-                        Lists.<String>newArrayList("to02@mail.com", "mon sujet 02"),
-                        Lists.<String>newArrayList("to@mail.com", "mon sujet"));
+                        Lists.<String>newArrayList("to@mail.com", "mon sujet"),
+                        Lists.<String>newArrayList("to02@mail.com", "mon sujet 02"));
 
         assertThat(dataTableEmail.raw(), is(expected));
     }

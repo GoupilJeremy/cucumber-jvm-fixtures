@@ -1,5 +1,6 @@
 package fixtures.common.transformers;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import gherkin.formatter.model.DataTableRow;
 
@@ -48,14 +49,9 @@ public  class LineComparator implements Comparator<DataTableRow>{
         String value2 = cells2.get(sortColumnIndex);
         int result;
         // la colonne avec le header reste en premier
-
-        if(value1==null && value2 == null){
-            result = 0;
-        }else if(value2 == null){
-            result = 1;
-        }else if (value1 == null){
-            result = -1;
-        }else if (value1.equals(sortColumn)) {
+        value1 = Strings.nullToEmpty(value1);
+        value2 = Strings.nullToEmpty(value2);
+        if (value1.equals(sortColumn)) {
             result= -1;
         }else {
             result = (collator.compare(value1, value2)) * order;
